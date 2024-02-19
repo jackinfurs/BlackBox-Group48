@@ -2,6 +2,7 @@
   <configuration default="false" name="RunBlackBox" type="Application" factoryName="Application">
     <option name="MAIN_CLASS_NAME" value="com.blackbox.game.DesktopLauncher" />
     <module name="COMP20050SEP2-48.desktop.main" />
+    <option name="PROGRAM_PARAMETERS" value="-Xlint:-options" />
     <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/assets" />
     <extension name="coverage">
       <pattern>
