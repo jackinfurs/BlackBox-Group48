@@ -1,0 +1,5 @@
+/.gradle/
+/.idea/
+/.run/
+/core/build/
+/desktop/build/
