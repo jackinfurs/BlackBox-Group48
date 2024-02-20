@@ -11,13 +11,9 @@ public class BlackBox extends ApplicationAdapter {
     private SpriteBatch batch;
     private Texture backgroundTexture;
     private Texture playButtonTexture;
-    private Texture signUpButtonTexture;
-    private Texture signInButtonTexture;
     private Texture leaderboardButtonTexture;
     private Texture exitButtonTexture;
     private boolean playButtonClicked;
-    private boolean signUpButtonClicked;
-    private boolean signInButtonClicked;
     private boolean leaderboardButtonClicked;
     private boolean exitButtonClicked;
 
@@ -28,8 +24,6 @@ public class BlackBox extends ApplicationAdapter {
         // Load menu assets/pngs
         backgroundTexture = new Texture("VaporBackground.png");
         playButtonTexture = new Texture("play.png");
-        signUpButtonTexture = new Texture("sign up.png");
-        signInButtonTexture = new Texture("sign in.png");
         leaderboardButtonTexture = new Texture("Leaderboard.png");
         exitButtonTexture = new Texture("Exit.png");
 
@@ -53,19 +47,9 @@ public class BlackBox extends ApplicationAdapter {
         float playButtonY = 300;
         batch.draw(playButtonTexture, playButtonX, playButtonY, buttonWidth, buttonHeight);
 
-        // Draw sign-up button
-        float signUpButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
-        float signUpButtonY = 400;
-        batch.draw(signUpButtonTexture, signUpButtonX, signUpButtonY, buttonWidth, buttonHeight);
-
-        // Draw sign-in button
-        float signInButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
-        float signInButtonY = 500;
-        batch.draw(signInButtonTexture, signInButtonX, signInButtonY, buttonWidth, buttonHeight);
-
         // Draw leaderboard button
         float leaderboardButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
-        float leaderboardButtonY = 600;
+        float leaderboardButtonY = 400;
         batch.draw(leaderboardButtonTexture, leaderboardButtonX, leaderboardButtonY, buttonWidth, buttonHeight);
 
         // Draw exit button
@@ -79,16 +63,6 @@ public class BlackBox extends ApplicationAdapter {
         if (playButtonClicked) {
             System.out.println("Play button clicked!");
             playButtonClicked = false; // Reset
-        }
-
-        if (signUpButtonClicked) {
-            System.out.println("Sign Up button clicked!");
-            signUpButtonClicked = false; // Reset
-        }
-
-        if (signInButtonClicked) {
-            System.out.println("Sign In button clicked!");
-            signInButtonClicked = false; // Reset
         }
 
         if (leaderboardButtonClicked) {
@@ -107,8 +81,6 @@ public class BlackBox extends ApplicationAdapter {
         batch.dispose();
         backgroundTexture.dispose();
         playButtonTexture.dispose();
-        signUpButtonTexture.dispose();
-        signInButtonTexture.dispose();
         leaderboardButtonTexture.dispose();
         exitButtonTexture.dispose();
     }
@@ -129,29 +101,9 @@ public class BlackBox extends ApplicationAdapter {
                 playButtonClicked = true;
             }
 
-            // Check if the touch is within the bounds of the sign-up button
-            float signUpButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
-            float signUpButtonY = 400;
-            if (worldX >= signUpButtonX &&
-                    worldX <= signUpButtonX + buttonWidth &&
-                    worldY >= signUpButtonY &&
-                    worldY <= signUpButtonY + buttonHeight) {
-                signUpButtonClicked = true;
-            }
-
-            // Check if the touch is within the bounds of the sign-in button
-            float signInButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
-            float signInButtonY = 500;
-            if (worldX >= signInButtonX &&
-                    worldX <= signInButtonX + buttonWidth &&
-                    worldY >= signInButtonY &&
-                    worldY <= signInButtonY + buttonHeight) {
-                signInButtonClicked = true;
-            }
-
             // Check if the touch is within the bounds of the leaderboard button
             float leaderboardButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
-            float leaderboardButtonY = 600;
+            float leaderboardButtonY = 400;
             if (worldX >= leaderboardButtonX &&
                     worldX <= leaderboardButtonX + buttonWidth &&
                     worldY >= leaderboardButtonY &&
