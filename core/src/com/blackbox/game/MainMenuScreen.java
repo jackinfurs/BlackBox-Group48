@@ -12,6 +12,29 @@ public class MainMenuScreen implements Screen {
     final BlackBox game;
     OrthographicCamera camera;
 
+    /*
+    class Button {
+        float width = 200f;
+        float height = 50f;
+        Texture texture;
+
+        public Button(Texture texture) {
+            this.texture = texture;
+        }
+
+        public void draw(int y) {
+            float x = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
+            batch.draw(texture, x, y, buttonWidth, buttonHeight);
+        }
+
+        /* TODO
+        public boolean isClicked() {
+
+        }
+
+    }
+    */
+
     SpriteBatch batch;
     Texture backgroundTexture;
     Texture playButtonTexture;
@@ -36,6 +59,7 @@ public class MainMenuScreen implements Screen {
 
         // Load menu assets/pngs
         backgroundTexture = new Texture("MainMenuScreen/vaporBackground.png");
+        // Button playButton = new Button(new Texture("MainMenuScreen/play.png"));
         playButtonTexture = new Texture("MainMenuScreen/play.png");
         leaderboardButtonTexture = new Texture("MainMenuScreen/leaderboard.png");
         exitButtonTexture = new Texture("MainMenuScreen/exit.png");
@@ -100,7 +124,10 @@ public class MainMenuScreen implements Screen {
             float buttonHeight = 50;
             float playButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
             float playButtonY = 300;
-            if (worldX >= playButtonX && worldX <= playButtonX + buttonWidth && worldY >= playButtonY && worldY <= playButtonY + buttonHeight) {
+            if (worldX >= playButtonX &&
+                    worldX <= playButtonX + buttonWidth &&
+                    worldY >= playButtonY &&
+                    worldY <= playButtonY + buttonHeight) {
                 playButtonClicked = true;
             }
 
@@ -108,20 +135,24 @@ public class MainMenuScreen implements Screen {
             // Check if the touch is within the bounds of the leaderboard button
             float leaderboardButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
             float leaderboardButtonY = 400;
-            if (worldX >= leaderboardButtonX && worldX <= leaderboardButtonX + buttonWidth && worldY >= leaderboardButtonY && worldY <= leaderboardButtonY + buttonHeight) {
+            if (worldX >= leaderboardButtonX &&
+                    worldX <= leaderboardButtonX + buttonWidth &&
+                    worldY >= leaderboardButtonY &&
+                    worldY <= leaderboardButtonY + buttonHeight) {
                 leaderboardButtonClicked = true;
             }
 
             // Check if the touch is within the bounds of the exit button
             float exitButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
             float exitButtonY = 200;
-            if (worldX >= exitButtonX && worldX <= exitButtonX + buttonWidth && worldY >= exitButtonY && worldY <= exitButtonY + buttonHeight) {
+            if (worldX >= exitButtonX &&
+                    worldX <= exitButtonX + buttonWidth &&
+                    worldY >= exitButtonY &&
+                    worldY <= exitButtonY + buttonHeight) {
                 exitButtonClicked = true;
             }
-
             return true;
         }
-
     }
 
     @Override
