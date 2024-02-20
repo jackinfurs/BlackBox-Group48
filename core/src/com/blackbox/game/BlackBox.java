@@ -33,7 +33,6 @@ public class BlackBox extends ApplicationAdapter {
         leaderboardButtonTexture = new Texture("Leaderboard.png");
         exitButtonTexture = new Texture("Exit.png");
 
-
         Gdx.input.setInputProcessor(new InputHandler());
     }
 
@@ -45,7 +44,6 @@ public class BlackBox extends ApplicationAdapter {
 
         // Render the main menu
         batch.begin();
-
         batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         // Draw play button
@@ -127,40 +125,47 @@ public class BlackBox extends ApplicationAdapter {
             float buttonHeight = 50;
             float playButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
             float playButtonY = 300;
-            if (worldX >= playButtonX && worldX <= playButtonX + buttonWidth &&
-                    worldY >= playButtonY && worldY <= playButtonY + buttonHeight) {
+            if (worldX >= playButtonX && worldX <= playButtonX + buttonWidth && worldY >= playButtonY && worldY <= playButtonY + buttonHeight) {
                 playButtonClicked = true;
             }
 
             // Check if the touch is within the bounds of the sign-up button
             float signUpButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
             float signUpButtonY = 400;
-            if (worldX >= signUpButtonX && worldX <= signUpButtonX + buttonWidth &&
-                    worldY >= signUpButtonY && worldY <= signUpButtonY + buttonHeight) {
+            if (worldX >= signUpButtonX &&
+                    worldX <= signUpButtonX + buttonWidth &&
+                    worldY >= signUpButtonY &&
+                    worldY <= signUpButtonY + buttonHeight) {
                 signUpButtonClicked = true;
             }
 
             // Check if the touch is within the bounds of the sign-in button
             float signInButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
             float signInButtonY = 500;
-            if (worldX >= signInButtonX && worldX <= signInButtonX + buttonWidth &&
-                    worldY >= signInButtonY && worldY <= signInButtonY + buttonHeight) {
+            if (worldX >= signInButtonX &&
+                    worldX <= signInButtonX + buttonWidth &&
+                    worldY >= signInButtonY &&
+                    worldY <= signInButtonY + buttonHeight) {
                 signInButtonClicked = true;
             }
 
             // Check if the touch is within the bounds of the leaderboard button
             float leaderboardButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
             float leaderboardButtonY = 600;
-            if (worldX >= leaderboardButtonX && worldX <= leaderboardButtonX + buttonWidth &&
-                    worldY >= leaderboardButtonY && worldY <= leaderboardButtonY + buttonHeight) {
+            if (worldX >= leaderboardButtonX &&
+                    worldX <= leaderboardButtonX + buttonWidth &&
+                    worldY >= leaderboardButtonY &&
+                    worldY <= leaderboardButtonY + buttonHeight) {
                 leaderboardButtonClicked = true;
             }
 
             // Check if the touch is within the bounds of the exit button
             float exitButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
             float exitButtonY = 200;
-            if (worldX >= exitButtonX && worldX <= exitButtonX + buttonWidth &&
-                    worldY >= exitButtonY && worldY <= exitButtonY + buttonHeight) {
+            if (worldX >= exitButtonX &&
+                    worldX <= exitButtonX + buttonWidth &&
+                    worldY >= exitButtonY &&
+                    worldY <= exitButtonY + buttonHeight) {
                 exitButtonClicked = true;
             }
 
