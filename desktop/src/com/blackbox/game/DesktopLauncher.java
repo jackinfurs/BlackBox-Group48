@@ -10,6 +10,5 @@ public class DesktopLauncher {
         config.setWindowedMode(800, 600);
         config.setTitle("Black Box+");
         new Lwjgl3Application(new BlackBox(), config);
-
     }
 }
