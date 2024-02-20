@@ -6,6 +6,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.blackbox.game.SignIn;
 
 public class BlackBox extends ApplicationAdapter {
     private SpriteBatch batch;
@@ -61,7 +62,8 @@ public class BlackBox extends ApplicationAdapter {
 
         // Process button clicks
         if (playButtonClicked) {
-            System.out.println("Play button clicked!");
+            // Returns string username to be used later for the leaderboard
+            String username = SignIn.localSignIn();
             playButtonClicked = false; // Reset
         }
 
