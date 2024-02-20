@@ -12,11 +12,15 @@ public class MainMenuScreen implements Screen {
     final BlackBox game;
     OrthographicCamera camera;
 
-    /*
+
     class Button {
         float width = 200f;
         float height = 50f;
+        float x = Gdx.graphics.getWidth() / 2 - width / 2;
+        float y = 400;
         Texture texture;
+        float worldX = Gdx.graphics.getHeight() * Gdx.graphics.getWidth() / (float) Gdx.graphics.getWidth();
+        float worldY = (Gdx.graphics.getHeight() - Gdx.graphics.getHeight()) * Gdx.graphics.getHeight() / (float) Gdx.graphics.getHeight();
 
         public Button(Texture texture) {
             this.texture = texture;
@@ -27,13 +31,13 @@ public class MainMenuScreen implements Screen {
             batch.draw(texture, x, y, buttonWidth, buttonHeight);
         }
 
-        /* TODO
         public boolean isClicked() {
-
+            return worldX >= x &&
+                    worldX <= y + width &&
+                    worldY >= y &&
+                    worldY <= y + height;
         }
-
     }
-    */
 
     SpriteBatch batch;
     Texture backgroundTexture;
