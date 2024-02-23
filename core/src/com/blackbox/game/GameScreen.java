@@ -1,5 +1,7 @@
 package com.blackbox.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -26,13 +28,11 @@ public class GameScreen implements Screen {
         //  this is exactly the time i'd like a preprocessor directive
         camera.setToOrtho(false, 800, 600);
 
-        // TODO insert input processor and insert below
-        /*
+        // ESC key exits to main menu
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             System.out.println("ESC button clicked!");
             game.setScreen(new MainMenuScreen(game));
         }
-         */
     }
 
     @Override
