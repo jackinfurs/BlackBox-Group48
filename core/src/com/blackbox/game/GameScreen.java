@@ -1,14 +1,22 @@
 package com.blackbox.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.maps.*;
 import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class GameScreen implements Screen {
     final BlackBox game;
     OrthographicCamera camera;
+
+    TiledMap tiledMap;
+    TiledMapRenderer renderer;
 
     public GameScreen(BlackBox game) {
         this.game = game;
@@ -39,9 +47,13 @@ public class GameScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+        tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
+        renderer = new HexagonalTiledMapRenderer(tiledMap);
+
         game.batch.begin();
 
-
+        renderer.setView(camera);
+        renderer.render();
 
         game.batch.end();
 
