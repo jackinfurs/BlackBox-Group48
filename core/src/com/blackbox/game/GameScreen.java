@@ -1,13 +1,14 @@
 package com.blackbox.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.maps.*;
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
@@ -42,7 +43,7 @@ public class GameScreen implements Screen {
 
     @Override
     public void render(float delta) {
-        ScreenUtils.clear(0, 0, 0, 1);
+        ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
@@ -52,8 +53,12 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
 
+        int[] baseLayer = {0}; // only black outlines
+        int[] selectLayers = {1, 2}; // green outline + highlight
+
         renderer.setView(camera);
-        renderer.render();
+        renderer.render(baseLayer);
+        camera.position.set(360,110,0);
 
         game.batch.end();
 
@@ -81,6 +86,6 @@ public class GameScreen implements Screen {
 
     @Override
     public void dispose() {
-
+        tiledMap.dispose();
     }
 }
