@@ -11,7 +11,9 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.utils.Array;
 
+import java.util.HashSet;
 import java.util.Random;
+import java.util.Set;
 
 public class Atoms {
     private TiledMapTileLayer atomsLayer;
@@ -19,10 +21,11 @@ public class Atoms {
     private TiledMapTileSet tileset;
     private TiledMapTileSet guessTileset; // Tileset for guess atoms
     private final TiledMap tiledMap;
-    private Array<int[]> hiddenAtomPositions = new Array<>();
+    private Set<String> excludedCoords;
 
     public Atoms(TiledMap tiledMap) {
         this.tiledMap = tiledMap;
+        initializeExcludedCoords();
         createAtoms();
         createGuessAtoms();
     }
@@ -31,6 +34,7 @@ public class Atoms {
         MapLayers layers = tiledMap.getLayers();
         atomsLayer = new TiledMapTileLayer(9, 9, 32, 34);
         atomsLayer.setName("Atoms");
+
         tiledMap.getLayers().add(atomsLayer);
 
         tileset = new TiledMapTileSet();
@@ -38,6 +42,9 @@ public class Atoms {
         TiledMapTile tile1Data = new StaticTiledMapTile(tile1);
         tile1Data.setId(1);
         tileset.putTile(1, tile1Data);
+
+
+
     }
 
     private void createGuessAtoms() {
@@ -75,13 +82,47 @@ public class Atoms {
             do {
                 x = random.nextInt(gridWidth);
                 y = random.nextInt(gridHeight);
-            } while (cellIsOccupied(x, y)); // Check if the randomly selected cell is already occupied
+            } while (!isExcluded(x, y) && cellIsOccupied(x, y));
 
-            addAtom(x, y); // Add an atom to the randomly selected position
+            addAtom(x, y);
         }
     }
 
     private boolean cellIsOccupied(int x, int y) {
         return atomsLayer.getCell(x, y) != null;
     }
+
+    private boolean isExcluded(int x, int y) {
+        return excludedCoords.contains(x + "," + y);
+    }
+
+    private void initializeExcludedCoords() {
+
+        excludedCoords = new HashSet<>();
+
+        excludedCoords.add("0,0");
+        excludedCoords.add("1,0");
+        excludedCoords.add("7,0");
+        excludedCoords.add("8,0");
+        excludedCoords.add("0,1");
+        excludedCoords.add("7,1");
+        excludedCoords.add("8,1");
+        excludedCoords.add("0,2");
+        excludedCoords.add("8,2");
+        excludedCoords.add("8,3");
+        excludedCoords.add("8,5");
+        excludedCoords.add("0,6");
+        excludedCoords.add("8,6");
+        excludedCoords.add("0,7");
+        excludedCoords.add("7,7");
+        excludedCoords.add("0,8");
+        excludedCoords.add("1,8");
+        excludedCoords.add("7,8");
+        excludedCoords.add("8,8");
+
+
+    }
+
+
+
 }
