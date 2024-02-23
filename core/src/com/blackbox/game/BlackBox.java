@@ -27,6 +27,8 @@ public class BlackBox extends ApplicationAdapter {
         playButtonTexture = new Texture("play.png");
         leaderboardButtonTexture = new Texture("Leaderboard.png");
         exitButtonTexture = new Texture("Exit.png");
+        // Texture atomTexture = new Texture("Atom-design.png");
+        
 
         Gdx.input.setInputProcessor(new InputHandler());
     }
@@ -63,7 +65,7 @@ public class BlackBox extends ApplicationAdapter {
         // Process button clicks
         if (playButtonClicked) {
             // Returns string username to be used later for the leaderboard
-            // String username = SignIn.localSignIn();
+            String username = SignIn.requestUsername();
             playButtonClicked = false; // Reset
         }
 

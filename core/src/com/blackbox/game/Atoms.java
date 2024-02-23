@@ -1,20 +1,28 @@
 package com.blackbox.game;
 
-import com.badlogic.gdx.graphics.Color;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Atoms extends Actor {
-    private final float radius = 5;
+public class Atoms{
+    private Texture texture;
+    private float x;
+    private float y;
+    private float height = 10;
+    private float width = 10;
 
-    public void Atom(float x, float y) {
-        setPosition(x, y);
-        setSize(radius * 2, radius * 2);
+    public Atoms(Texture texture, float x, float y, float width, float height) {
+        this.texture = texture;
+        this.x = x;
+        this.y = y;
+        this.height = height;
+        this.width = width;
     }
 
+    public void draw(SpriteBatch batch) {
+        batch.draw(texture, x, y, width, height);
+    }
 
-    public void draw(ShapeRenderer shapeRenderer, float parentAlpha) {
-        shapeRenderer.setColor(Color.BLUE);
-        shapeRenderer.circle(getX() + radius, getY() + radius, radius);
+    public void dispose() {
+        texture.dispose();
     }
 }
