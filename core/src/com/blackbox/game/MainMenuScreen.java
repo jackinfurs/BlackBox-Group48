@@ -13,7 +13,7 @@ public class MainMenuScreen implements Screen {
     final BlackBox game;
     OrthographicCamera camera;
 
-
+    /*
     class Button {
         float width = 200f;
         float height = 50f;
@@ -39,6 +39,7 @@ public class MainMenuScreen implements Screen {
                     worldY <= y + height;
         }
     }
+     */
 
     SpriteBatch batch;
     Texture backgroundTexture;

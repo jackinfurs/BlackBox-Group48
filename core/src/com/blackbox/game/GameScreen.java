@@ -10,14 +10,25 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 public class GameScreen implements Screen {
     final BlackBox game;
     OrthographicCamera camera;
+
     SpriteBatch batch;
 
     public GameScreen(BlackBox game) {
         this.game = game;
         camera = new OrthographicCamera();
+
         // TODO please find a way to set the viewportWidth and Height to something more concrete
         //  this is exactly the time i'd like a preprocessor directive
+        camera.setToOrtho(false, 800, 600);
+        batch = new SpriteBatch();
 
+        // TODO insert input processor and insert below
+        /*
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            System.out.println("ESC button clicked!");
+            game.setScreen(new MainMenuScreen(game));
+        }
+         */
     }
 
     @Override
@@ -28,10 +39,14 @@ public class GameScreen implements Screen {
     @Override
     public void render(float delta) {
         ScreenUtils.clear(0, 0, 0, 1);
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)){
-            System.out.println("ESC button clicked!");
-            game.setScreen(new MainMenuScreen(game));
-        }
+
+        camera.update();
+        batch.setProjectionMatrix(camera.combined);
+
+        batch.begin();
+
+        batch.end();
+
     }
 
     @Override
@@ -57,6 +72,5 @@ public class GameScreen implements Screen {
     @Override
     public void dispose() {
         batch.dispose();
-
     }
 }
