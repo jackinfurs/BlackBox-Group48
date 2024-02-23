@@ -1,5 +1,6 @@
 package com.blackbox.game;
 
+import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
@@ -102,7 +103,9 @@ public class MainMenuScreen implements Screen {
         // Process button clicks
         if (playButtonClicked) {
             System.out.println("Play button clicked!");
+            game.setScreen(new GameScreen(game));
             playButtonClicked = false; // Reset
+            dispose();
         }
 
         if (leaderboardButtonClicked) {
