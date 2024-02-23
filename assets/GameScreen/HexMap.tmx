@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.10" tiledversion="1.10.2" orientation="hexagonal" renderorder="left-down" width="9" height="9" tilewidth="32" tileheight="34" infinite="0" hexsidelength="17" staggeraxis="y" staggerindex="odd" nextlayerid="6" nextobjectid="1">
- <tileset firstgid="1" source="BlackHex.tsx"/>
- <tileset firstgid="2" source="SelectHex.tsx"/>
- <tileset firstgid="3" source="SelectMask.tsx"/>
+<map version="1.10" tiledversion="1.10.2" orientation="hexagonal" renderorder="right-down" width="9" height="9" tilewidth="32" tileheight="34" infinite="0" hexsidelength="17" staggeraxis="y" staggerindex="odd" nextlayerid="2" nextobjectid="1">
+ <tileset firstgid="1" source="Hex.tsx"/>
  <layer id="1" name="Base" width="9" height="9">
   <data encoding="csv">
 0,0,1,1,1,1,1,0,0,
@@ -16,32 +14,4 @@
 0,0,1,1,1,1,1,0,0
 </data>
  </layer>
- <group id="5" name="Select">
-  <layer id="4" name="SelectMask" width="9" height="9">
-   <data encoding="csv">
-0,0,3,3,3,3,3,0,0,
-0,3,3,3,3,3,3,0,0,
-0,3,3,3,3,3,3,3,0,
-3,3,3,3,3,3,3,3,0,
-3,3,3,3,3,3,3,3,3,
-3,3,3,3,3,3,3,3,0,
-0,3,3,3,3,3,3,3,0,
-0,3,3,3,3,3,3,0,0,
-0,0,3,3,3,3,3,0,0
-</data>
-  </layer>
-  <layer id="2" name="Select" width="9" height="9">
-   <data encoding="csv">
-0,0,2,2,2,2,2,0,0,
-0,2,2,2,2,2,2,0,0,
-0,2,2,2,2,2,2,2,0,
-2,2,2,2,2,2,2,2,0,
-2,2,2,2,2,2,2,2,2,
-2,2,2,2,2,2,2,2,0,
-0,2,2,2,2,2,2,2,0,
-0,2,2,2,2,2,2,0,0,
-0,0,2,2,2,2,2,0,0
-</data>
-  </layer>
- </group>
 </map>

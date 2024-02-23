@@ -49,11 +49,8 @@ public class GameScreen implements Screen {
 
         game.batch.begin();
 
-        int[] baseLayer = {0}; // only black outlines
-        int[] selectLayers = {1, 2}; // green outline + highlight
-
         renderer.setView(camera);
-        renderer.render(baseLayer);
+        renderer.render();
         camera.position.set(360,110,0);
 
         game.batch.end();
