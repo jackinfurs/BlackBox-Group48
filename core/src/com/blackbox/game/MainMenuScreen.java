@@ -1,12 +1,10 @@
 package com.blackbox.game;
 
-import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainMenuScreen implements Screen {
@@ -41,7 +39,6 @@ public class MainMenuScreen implements Screen {
     }
      */
 
-    SpriteBatch batch;
     Texture backgroundTexture;
     Texture playButtonTexture;
     Texture leaderboardButtonTexture;
@@ -61,7 +58,6 @@ public class MainMenuScreen implements Screen {
         //  this is exactly the time i'd like a preprocessor directive
         // TODO also set this to not stretch/borderless, etc
         camera.setToOrtho(false, 800, 600);
-        batch = new SpriteBatch();
 
         // Load menu assets/pngs
         backgroundTexture = new Texture("MainMenuScreen/vaporBackground.png");
@@ -78,7 +74,7 @@ public class MainMenuScreen implements Screen {
 
     private void drawButton(Texture t, int y) {
         float x = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
-        batch.draw(t, x, y, buttonWidth, buttonHeight);
+        game.batch.draw(t, x, y, buttonWidth, buttonHeight);
     }
 
     @Override
@@ -88,10 +84,10 @@ public class MainMenuScreen implements Screen {
 
         // Render the main menu
         camera.update();
-        batch.setProjectionMatrix(camera.combined);
+        game.batch.setProjectionMatrix(camera.combined);
 
-        batch.begin();
-        batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        game.batch.begin();
+        game.batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
         // TODO
         // draw buttons
@@ -99,7 +95,7 @@ public class MainMenuScreen implements Screen {
         drawButton(playButtonTexture, 300);
         drawButton(exitButtonTexture, 200);
 
-        batch.end();
+        game.batch.end();
 
         // Process button clicks
         if (playButtonClicked) {
@@ -165,7 +161,6 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void dispose() {
-        batch.dispose();
         backgroundTexture.dispose();
         playButtonTexture.dispose();
         leaderboardButtonTexture.dispose();
