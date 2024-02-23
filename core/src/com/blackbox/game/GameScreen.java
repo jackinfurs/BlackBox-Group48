@@ -40,6 +40,7 @@ public class GameScreen implements Screen{
         renderer = new HexagonalTiledMapRenderer(tiledMap);
 
         atoms = new Atoms(tiledMap);
+        atoms.placeRandomAtoms();
     }
 
 
@@ -80,6 +81,8 @@ public class GameScreen implements Screen{
             }
         }
     }
+
+
     @Override
     public void render(float delta) {
 
@@ -106,27 +109,6 @@ public class GameScreen implements Screen{
         camera.position.set(360, 110, 0);
         renderer.render();
 
-        /*
-        // to create an "Atoms" layer
-        MapLayers layers = tiledMap.getLayers();
-        TiledMapTileLayer atomsLayer = new TiledMapTileLayer(9,9,32,34);
-        atomsLayer.setName("Atoms");
-        layers.add(atomsLayer);
-
-        // to create an "Atom" tileset with red atoms (do the same for guessAtom.png later on)
-        TiledMapTileSet tileset = new TiledMapTileSet();
-        TextureRegion tile1 = new TextureRegion(new Texture("GameScreen/redAtom.png"));
-        TiledMapTile tile1Data = new StaticTiledMapTile(tile1);
-        tile1Data.setId(1);
-        tileset.putTile(1, tile1Data);
-
-        // to place an atom at x=4,y=4
-        TiledMapTileLayer.Cell atomCell = new TiledMapTileLayer.Cell();
-        atomCell.setTile(tileset.getTile(1));
-        atomsLayer.setCell(4,4,atomCell);
-
-         */
-
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             System.out.println("ESC button clicked!");
             game.setScreen(new MainMenuScreen(game));
@@ -141,7 +123,7 @@ public class GameScreen implements Screen{
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 34);
             System.out.println("position x: " + tileX + " position y: " + tileY);
-            atoms.addAtom(tileX, tileY);
+            atoms.addGuessAtom(tileX, tileY);
         }
 
         renderer.render();
