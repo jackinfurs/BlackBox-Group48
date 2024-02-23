@@ -4,25 +4,33 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="778c6271-c16e-410b-a5b6-8f53948ac814" name="Changes" comment="updated .gitignore">
+    <list default="true" id="778c6271-c16e-410b-a5b6-8f53948ac814" name="Changes" comment="GameScreen.java added if username is null.&#10;SignInScreen.java setup foundations for class, will draw fonts as placeholders">
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/resourceHashesCache.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/resourceHashesCache.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build/classes/java/main/com/blackbox/game/SignIn$Score.class" beforeDir="false" afterPath="$PROJECT_DIR$/core/build/classes/java/main/com/blackbox/game/SignIn$Score.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/build/classes/java/main/com/blackbox/game/SignIn.class" beforeDir="false" afterPath="$PROJECT_DIR$/core/build/classes/java/main/com/blackbox/game/SignIn.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build/libs/core-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/core/build/libs/core-1.0.jar" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build/tmp/compileJava/previous-compilation-data.bin" beforeDir="false" afterPath="$PROJECT_DIR$/core/build/tmp/compileJava/previous-compilation-data.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/com/blackbox/game/GameScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/com/blackbox/game/GameScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/com/blackbox/game/MainMenuScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/com/blackbox/game/MainMenuScreen.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/com/blackbox/game/SignIn.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/com/blackbox/game/SignIn.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/com/blackbox/game/SignInScreen.java" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/com/blackbox/game/SignInScreen.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ChangesViewManager">
+    <option name="groupingKeys">
+      <option value="directory" />
+    </option>
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$">
@@ -139,6 +147,31 @@
       <workItem from="1708422265506" duration="2220000" />
       <workItem from="1708425419016" duration="625000" />
     </task>
+    <task id="LOCAL-00001" summary="exit to main menu when ESC is clicked">
+      <option name="closed" value="true" />
+      <created>1708725484771</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1708725484771</updated>
+    </task>
+    <task id="LOCAL-00002" summary="getUsername() in SignIn.java to check if it's been entered this session or not">
+      <option name="closed" value="true" />
+      <created>1708725769301</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1708725769301</updated>
+    </task>
+    <task id="LOCAL-00003" summary="GameScreen.java added if username is null.&#10;SignInScreen.java setup foundations for class, will draw fonts as placeholders">
+      <option name="closed" value="true" />
+      <created>1708726234728</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1708726234728</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -146,6 +179,9 @@
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="updated .gitignore" />
-    <option name="LAST_COMMIT_MESSAGE" value="updated .gitignore" />
+    <MESSAGE value="exit to main menu when ESC is clicked" />
+    <MESSAGE value="getUsername() in SignIn.java to check if it's been entered this session or not" />
+    <MESSAGE value="GameScreen.java added if username is null.&#10;SignInScreen.java setup foundations for class, will draw fonts as placeholders" />
+    <option name="LAST_COMMIT_MESSAGE" value="GameScreen.java added if username is null.&#10;SignInScreen.java setup foundations for class, will draw fonts as placeholders" />
   </component>
 </project>
