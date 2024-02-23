@@ -36,18 +36,28 @@ public class GameScreen implements Screen {
 
     }
 
+    // this method changes a tile from black to green to signify that it has been selected
     void selectTile(TiledMap tiledMap, int x, int y) {
-//        MapProperties map = tiledMap.getProperties();
-//        if (x > map.get("width", Integer.class) - 1 ||
-//                y > map.get("height", Integer.class) - 1) {
-//            throw new IllegalArgumentException("coordinates out of bounds");
-//        } else {
-            TiledMapTile selectedTile = tiledMap.getTileSets().getTile(2); // 1 = black, 2 = green; in Tiled it's 1 for some reason
+        // error checking
+        MapProperties map = tiledMap.getProperties();
+        if (x > map.get("width", Integer.class) - 1 ||
+                y > map.get("height", Integer.class) - 1) {
+            System.out.println("YOU FUCKED IT. OUT OF BOUNDS."); // change it to something less vulgar. this repeatedly prints and i'm not sure how to make it print only once.
+        } else {
+            // get green tile tilemap (image)
+            // getTile(1) = black, getTile(2) = green
+            TiledMapTile selectedTile = tiledMap.getTileSets().getTile(2);
+            // select "Base" tile layer from Hex.tmx; makes next line more concise
             TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
+            // use this to select a specific tile by the X and Y coordinate (in the range of 0-8)
+            // x: 0 = leftmost, 8 = rightmost on board
+            // y: 0 = lowest, 8 = highest on board
             TiledMapTileLayer.Cell cell = tileLayer.getCell(x, y);
+            // change cell to green tile (selectedTile above)
             cell.setTile(selectedTile);
+            // finally render (please make sure to call this anytime you change the board)
             renderer.render();
-        //}
+        }
     }
 
     @Override
@@ -57,19 +67,16 @@ public class GameScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
+        // load HexMap.tmx, contains board + tiles
         tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
         renderer = new HexagonalTiledMapRenderer(tiledMap);
 
-        game.batch.begin();
 
         renderer.setView(camera);
         camera.position.set(360, 110, 0);
         renderer.render();
 
         selectTile(tiledMap, 4, 4);
-
-        game.batch.end();
-
     }
 
     @Override
