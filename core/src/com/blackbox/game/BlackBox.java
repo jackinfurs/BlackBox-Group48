@@ -65,7 +65,7 @@ public class BlackBox extends ApplicationAdapter {
         // Process button clicks
         if (playButtonClicked) {
             // Returns string username to be used later for the leaderboard
-            String username = SignIn.requestUsername();
+            String username = SignIn.localSignIn();
             playButtonClicked = false; // Reset
         }
 

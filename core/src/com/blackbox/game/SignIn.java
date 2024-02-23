@@ -1,45 +1,28 @@
 package com.blackbox.game;
 
-import com.badlogic.gdx.Input.TextInputListener;
-import com.badlogic.gdx.Gdx;
-
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Scanner;
 
 public class SignIn {
 
     private static final String FILE_NAME = "users.csv";
 
-    public static String requestUsername() {
-        localSignIn listener = new localSignIn();
-        Gdx.input.getTextInput(listener, "Enter your username:", "", "Username");
-        return listener.getUsername();
-    }
+    public static String localSignIn() {
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("Enter your username:");
+        String username = scanner.nextLine();
 
-    private static class localSignIn implements TextInputListener {
-        private String username;
-
-        public void input(String username) {
-            if(username != null && !username.isEmpty()) {
-                System.out.println("Welcome" + username);
-                this.username = username;
-            }
-            else {
-                System.out.println("Invalid username, please try again:");
-                requestUsername();
-            }
+        // Validate username
+        if (!username.isEmpty()) {
+            System.out.println("Welcome " + username + "!");
+        } else {
+            System.out.println("Invalid username, please enter your username");
+            localSignIn();
         }
-
-        public void canceled() {
-            System.out.println("Username input canceled");
-            Gdx.app.exit();
-        }
-
-        public String getUsername() {
-            return username;
-        }
+        return username;
     }
 
     public static void saveScore(String username, int score) {
