@@ -1,6 +1,6 @@
 package com.blackbox.game;
 
-import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayers;
@@ -8,15 +8,18 @@ import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-public class GameScreen implements Screen {
+public class GameScreen implements Screen{
     final BlackBox game;
     OrthographicCamera camera;
 
     TiledMap tiledMap;
     TiledMapRenderer renderer;
+
+    private Atoms atoms;
 
     public GameScreen(BlackBox game) {
         this.game = game;
@@ -24,21 +27,21 @@ public class GameScreen implements Screen {
 
         // TODO please find a way to set the viewportWidth and Height to something more concrete
         //  this is exactly the time i'd like a preprocessor directive
+
         camera.setToOrtho(false, 800, 600);
 
-        // TODO insert input processor and insert below
-        /*
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            System.out.println("ESC button clicked!");
-            game.setScreen(new MainMenuScreen(game));
-        }
-         */
     }
+
+
 
     @Override
     public void show() {
+        tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
+        renderer = new HexagonalTiledMapRenderer(tiledMap);
 
+        atoms = new Atoms(tiledMap);
     }
+
 
     // this method changes a tile from black to green to signify that it has been selected
     void selectTile(TiledMap tiledMap, int x, int y) {
@@ -46,7 +49,7 @@ public class GameScreen implements Screen {
         MapProperties map = tiledMap.getProperties();
         if (x > map.get("width", Integer.class) - 1 ||
                 y > map.get("height", Integer.class) - 1) {
-            System.out.println("YOU FUCKED IT. OUT OF BOUNDS."); // change it to something less vulgar. this repeatedly prints and i'm not sure how to make it print only once.
+            System.out.println("Cell not located within bounds");
         } else {
             // get green tile tilemap (image)
             // getTile(1) = black, getTile(2) = green
@@ -64,24 +67,46 @@ public class GameScreen implements Screen {
         }
     }
 
+    void deselectTiles(TiledMap tiledMap) {
+        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
+        TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(1);
+
+        for (int y = 0; y < tileLayer.getHeight(); y++) {
+            for (int x = 0; x < tileLayer.getWidth(); x++) {
+                TiledMapTileLayer.Cell cell = tileLayer.getCell(x, y);
+                if (cell != null) { // Check if the cell is not null
+                    cell.setTile(defaultTile);
+                }
+            }
+        }
+    }
     @Override
     public void render(float delta) {
+
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+
+            // Check for button presses
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(mousePos);
+
+            int tileX = (int) (mousePos.x / 32);
+            int tileY = (int) (mousePos.y / 34);
+            System.out.println("position x: " + tileX + " position y: " + tileY);
+            deselectTiles(tiledMap);
+            selectTile(tiledMap, tileX, tileY);
+        }
+
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
 
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
-        // load HexMap.tmx, contains board + tiles
-        tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
-        renderer = new HexagonalTiledMapRenderer(tiledMap);
 
         renderer.setView(camera);
         camera.position.set(360, 110, 0);
         renderer.render();
 
-        selectTile(tiledMap, 4, 4);
-
-        // TODO CLEAN THIS FUCKIN MESS
+        /*
         // to create an "Atoms" layer
         MapLayers layers = tiledMap.getLayers();
         TiledMapTileLayer atomsLayer = new TiledMapTileLayer(9,9,32,34);
@@ -99,6 +124,25 @@ public class GameScreen implements Screen {
         TiledMapTileLayer.Cell atomCell = new TiledMapTileLayer.Cell();
         atomCell.setTile(tileset.getTile(1));
         atomsLayer.setCell(4,4,atomCell);
+
+         */
+
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            System.out.println("ESC button clicked!");
+            game.setScreen(new MainMenuScreen(game));
+        }
+
+        if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+
+            // Check for button presses
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            camera.unproject(mousePos);
+
+            int tileX = (int) (mousePos.x / 32);
+            int tileY = (int) (mousePos.y / 34);
+            System.out.println("position x: " + tileX + " position y: " + tileY);
+            atoms.addAtom(tileX, tileY);
+        }
 
         renderer.render();
 

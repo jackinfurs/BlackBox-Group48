@@ -1,28 +1,40 @@
 package com.blackbox.game;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayers;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapTile;
+import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 
-public class Atoms{
-    private Texture texture;
-    private float x;
-    private float y;
-    private float height = 10;
-    private float width = 10;
+public class Atoms {
+    private TiledMapTileLayer atomsLayer;
+    private TiledMapTileSet tileset;
+    private final TiledMap tiledMap;
 
-    public Atoms(Texture texture, float x, float y, float width, float height) {
-        this.texture = texture;
-        this.x = x;
-        this.y = y;
-        this.height = height;
-        this.width = width;
+    public Atoms(TiledMap tiledMap){
+        this.tiledMap = tiledMap;
+        createAtoms();
     }
 
-    public void draw(SpriteBatch batch) {
-        batch.draw(texture, x, y, width, height);
+    private void createAtoms(){
+        MapLayers layers = tiledMap.getLayers();
+        atomsLayer = new TiledMapTileLayer(9, 9, 32, 34);
+        atomsLayer.setName("Atoms");
+        tiledMap.getLayers().add(atomsLayer);
+
+        tileset = new TiledMapTileSet();
+        TextureRegion tile1 = new TextureRegion(new Texture("GameScreen/redAtom.png"));
+        TiledMapTile tile1Data = new StaticTiledMapTile(tile1);
+        tile1Data.setId(1);
+        tileset.putTile(1, tile1Data);
     }
 
-    public void dispose() {
-        texture.dispose();
+    public void addAtom(int x, int y) {
+        TiledMapTileLayer.Cell atomCell = new TiledMapTileLayer.Cell();
+        atomCell.setTile(tileset.getTile(1));
+        atomsLayer.setCell(x, y, atomCell);
     }
 }
