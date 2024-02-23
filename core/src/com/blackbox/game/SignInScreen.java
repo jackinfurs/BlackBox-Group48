@@ -27,7 +27,7 @@ public class SignInScreen implements Screen {
         stage = new Stage(new ScreenViewport(), game.batch);
         Gdx.input.setInputProcessor(stage);
 
-        Skin skin = new Skin(Gdx.files.internal("skinuiskin.json"));
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
 
         usernameField = new TextField("", skin);
         usernameField.setMessageText("Enter username...");

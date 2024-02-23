@@ -4,7 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="778c6271-c16e-410b-a5b6-8f53948ac814" name="Changes" comment="workspace.xml because git will not stop complaining">
+    <list default="true" id="778c6271-c16e-410b-a5b6-8f53948ac814" name="Changes" comment=" i don't have time to explain">
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/executionHistory/executionHistory.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/8.5/fileHashes/fileHashes.bin" afterDir="false" />
@@ -13,7 +13,6 @@
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/buildOutputCleanup.lock" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/buildOutputCleanup/outputFiles.bin" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.gradle/file-system.probe" beforeDir="false" afterPath="$PROJECT_DIR$/.gradle/file-system.probe" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build/classes/java/main/com/blackbox/game/SignIn$Score.class" beforeDir="false" afterPath="$PROJECT_DIR$/core/build/classes/java/main/com/blackbox/game/SignIn$Score.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build/classes/java/main/com/blackbox/game/SignIn.class" beforeDir="false" afterPath="$PROJECT_DIR$/core/build/classes/java/main/com/blackbox/game/SignIn.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/core/build/libs/core-1.0.jar" beforeDir="false" afterPath="$PROJECT_DIR$/core/build/libs/core-1.0.jar" afterDir="false" />
@@ -188,7 +187,15 @@
       <option name="project" value="LOCAL" />
       <updated>1708727172255</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary=" i don't have time to explain">
+      <option name="closed" value="true" />
+      <created>1708730766696</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1708730766696</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -201,6 +208,7 @@
     <MESSAGE value="GameScreen.java added if username is null.&#10;SignInScreen.java setup foundations for class, will draw fonts as placeholders" />
     <MESSAGE value="cthulhu commit" />
     <MESSAGE value="workspace.xml because git will not stop complaining" />
-    <option name="LAST_COMMIT_MESSAGE" value="workspace.xml because git will not stop complaining" />
+    <MESSAGE value=" i don't have time to explain" />
+    <option name="LAST_COMMIT_MESSAGE" value=" i don't have time to explain" />
   </component>
 </project>
