@@ -1,13 +1,21 @@
 package com.blackbox.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
+import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 public class SignInScreen implements Screen {
 
     final BlackBox game;
-
+    private Stage stage;
+    private TextField usernameField;
     OrthographicCamera camera;
 
     public SignInScreen(final BlackBox game) {
@@ -15,6 +23,21 @@ public class SignInScreen implements Screen {
 
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 600);
+
+        stage = new Stage(new ScreenViewport(), game.batch);
+        Gdx.input.setInputProcessor(stage);
+
+        Skin skin = new Skin(Gdx.files.internal("skinuiskin.json"));
+
+        usernameField = new TextField("", skin);
+        usernameField.setMessageText("Enter username...");
+
+        Table table = new Table();
+        table.setFillParent(true);
+        table.add(usernameField).width(200).height(30);
+
+        stage.addActor(table);
+
     }
 
 
@@ -30,9 +53,13 @@ public class SignInScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
-        game.batch.begin();
+        stage.act();
+        stage.draw();
 
-        game.batch.end();
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            SignIn.username = usernameField.getText();
+            game.setScreen(new GameScreen(game));
+        }
     }
 
     @Override
