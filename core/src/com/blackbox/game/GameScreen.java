@@ -33,6 +33,11 @@ public class GameScreen extends SignIn implements Screen {
             System.out.println("ESC button clicked!");
             game.setScreen(new MainMenuScreen(game));
         }
+
+        if (SignIn.getUsername() == null) {
+            game.setScreen(new SignInScreen(game));
+        }
+
     }
 
     @Override
