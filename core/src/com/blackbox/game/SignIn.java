@@ -14,20 +14,20 @@ public class SignIn {
     public static String getUsername() {
         return username;
     }
-
-    public static void localSignIn() {
-        Scanner scanner = new Scanner(System.in);
-        System.out.println("Enter your username:");
-        username = scanner.nextLine();
-
-        // Validate username
-        if (!username.isEmpty()) {
-            System.out.println("Welcome " + username + "!");
-        } else {
-            System.out.println("Invalid username, please enter your username");
-            localSignIn();
-        }
-    }
+//
+//    public static void localSignIn() {
+//        Scanner scanner = new Scanner(System.in);
+//        System.out.println("Enter your username:");
+//        username = scanner.nextLine();
+//
+//        // Validate username
+//        if (!username.isEmpty()) {
+//            System.out.println("Welcome " + username + "!");
+//        } else {
+//            System.out.println("Invalid username, please enter your username");
+//            localSignIn();
+//        }
+//    }
 
     public static void saveScore(String username, int score) {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME, true))) {

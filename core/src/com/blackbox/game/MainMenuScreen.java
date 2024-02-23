@@ -110,9 +110,9 @@ public class MainMenuScreen implements Screen {
         // Process button clicks
         if (playButtonClicked) {
             System.out.println("Play button clicked!");
-            SignIn.localSignIn();
             playButtonClicked = false; // Reset
-            game.setScreen(new GameScreen(game));
+            if (SignIn.getUsername() == null) game.setScreen(new SignInScreen(game));
+            else game.setScreen(new GameScreen(game));
             dispose();
         }
         if (tutorialButtonClicked) {
