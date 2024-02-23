@@ -42,6 +42,8 @@ public class MainMenuScreen implements Screen {
 
     // init textures
     Texture backgroundTexture;
+    Texture tutorialButtonTexture;
+
     Texture playButtonTexture;
     Texture leaderboardButtonTexture;
     Texture exitButtonTexture;
@@ -51,6 +53,8 @@ public class MainMenuScreen implements Screen {
     boolean playButtonClicked;
     boolean exitButtonClicked;
     boolean leaderboardButtonClicked;
+    boolean tutorialButtonClicked;
+
 
     // MainMenuScreen constructor
     public MainMenuScreen(final BlackBox game) {
@@ -68,6 +72,8 @@ public class MainMenuScreen implements Screen {
         playButtonTexture = new Texture("MainMenuScreen/play.png");
         leaderboardButtonTexture = new Texture("MainMenuScreen/leaderboard.png");
         exitButtonTexture = new Texture("MainMenuScreen/exit.png");
+        tutorialButtonTexture = new Texture("MainMenuScreen/tutorial.png");
+
 
         Gdx.input.setInputProcessor(new InputHandler());
     }
@@ -97,19 +103,23 @@ public class MainMenuScreen implements Screen {
         // draw buttons
         drawButton(leaderboardButtonTexture, 400);
         drawButton(playButtonTexture, 300);
-        drawButton(exitButtonTexture, 200);
-
+        drawButton(exitButtonTexture, 100);
+        drawButton(tutorialButtonTexture, 200);
         game.batch.end();
 
         // Process button clicks
         if (playButtonClicked) {
             System.out.println("Play button clicked!");
-            // SignIn.localSignIn();
+            SignIn.localSignIn();
             playButtonClicked = false; // Reset
             game.setScreen(new GameScreen(game));
             dispose();
         }
-
+        if (tutorialButtonClicked) {
+            System.out.println("Tutorial button clicked!");
+            // Add your tutorial logic here
+            tutorialButtonClicked = false; // Reset
+        }
         if (leaderboardButtonClicked) {
             System.out.println("Leaderboard button clicked!");
             SignIn.readScores();
@@ -140,7 +150,14 @@ public class MainMenuScreen implements Screen {
                     worldY <= playButtonY + buttonHeight) {
                 playButtonClicked = true;
             }
-
+            float tutorialButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
+            float tutorialButtonY = 200; // Adjust as needed
+            if (worldX >= tutorialButtonX &&
+                    worldX <= tutorialButtonX + buttonWidth &&
+                    worldY >= tutorialButtonY &&
+                    worldY <= tutorialButtonY + buttonHeight) {
+                tutorialButtonClicked = true;
+            }
             // TODO
             // Check if the touch is within the bounds of the leaderboard button
             float leaderboardButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
@@ -154,7 +171,7 @@ public class MainMenuScreen implements Screen {
 
             // Check if the touch is within the bounds of the exit button
             float exitButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
-            float exitButtonY = 200;
+            float exitButtonY = 100;
             if (worldX >= exitButtonX &&
                     worldX <= exitButtonX + buttonWidth &&
                     worldY >= exitButtonY &&
