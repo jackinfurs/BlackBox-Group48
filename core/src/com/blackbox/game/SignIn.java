@@ -9,11 +9,16 @@ import java.util.Scanner;
 public class SignIn {
 
     private static final String FILE_NAME = "users.csv";
+    public static String username;
 
-    public static String localSignIn() {
+    public static String getUsername() {
+        return username;
+    }
+
+    public static void localSignIn() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("Enter your username:");
-        String username = scanner.nextLine();
+        username = scanner.nextLine();
 
         // Validate username
         if (!username.isEmpty()) {
@@ -22,7 +27,6 @@ public class SignIn {
             System.out.println("Invalid username, please enter your username");
             localSignIn();
         }
-        return username;
     }
 
     public static void saveScore(String username, int score) {

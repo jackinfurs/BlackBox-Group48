@@ -13,7 +13,7 @@ import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
-public class GameScreen implements Screen {
+public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
     OrthographicCamera camera;
 
