@@ -54,7 +54,6 @@ public class GameScreen implements Screen {
 
         renderer.setView(camera);
         renderer.render(baseLayer);
-        // FIXME if there's problems with the camera, it'll probably be because of this
         camera.position.set(360,110,0);
 
         game.batch.end();

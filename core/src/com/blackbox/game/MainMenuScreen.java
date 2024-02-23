@@ -12,7 +12,6 @@ public class MainMenuScreen implements Screen {
     OrthographicCamera camera;
 
     /*
-    // Button class for code cleanup; to be implemented as a misc task
     class Button {
         float width = 200f;
         float height = 50f;
@@ -40,7 +39,6 @@ public class MainMenuScreen implements Screen {
     }
      */
 
-    // init textures
     Texture backgroundTexture;
     Texture playButtonTexture;
     Texture leaderboardButtonTexture;
@@ -52,7 +50,6 @@ public class MainMenuScreen implements Screen {
     boolean exitButtonClicked;
     boolean leaderboardButtonClicked;
 
-    // MainMenuScreen constructor
     public MainMenuScreen(final BlackBox game) {
         this.game = game;
 
@@ -89,7 +86,6 @@ public class MainMenuScreen implements Screen {
         camera.update();
         game.batch.setProjectionMatrix(camera.combined);
 
-        // draw backgroundTexture
         game.batch.begin();
         game.batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
 
@@ -104,8 +100,8 @@ public class MainMenuScreen implements Screen {
         // Process button clicks
         if (playButtonClicked) {
             System.out.println("Play button clicked!");
-            playButtonClicked = false; // Reset
             game.setScreen(new GameScreen(game));
+            playButtonClicked = false; // Reset
             dispose();
         }
 
