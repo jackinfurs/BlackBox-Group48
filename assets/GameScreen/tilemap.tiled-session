@@ -1,0 +1,52 @@
+{
+    "Map/SizeTest": {
+        "height": 4300,
+        "width": 2
+    },
+    "activeFile": "",
+    "expandedProjectPaths": [
+    ],
+    "file.lastUsedOpenFilter": "All Files (*)",
+    "fileStates": {
+        "BlackHex.tsx": {
+            "dynamicWrapping": false,
+            "scaleInEditor": 1
+        },
+        "BlackHexagon.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "SelectHex.tsx": {
+            "dynamicWrapping": true,
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "SelectMask.tsx": {
+            "dynamicWrapping": false
+        }
+    },
+    "last.imagePath": "C:/Users/dynam/IdeaProjectsintro/COMP20050SEP2-48/assets",
+    "map.height": 10,
+    "map.lastUsedFormat": "tmx",
+    "map.orientation": null,
+    "map.renderOrder": null,
+    "map.tileHeight": 34,
+    "map.tileWidth": 32,
+    "map.width": 10,
+    "openFiles": [
+    ],
+    "project": "tilemap.tiled-project",
+    "property.type": "object",
+    "recentFiles": [
+        "BlackHexagon.tsx",
+        "BlackHex.tsx",
+        "SelectHex.tsx"
+    ],
+    "resizeMap.removeObjects": false,
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.tileSize": {
+        "height": 34,
+        "width": 32
+    },
+    "tileset.type": 0
+}
