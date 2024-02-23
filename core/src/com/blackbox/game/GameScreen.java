@@ -1,9 +1,13 @@
 package com.blackbox.game;
 
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 
@@ -46,7 +50,7 @@ public class GameScreen implements Screen {
         } else {
             // get green tile tilemap (image)
             // getTile(1) = black, getTile(2) = green
-            TiledMapTile selectedTile = tiledMap.getTileSets().getTile(2);
+            TiledMapTile selectedTile = tiledMap.getTileSets().getTileSet("Hex").getTile(2);
             // select "Base" tile layer from Hex.tmx; makes next line more concise
             TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
             // use this to select a specific tile by the X and Y coordinate (in the range of 0-8)
@@ -71,12 +75,33 @@ public class GameScreen implements Screen {
         tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
         renderer = new HexagonalTiledMapRenderer(tiledMap);
 
-
         renderer.setView(camera);
         camera.position.set(360, 110, 0);
         renderer.render();
 
         selectTile(tiledMap, 4, 4);
+
+        // TODO CLEAN THIS FUCKIN MESS
+        // to create an "Atoms" layer
+        MapLayers layers = tiledMap.getLayers();
+        TiledMapTileLayer atomsLayer = new TiledMapTileLayer(9,9,32,34);
+        atomsLayer.setName("Atoms");
+        layers.add(atomsLayer);
+
+        // to create an "Atom" tileset with red atoms (do the same for guessAtom.png later on)
+        TiledMapTileSet tileset = new TiledMapTileSet();
+        TextureRegion tile1 = new TextureRegion(new Texture("GameScreen/redAtom.png"));
+        TiledMapTile tile1Data = new StaticTiledMapTile(tile1);
+        tile1Data.setId(1);
+        tileset.putTile(1, tile1Data);
+
+        // to place an atom at x=4,y=4
+        TiledMapTileLayer.Cell atomCell = new TiledMapTileLayer.Cell();
+        atomCell.setTile(tileset.getTile(1));
+        atomsLayer.setCell(4,4,atomCell);
+
+        renderer.render();
+
     }
 
     @Override
