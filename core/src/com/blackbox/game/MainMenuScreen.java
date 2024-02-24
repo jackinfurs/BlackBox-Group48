@@ -74,7 +74,6 @@ public class MainMenuScreen implements Screen {
         exitButtonTexture = new Texture("MainMenuScreen/exit.png");
         tutorialButtonTexture = new Texture("MainMenuScreen/tutorial.png");
 
-
         Gdx.input.setInputProcessor(new InputHandler());
     }
 
@@ -82,7 +81,7 @@ public class MainMenuScreen implements Screen {
     float buttonHeight = 50;
 
     private void drawButton(Texture t, int y) {
-        float x = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
+        float x = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
         game.batch.draw(t, x, y, buttonWidth, buttonHeight);
     }
 
@@ -142,7 +141,7 @@ public class MainMenuScreen implements Screen {
             // Check if the touch is within the bounds of the play button
             float buttonWidth = 200;
             float buttonHeight = 50;
-            float playButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
+            float playButtonX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
             float playButtonY = 300;
             if (worldX >= playButtonX &&
                     worldX <= playButtonX + buttonWidth &&
@@ -150,7 +149,7 @@ public class MainMenuScreen implements Screen {
                     worldY <= playButtonY + buttonHeight) {
                 playButtonClicked = true;
             }
-            float tutorialButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
+            float tutorialButtonX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
             float tutorialButtonY = 200; // Adjust as needed
             if (worldX >= tutorialButtonX &&
                     worldX <= tutorialButtonX + buttonWidth &&
@@ -160,7 +159,7 @@ public class MainMenuScreen implements Screen {
             }
             // TODO
             // Check if the touch is within the bounds of the leaderboard button
-            float leaderboardButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
+            float leaderboardButtonX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
             float leaderboardButtonY = 400;
             if (worldX >= leaderboardButtonX &&
                     worldX <= leaderboardButtonX + buttonWidth &&
@@ -170,7 +169,7 @@ public class MainMenuScreen implements Screen {
             }
 
             // Check if the touch is within the bounds of the exit button
-            float exitButtonX = Gdx.graphics.getWidth() / 2 - buttonWidth / 2;
+            float exitButtonX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
             float exitButtonY = 100;
             if (worldX >= exitButtonX &&
                     worldX <= exitButtonX + buttonWidth &&
