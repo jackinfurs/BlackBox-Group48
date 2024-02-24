@@ -1,5 +1,4 @@
-\.gradle
-\.idea
-\.run
-\core\build
-\desktop\build
+/.gradle/*
+/.idea/*
+/core/build/*
+/desktop/build/*
