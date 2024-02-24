@@ -1,4 +1,5 @@
 /.gradle/*
 /.idea/*
-/core/build/*
+/core/build/
+/core/build/tmp/
 /desktop/build/*
