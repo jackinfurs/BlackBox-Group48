@@ -22,12 +22,16 @@ public class Atoms {
     private TiledMapTileSet guessTileset; // Tileset for guess atoms
     private final TiledMap tiledMap;
     private Set<String> excludedCoords;
+    private Set<String> atomCoordinates;
+    private boolean gameFinished;
 
     public Atoms(TiledMap tiledMap) {
         this.tiledMap = tiledMap;
         initializeExcludedCoords();
+        atomCoordinates = new HashSet<>();
         createAtoms();
         createGuessAtoms();
+        gameFinished = false;
     }
 
     private void createAtoms() {
@@ -71,25 +75,38 @@ public class Atoms {
         guessAtomsLayer.setCell(x, y, guessAtomCell);
     }
 
+    public void setGameFinished(boolean finished) {
+        revealAtoms();
+    }
+
+    public void revealAtoms() {
+        for (String coordinate : atomCoordinates) {
+            String[] parts = coordinate.split(",");
+            int x = Integer.parseInt(parts[0]);
+            int y = Integer.parseInt(parts[1]);
+            addAtom(x, y);
+        }
+    }
+
     public void placeRandomAtoms() {
         Random random = new Random();
         int totalAtoms = 6;
         int gridWidth = atomsLayer.getWidth();
         int gridHeight = atomsLayer.getHeight();
 
-        for (int i = 0; i < totalAtoms; i++) {
+        for (int i = 0; i < totalAtoms;) {
             int x, y;
-            do {
-                x = random.nextInt(gridWidth);
-                y = random.nextInt(gridHeight);
-            } while (!isExcluded(x, y) && cellIsOccupied(x, y));
-
-            addAtom(x, y);
+            x = random.nextInt(gridWidth);
+            y = random.nextInt(gridHeight);
+            if(!isExcluded(x, y) && !cellIsOccupied(x, y)){
+                atomCoordinates.add(x + "," + y);
+                i++;
+            }
         }
     }
 
     private boolean cellIsOccupied(int x, int y) {
-        return atomsLayer.getCell(x, y) != null;
+        return atomCoordinates.contains(x + "," + y);
     }
 
     private boolean isExcluded(int x, int y) {
@@ -115,6 +132,7 @@ public class Atoms {
         excludedCoords.add("8,6");
         excludedCoords.add("0,7");
         excludedCoords.add("7,7");
+        excludedCoords.add("8,7");
         excludedCoords.add("0,8");
         excludedCoords.add("1,8");
         excludedCoords.add("7,8");
