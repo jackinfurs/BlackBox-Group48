@@ -2,7 +2,6 @@ package com.group48.blackbox;
 
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
@@ -19,7 +18,6 @@ public class Atoms {
     private TiledMapTileLayer guessAtomsLayer; // Layer for guess atoms
     private TiledMapTileSet tileset;
     private TiledMapTileSet guessTileset; // Tileset for guess atoms
-    private ShapeRenderer shape;
     private final TiledMap tiledMap;
     private Set<String> excludedCoords;
     private Set<String> atomCoordinates;
@@ -29,7 +27,6 @@ public class Atoms {
         this.tiledMap = tiledMap;
         initializeExcludedCoords();
         atomCoordinates = new HashSet<>();
-        shape = new ShapeRenderer();
         createAtoms();
         createGuessAtoms();
 //        gameFinished = false;
@@ -139,11 +136,4 @@ public class Atoms {
         excludedCoords.add("7,8");
         excludedCoords.add("8,8");
     }
-
-    public void showCOI() {
-        shape.begin(ShapeRenderer.ShapeType.Line);
-        shape.circle(0,0,500);
-        shape.end();
-    }
-
 }
