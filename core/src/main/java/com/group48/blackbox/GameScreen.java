@@ -12,7 +12,6 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
-    OrthographicCamera camera;
 
     TiledMap tiledMap;
     TiledMapRenderer renderer;
@@ -21,12 +20,6 @@ public class GameScreen extends SignIn implements Screen {
 
     public GameScreen(BlackBox game) {
         this.game = game;
-        camera = new OrthographicCamera();
-
-        // TODO please find a way to set the viewportWidth and Height to something more concrete
-        //  this is exactly the time i'd like a preprocessor directive
-
-        camera.setToOrtho(false, 800, 600);
 
         // ESC key exits to main menu
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -93,7 +86,7 @@ public class GameScreen extends SignIn implements Screen {
 
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(mousePos);
+            game.camera.unproject(mousePos);
 
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 34);
@@ -104,12 +97,12 @@ public class GameScreen extends SignIn implements Screen {
 
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
 
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+        game.camera.update();
+        game.batch.setProjectionMatrix(game.camera.combined);
 
 
-        renderer.setView(camera);
-        camera.position.set(360, 110, 0);
+        renderer.setView(game.camera);
+        game.camera.position.set(360, 110, 0);
         renderer.render();
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -127,7 +120,7 @@ public class GameScreen extends SignIn implements Screen {
 
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            camera.unproject(mousePos);
+            game.camera.unproject(mousePos);
 
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 34);
