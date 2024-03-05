@@ -28,8 +28,6 @@ public class GameScreen extends SignIn implements Screen {
         }
     }
 
-
-
     @Override
     public void show() {
         tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");

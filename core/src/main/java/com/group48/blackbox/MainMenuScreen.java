@@ -80,10 +80,9 @@ public class MainMenuScreen implements Screen {
 
     @Override
     public void render(float v) {
-        // Clear the screen
-        ScreenUtils.clear(0, 0, 0, 1);
 
-        // Render the main menu
+//        // Render the main menu
+        game.camera.setToOrtho(false, 800, 600);
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
 
@@ -137,17 +136,17 @@ public class MainMenuScreen implements Screen {
             float playButtonX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
             float playButtonY = 300;
             if (worldX >= playButtonX &&
-                    worldX <= playButtonX + buttonWidth &&
-                    worldY >= playButtonY &&
-                    worldY <= playButtonY + buttonHeight) {
+                worldX <= playButtonX + buttonWidth &&
+                worldY >= playButtonY &&
+                worldY <= playButtonY + buttonHeight) {
                 playButtonClicked = true;
             }
             float tutorialButtonX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
             float tutorialButtonY = 200; // Adjust as needed
             if (worldX >= tutorialButtonX &&
-                    worldX <= tutorialButtonX + buttonWidth &&
-                    worldY >= tutorialButtonY &&
-                    worldY <= tutorialButtonY + buttonHeight) {
+                worldX <= tutorialButtonX + buttonWidth &&
+                worldY >= tutorialButtonY &&
+                worldY <= tutorialButtonY + buttonHeight) {
                 tutorialButtonClicked = true;
             }
             // TODO
@@ -155,9 +154,9 @@ public class MainMenuScreen implements Screen {
             float leaderboardButtonX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
             float leaderboardButtonY = 400;
             if (worldX >= leaderboardButtonX &&
-                    worldX <= leaderboardButtonX + buttonWidth &&
-                    worldY >= leaderboardButtonY &&
-                    worldY <= leaderboardButtonY + buttonHeight) {
+                worldX <= leaderboardButtonX + buttonWidth &&
+                worldY >= leaderboardButtonY &&
+                worldY <= leaderboardButtonY + buttonHeight) {
                 leaderboardButtonClicked = true;
             }
 
@@ -165,9 +164,9 @@ public class MainMenuScreen implements Screen {
             float exitButtonX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
             float exitButtonY = 100;
             if (worldX >= exitButtonX &&
-                    worldX <= exitButtonX + buttonWidth &&
-                    worldY >= exitButtonY &&
-                    worldY <= exitButtonY + buttonHeight) {
+                worldX <= exitButtonX + buttonWidth &&
+                worldY >= exitButtonY &&
+                worldY <= exitButtonY + buttonHeight) {
                 exitButtonClicked = true;
             }
             return true;
