@@ -119,7 +119,9 @@ public class GameScreen extends SignIn implements Screen {
 
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             System.out.println("SPACEBAR clicked!");
+            atoms.showCOI();
             atoms.setGameFinished(true);
+            renderer.render();
         }
 
         if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
