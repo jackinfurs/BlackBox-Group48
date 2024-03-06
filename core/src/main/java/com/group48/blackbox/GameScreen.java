@@ -11,36 +11,121 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
-
+    
     TiledMap tiledMap;
     TiledMapRenderer renderer;
-
+    
     private Atoms atoms;
     private Rays rays;
-
-    public GameScreen(BlackBox game) {
+    
+    public GameScreen(BlackBox game)
+    {
         this.game = game;
-
+        
         // ESC key exits to main menu
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             System.out.println("ESC button clicked!");
             game.setScreen(new MainMenuScreen(game));
         }
     }
-
+    
     @Override
-    public void show() {
+    public void show()
+    {
         tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
         renderer = new HexagonalTiledMapRenderer(tiledMap);
-
+        
         atoms = new Atoms(tiledMap);
         atoms.placeRandomAtoms();
         rays = new Rays(tiledMap);
     }
-
-
+    
+    // TODO implement direction + proper tile selection
+    @Override
+    public void render(float delta)
+    {
+        
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            
+            // Check for button presses
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.camera.unproject(mousePos);
+            
+            int tileX = (int) (mousePos.x / 32);
+            int tileY = (int) (mousePos.y / 34);
+            System.out.println("position x: " + tileX + " position y: " + tileY);
+            deselectTiles(tiledMap);
+            selectTile(tiledMap, tileX, tileY);
+        }
+        
+        ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
+        
+        game.camera.update();
+        game.batch.setProjectionMatrix(game.camera.combined);
+        
+        renderer.setView(game.camera);
+        game.camera.position.set(360, 110, 0);
+        renderer.render();
+        
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            System.out.println("ESC button clicked!");
+            game.setScreen(new MainMenuScreen(game));
+        }
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            System.out.println("SPACEBAR clicked!");
+            atoms.setGameFinished(true);
+            renderer.render();
+        }
+        
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+            
+            // Check for button presses
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.camera.unproject(mousePos);
+            
+            int tileX = (int) (mousePos.x / 32);
+            int tileY = (int) (mousePos.y / 34);
+            System.out.println("position x: " + tileX + " position y: " + tileY);
+            atoms.addGuessAtom(tileX, tileY);
+        }
+        
+        renderer.render();
+    }
+    
+    @Override
+    public void resize(int width, int height)
+    {
+    
+    }
+    
+    @Override
+    public void pause()
+    {
+    
+    }
+    
+    @Override
+    public void resume()
+    {
+    
+    }
+    
+    @Override
+    public void hide()
+    {
+    
+    }
+    
+    @Override
+    public void dispose()
+    {
+        tiledMap.dispose();
+    }
+    
     // this method changes a tile from black to green to signify that it has been selected
-    void selectTile(TiledMap tiledMap, int x, int y) {
+    void selectTile(TiledMap tiledMap, int x, int y)
+    {
         // error checking
         MapProperties map = tiledMap.getProperties();
         if (x > map.get("width", Integer.class) - 1 ||
@@ -62,100 +147,19 @@ public class GameScreen extends SignIn implements Screen {
             renderer.render();
         }
     }
-
-    void deselectTiles(TiledMap tiledMap) {
+    
+    void deselectTiles(TiledMap tiledMap)
+    {
         TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
         TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(1);
-
-        for (int y = 0; y < tileLayer.getHeight(); y++) {
-            for (int x = 0; x < tileLayer.getWidth(); x++) {
+        
+        for (int y = 0 ; y < tileLayer.getHeight() ; y++) {
+            for (int x = 0 ; x < tileLayer.getWidth() ; x++) {
                 TiledMapTileLayer.Cell cell = tileLayer.getCell(x, y);
                 if (cell != null) { // Check if the cell is not null
                     cell.setTile(defaultTile);
                 }
             }
         }
-    }
-
-
-    // TODO implement direction + proper tile selection
-    @Override
-    public void render(float delta) {
-
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-
-            // Check for button presses
-            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(mousePos);
-
-            int tileX = (int) (mousePos.x / 32);
-            int tileY = (int) (mousePos.y / 34);
-            System.out.println("position x: " + tileX + " position y: " + tileY);
-            deselectTiles(tiledMap);
-            selectTile(tiledMap, tileX, tileY);
-        }
-
-        ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
-
-        game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
-
-
-        renderer.setView(game.camera);
-        game.camera.position.set(360, 110, 0);
-        renderer.render();
-
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            System.out.println("ESC button clicked!");
-            game.setScreen(new MainMenuScreen(game));
-        }
-
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            System.out.println("SPACEBAR clicked!");
-            atoms.setGameFinished(true);
-            renderer.render();
-        }
-
-        if(Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-
-            // Check for button presses
-            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(mousePos);
-
-            int tileX = (int) (mousePos.x / 32);
-            int tileY = (int) (mousePos.y / 34);
-            System.out.println("position x: " + tileX + " position y: " + tileY);
-            atoms.addGuessAtom(tileX, tileY);
-        }
-        
-        
-        
-        renderer.render();
-
-    }
-
-    @Override
-    public void resize(int width, int height) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
-    }
-
-    @Override
-    public void dispose() {
-        tiledMap.dispose();
     }
 }

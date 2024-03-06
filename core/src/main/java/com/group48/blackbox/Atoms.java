@@ -15,12 +15,12 @@ import java.util.Set;
 
 public class Atoms {
     private final TiledMap tiledMap;
+    private final Set<String> atomCoordinates;
     private TiledMapTileLayer atomsLayer;
     private TiledMapTileLayer guessAtomsLayer; // Layer for guess atoms
     private TiledMapTileSet tileset;
     private TiledMapTileSet guessTileset; // Tileset for guess atoms
     private Set<String> excludedCoords;
-    private final Set<String> atomCoordinates;
     //    private boolean gameFinished;
     
     public Atoms(TiledMap tiledMap)
