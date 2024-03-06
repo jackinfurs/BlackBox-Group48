@@ -54,13 +54,14 @@ public class GameScreen extends SignIn implements Screen {
             
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 34);
-            System.out.println("position x: " + tileX + " position y: " + tileY);
+            System.out.println("position x: " + tileX + "\tposition y: " + tileY);
             
             if (selectedTile == null) {
+                deselectTiles(tiledMap);
                 selectedTile = selectTile(tiledMap, tileX, tileY);
             } else {
                 rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
-                deselectTiles(tiledMap);
+                selectedTile = null;
             }
         }
         
@@ -80,7 +81,7 @@ public class GameScreen extends SignIn implements Screen {
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             System.out.println("SPACEBAR clicked!");
-            atoms.setGameFinished(true);
+            atoms.setGameFinished();
             renderer.render();
         }
         
@@ -132,11 +133,14 @@ public class GameScreen extends SignIn implements Screen {
     // this method changes a tile from black to green to signify that it has been selected
     TiledMapTileLayer.Cell selectTile(TiledMap tiledMap, int x, int y)
     {
-        // error checking
-        MapProperties map = tiledMap.getProperties();
         TiledMapTileLayer.Cell cell;
+        
+        // error checking; not in tilemap region
+        MapProperties map = tiledMap.getProperties();
         if (x > map.get("width", Integer.class) - 1 ||
                 y > map.get("height", Integer.class) - 1) {
+            return null;
+        } else if (atoms.getExcludedCoords().contains(x + "," + y)) { // error checking; unrendered tile
             return null;
         } else {
             // get green tile tilemap (image)

@@ -2,7 +2,6 @@ package com.group48.blackbox;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
@@ -21,7 +20,6 @@ public class Atoms {
     private TiledMapTileSet tileset;
     private TiledMapTileSet guessTileset; // Tileset for guess atoms
     private Set<String> excludedCoords;
-    //    private boolean gameFinished;
     
     public Atoms(TiledMap tiledMap)
     {
@@ -30,13 +28,10 @@ public class Atoms {
         atomCoordinates = new HashSet<>();
         createAtoms();
         createGuessAtoms();
-        //        gameFinished = false;
-        
     }
     
     private void createAtoms()
     {
-        MapLayers layers = tiledMap.getLayers();
         atomsLayer = new TiledMapTileLayer(9, 9, 32, 34);
         atomsLayer.setName("Atoms");
         
@@ -76,7 +71,7 @@ public class Atoms {
         guessAtomsLayer.setCell(x, y, guessAtomCell);
     }
     
-    public void setGameFinished(boolean finished)
+    public void setGameFinished()
     {
         revealAtoms();
     }
@@ -144,5 +139,10 @@ public class Atoms {
         excludedCoords.add("1,8");
         excludedCoords.add("7,8");
         excludedCoords.add("8,8");
+    }
+    
+    public Set<String> getExcludedCoords()
+    {
+        return excludedCoords;
     }
 }
