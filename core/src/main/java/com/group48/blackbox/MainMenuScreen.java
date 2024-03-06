@@ -3,7 +3,6 @@ package com.group48.blackbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.utils.ScreenUtils;
 
@@ -38,11 +37,11 @@ public class MainMenuScreen implements Screen {
         }
     }
      */
-
+    
     // init textures
     Texture backgroundTexture;
     Texture tutorialButtonTexture;
-
+    
     Texture playButtonTexture;
     Texture leaderboardButtonTexture;
     Texture exitButtonTexture;
@@ -53,12 +52,13 @@ public class MainMenuScreen implements Screen {
     boolean exitButtonClicked;
     boolean leaderboardButtonClicked;
     boolean tutorialButtonClicked;
-
-
+    float buttonWidth = 200;
+    float buttonHeight = 50;
     // MainMenuScreen constructor
-    public MainMenuScreen(final BlackBox game) {
+    public MainMenuScreen(final BlackBox game)
+    {
         this.game = game;
-
+        
         // Load menu assets/pngs
         backgroundTexture = new Texture("MainMenuScreen/vaporBackground.png");
         // Button playButton = new Button(new Texture("MainMenuScreen/play.png"));
@@ -66,31 +66,37 @@ public class MainMenuScreen implements Screen {
         leaderboardButtonTexture = new Texture("MainMenuScreen/leaderboard.png");
         exitButtonTexture = new Texture("MainMenuScreen/exit.png");
         tutorialButtonTexture = new Texture("MainMenuScreen/tutorial.png");
-
+        
         Gdx.input.setInputProcessor(new InputHandler());
     }
-
-    float buttonWidth = 200;
-    float buttonHeight = 50;
-
-    private void drawButton(Texture t, int y) {
+    
+    private void drawButton(Texture t, int y)
+    {
         float x = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
         game.batch.draw(t, x, y, buttonWidth, buttonHeight);
     }
-
+    
     @Override
-    public void render(float v) {
+    public void show()
+    {
+    
+    }
+    
+    @Override
+    public void render(float v)
+    {
         // Clear the screen
         ScreenUtils.clear(0, 0, 0, 1);
-
+        
         // Render the main menu
-        game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
-
+        game.camera.setToOrtho(false,800,600);
+        game.camera.update();
+        
         // draw backgroundTexture
         game.batch.begin();
         game.batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+        
         // TODO
         // draw buttons
         drawButton(leaderboardButtonTexture, 400);
@@ -98,7 +104,7 @@ public class MainMenuScreen implements Screen {
         drawButton(exitButtonTexture, 100);
         drawButton(tutorialButtonTexture, 200);
         game.batch.end();
-
+        
         // Process button clicks
         if (playButtonClicked) {
             System.out.println("Play button clicked!");
@@ -117,20 +123,54 @@ public class MainMenuScreen implements Screen {
             SignIn.readScores();
             leaderboardButtonClicked = false; // Reset
         }
-
+        
         if (exitButtonClicked) {
             System.out.println("Exit button clicked!");
             Gdx.app.exit(); // Exit the application
         }
     }
-
+    
+    @Override
+    public void resize(int i, int i1)
+    {
+    
+    }
+    
+    @Override
+    public void pause()
+    {
+    
+    }
+    
+    @Override
+    public void resume()
+    {
+    
+    }
+    
+    @Override
+    public void hide()
+    {
+    
+    }
+    
+    @Override
+    public void dispose()
+    {
+        backgroundTexture.dispose();
+        playButtonTexture.dispose();
+        leaderboardButtonTexture.dispose();
+        exitButtonTexture.dispose();
+    }
+    
     private class InputHandler extends InputAdapter {
         @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        public boolean touchDown(int screenX, int screenY, int pointer, int button)
+        {
             // Convert screen coordinates to world coordinates
             float worldX = screenX * Gdx.graphics.getWidth() / (float) Gdx.graphics.getWidth();
             float worldY = (Gdx.graphics.getHeight() - screenY) * Gdx.graphics.getHeight() / (float) Gdx.graphics.getHeight();
-
+            
             // Check if the touch is within the bounds of the play button
             float buttonWidth = 200;
             float buttonHeight = 50;
@@ -160,7 +200,7 @@ public class MainMenuScreen implements Screen {
                     worldY <= leaderboardButtonY + buttonHeight) {
                 leaderboardButtonClicked = true;
             }
-
+            
             // Check if the touch is within the bounds of the exit button
             float exitButtonX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
             float exitButtonY = 100;
@@ -172,38 +212,5 @@ public class MainMenuScreen implements Screen {
             }
             return true;
         }
-    }
-
-    @Override
-    public void dispose() {
-        backgroundTexture.dispose();
-        playButtonTexture.dispose();
-        leaderboardButtonTexture.dispose();
-        exitButtonTexture.dispose();
-    }
-
-    @Override
-    public void show() {
-
-    }
-
-    @Override
-    public void resize(int i, int i1) {
-
-    }
-
-    @Override
-    public void pause() {
-
-    }
-
-    @Override
-    public void resume() {
-
-    }
-
-    @Override
-    public void hide() {
-
     }
 }
