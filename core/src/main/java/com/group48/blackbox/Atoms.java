@@ -145,4 +145,8 @@ public class Atoms {
         excludedCoords.add("7,8");
         excludedCoords.add("8,8");
     }
+    
+    public Set<String> getExcludedCoords() {
+        return excludedCoords;
+    }
 }
