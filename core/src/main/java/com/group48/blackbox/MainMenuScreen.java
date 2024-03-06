@@ -9,7 +9,6 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class MainMenuScreen implements Screen {
     final BlackBox game;
-    OrthographicCamera camera;
 
     /*
     // Button class for code cleanup; to be implemented as a misc task
@@ -60,12 +59,6 @@ public class MainMenuScreen implements Screen {
     public MainMenuScreen(final BlackBox game) {
         this.game = game;
 
-        camera = new OrthographicCamera();
-        // TODO please find a way to set the viewportWidth and Height to something more concrete
-        //  this is exactly the time i'd like a preprocessor directive
-        // TODO also set this to not stretch/borderless, etc
-        camera.setToOrtho(false, 800, 600);
-
         // Load menu assets/pngs
         backgroundTexture = new Texture("MainMenuScreen/vaporBackground.png");
         // Button playButton = new Button(new Texture("MainMenuScreen/play.png"));
@@ -91,8 +84,8 @@ public class MainMenuScreen implements Screen {
         ScreenUtils.clear(0, 0, 0, 1);
 
         // Render the main menu
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+        game.camera.update();
+        game.batch.setProjectionMatrix(game.camera.combined);
 
         // draw backgroundTexture
         game.batch.begin();

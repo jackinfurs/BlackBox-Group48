@@ -1,6 +1,6 @@
 package com.group48.blackbox;
 
-import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.maps.MapLayers;
 import com.badlogic.gdx.maps.tiled.TiledMap;
@@ -8,8 +8,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.utils.Array;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -23,7 +21,7 @@ public class Atoms {
     private final TiledMap tiledMap;
     private Set<String> excludedCoords;
     private Set<String> atomCoordinates;
-    private boolean gameFinished;
+//    private boolean gameFinished;
 
     public Atoms(TiledMap tiledMap) {
         this.tiledMap = tiledMap;
@@ -31,7 +29,8 @@ public class Atoms {
         atomCoordinates = new HashSet<>();
         createAtoms();
         createGuessAtoms();
-        gameFinished = false;
+//        gameFinished = false;
+
     }
 
     private void createAtoms() {
@@ -46,7 +45,6 @@ public class Atoms {
         TiledMapTile tile1Data = new StaticTiledMapTile(tile1);
         tile1Data.setId(1);
         tileset.putTile(1, tile1Data);
-
 
 
     }
@@ -94,11 +92,11 @@ public class Atoms {
         int gridWidth = atomsLayer.getWidth();
         int gridHeight = atomsLayer.getHeight();
 
-        for (int i = 0; i < totalAtoms;) {
+        for (int i = 0; i < totalAtoms; ) {
             int x, y;
             x = random.nextInt(gridWidth);
             y = random.nextInt(gridHeight);
-            if(!isExcluded(x, y) && !cellIsOccupied(x, y)){
+            if (!isExcluded(x, y) && !cellIsOccupied(x, y)) {
                 atomCoordinates.add(x + "," + y);
                 i++;
             }
@@ -137,10 +135,5 @@ public class Atoms {
         excludedCoords.add("1,8");
         excludedCoords.add("7,8");
         excludedCoords.add("8,8");
-
-
     }
-
-
-
 }

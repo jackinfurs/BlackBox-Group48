@@ -16,13 +16,9 @@ public class SignInScreen implements Screen {
     final BlackBox game;
     private Stage stage;
     private TextField usernameField;
-    OrthographicCamera camera;
 
     public SignInScreen(final BlackBox game) {
         this.game = game;
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 600);
 
         stage = new Stage(new ScreenViewport(), game.batch);
         Gdx.input.setInputProcessor(stage);
@@ -50,8 +46,8 @@ public class SignInScreen implements Screen {
     public void render(float delta) {
 
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
-        camera.update();
-        game.batch.setProjectionMatrix(camera.combined);
+        game.camera.update();
+        game.batch.setProjectionMatrix(game.camera.combined);
 
         stage.act();
         stage.draw();
