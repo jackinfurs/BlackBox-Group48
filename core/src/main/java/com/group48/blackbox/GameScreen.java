@@ -8,7 +8,6 @@ import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
@@ -17,6 +16,7 @@ public class GameScreen extends SignIn implements Screen {
     TiledMapRenderer renderer;
 
     private Atoms atoms;
+    private Rays rays;
 
     public GameScreen(BlackBox game) {
         this.game = game;
@@ -35,6 +35,7 @@ public class GameScreen extends SignIn implements Screen {
 
         atoms = new Atoms(tiledMap);
         atoms.placeRandomAtoms();
+        rays = new Rays(tiledMap);
     }
 
 
@@ -77,6 +78,7 @@ public class GameScreen extends SignIn implements Screen {
     }
 
 
+    // TODO implement direction + proper tile selection
     @Override
     public void render(float delta) {
 
@@ -125,7 +127,9 @@ public class GameScreen extends SignIn implements Screen {
             System.out.println("position x: " + tileX + " position y: " + tileY);
             atoms.addGuessAtom(tileX, tileY);
         }
-
+        
+        
+        
         renderer.render();
 
     }
