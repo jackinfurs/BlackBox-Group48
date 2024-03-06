@@ -17,6 +17,7 @@ public class GameScreen extends SignIn implements Screen {
     
     private Atoms atoms;
     private Rays rays;
+    private TiledMapTileLayer.Cell selectedTile;
     
     public GameScreen(BlackBox game)
     {
@@ -38,6 +39,7 @@ public class GameScreen extends SignIn implements Screen {
         atoms = new Atoms(tiledMap);
         atoms.placeRandomAtoms();
         rays = new Rays(tiledMap);
+        selectedTile = null;
     }
     
     // TODO implement direction + proper tile selection
@@ -46,7 +48,6 @@ public class GameScreen extends SignIn implements Screen {
     {
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
-            
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             game.camera.unproject(mousePos);
@@ -54,8 +55,13 @@ public class GameScreen extends SignIn implements Screen {
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 34);
             System.out.println("position x: " + tileX + " position y: " + tileY);
-            deselectTiles(tiledMap);
-            selectTile(tiledMap, tileX, tileY);
+            
+            if (selectedTile == null) {
+                selectedTile = selectTile(tiledMap, tileX, tileY);
+            } else {
+                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                deselectTiles(tiledMap);
+            }
         }
         
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
@@ -124,13 +130,14 @@ public class GameScreen extends SignIn implements Screen {
     }
     
     // this method changes a tile from black to green to signify that it has been selected
-    void selectTile(TiledMap tiledMap, int x, int y)
+    TiledMapTileLayer.Cell selectTile(TiledMap tiledMap, int x, int y)
     {
         // error checking
         MapProperties map = tiledMap.getProperties();
+        TiledMapTileLayer.Cell cell;
         if (x > map.get("width", Integer.class) - 1 ||
                 y > map.get("height", Integer.class) - 1) {
-            System.out.println("Cell not located within bounds");
+            return null;
         } else {
             // get green tile tilemap (image)
             // getTile(1) = black, getTile(2) = green
@@ -140,16 +147,18 @@ public class GameScreen extends SignIn implements Screen {
             // use this to select a specific tile by the X and Y coordinate (in the range of 0-8)
             // x: 0 = leftmost, 8 = rightmost on board
             // y: 0 = lowest, 8 = highest on board
-            TiledMapTileLayer.Cell cell = tileLayer.getCell(x, y);
+            cell = tileLayer.getCell(x, y);
             // change cell to green tile (selectedTile above)
-            cell.setTile(selectedTile);
+            
             // finally render (please make sure to call this anytime you change the board)
             renderer.render();
+            return cell.setTile(selectedTile);
         }
     }
     
     void deselectTiles(TiledMap tiledMap)
     {
+        selectedTile = null;
         TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
         TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(1);
         
