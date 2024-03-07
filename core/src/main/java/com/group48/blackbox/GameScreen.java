@@ -30,19 +30,19 @@ class TileCoordinates {
             edgeCoords.add("4,0");
             edgeCoords.add("5,0");
             edgeCoords.add("6,0");
-            edgeCoords.add("2,1");
+            edgeCoords.add("1,1");
             edgeCoords.add("6,1");
             edgeCoords.add("1,2");
             edgeCoords.add("7,2");
-            edgeCoords.add("1,3");
+            edgeCoords.add("0,3");
             edgeCoords.add("7,3");
             edgeCoords.add("0,4");
             edgeCoords.add("8,4");
-            edgeCoords.add("1,5");
+            edgeCoords.add("0,5");
             edgeCoords.add("7,5");
             edgeCoords.add("1,6");
             edgeCoords.add("7,6");
-            edgeCoords.add("2,7");
+            edgeCoords.add("1,7");
             edgeCoords.add("6,7");
             edgeCoords.add("2,8");
             edgeCoords.add("3,8");
@@ -126,25 +126,43 @@ public class GameScreen extends SignIn implements Screen {
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             game.camera.unproject(mousePos);
             
+            // get coordinates of selected tile
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 34);
             String tileCoordinate = tileX + "," + tileY;
             
-            if (atoms.getExcludedCoords().contains(tileCoordinate)) deselectTiles(tiledMap);
-                // if no tile has been selected before, and it's an edge tile
+            // if selected tile is invalid, deselect all tiles
+            if (atoms.getExcludedCoords().contains(tileCoordinate)) {
+                System.out.println("selected tile invalid");
+                deselectTiles(tiledMap);
+            }
+            // if it's an edge, select the first tile
             else if (specialCoords.getEdgeCoords().contains(tileCoordinate) && selectedTile == null) {
+                System.out.println("first tile is an edge, selecting...");
                 deselectTiles(tiledMap);
                 selectedTile = selectTile(tiledMap, tileX, tileY);
             }
             // if a tile has been selected before
             else if (selectedTile != null) {
-                // if it's not an excluded tile, cast a ray
-                if (!specialCoords.getEdgeCoords().contains(tileCoordinate) || specialCoords.getCornerCoords().contains(tileCoordinate))
+                System.out.println("starting tile defined");
+                // if it's not an edge tile, cast a ray
+                if (!specialCoords.getEdgeCoords().contains(tileCoordinate)) {
+                    System.out.println("selection is not an edge tile, casting ray...");
                     rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                }
+                // if the starter tile is a corner tile, cast a ray
+                else if (specialCoords.getCornerCoords().contains(selectTileX + "," + selectTileY)) {
+                    System.out.println("first selection was a corner tile, casting ray...");
+                    rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                }
+//                else {
+//                    System.out.println("invalid selection");
+//                    deselectTiles(tiledMap);
+//                }
                 
                 selectedTile = null;
             }
-            System.out.println(tileCoordinate + "\nedge piece?: " + specialCoords.getEdgeCoords().contains(tileCoordinate));
+            System.out.println("");
         }
         
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
@@ -212,17 +230,22 @@ public class GameScreen extends SignIn implements Screen {
         tiledMap.dispose();
     }
     
+    int selectTileX, selectTileY;
+    
     // this method changes a tile from black to green to signify that it has been selected
     TiledMapTileLayer.Cell selectTile(TiledMap tiledMap, int x, int y)
     {
         TiledMapTileLayer.Cell cell;
         
+        selectTileX = x;
+        selectTileY = y;
+        
         // error checking; not in tilemap region
         MapProperties map = tiledMap.getProperties();
-        if (x > map.get("width", Integer.class) - 1 ||
-                y > map.get("height", Integer.class) - 1) {
+        if (selectTileX > map.get("width", Integer.class) - 1 ||
+                selectTileY > map.get("height", Integer.class) - 1) {
             return null;
-        } else if (atoms.getExcludedCoords().contains(x + "," + y)) { // error checking; unrendered tile
+        } else if (atoms.getExcludedCoords().contains(selectTileX + "," + selectTileY)) { // error checking; unrendered tile
             return null;
         } else {
             // get green tile tilemap (image)
@@ -232,7 +255,7 @@ public class GameScreen extends SignIn implements Screen {
             // use this to select a specific tile by the X and Y coordinate (in the range of 0-8)
             // x: 0 = leftmost, 8 = rightmost on board
             // y: 0 = lowest, 8 = highest on board
-            cell = tileLayer.getCell(x, y);
+            cell = tileLayer.getCell(selectTileX, selectTileY);
             // change cell to green tile (selectedTile above)
             
             // finally render (please make sure to call this anytime you change the board)
