@@ -9,12 +9,15 @@ import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
     
     TiledMap tiledMap;
     TiledMapRenderer renderer;
-    
+    private Set<String> edges;
     private Atoms atoms;
     private Rays rays;
     private TiledMapTileLayer.Cell selectedTile;
@@ -55,6 +58,8 @@ public class GameScreen extends SignIn implements Screen {
         atoms.placeRandomAtoms();
         rays = new Rays(tiledMap);
         selectedTile = null;
+        
+        edges = initializeEdgeCoords();
     }
     
     // TODO implement direction + proper tile selection
@@ -69,15 +74,19 @@ public class GameScreen extends SignIn implements Screen {
             
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 34);
-            System.out.println("position x: " + tileX + "\tposition y: " + tileY);
+            String tileCoordinate = tileX + "," + tileY;
             
-            if (selectedTile == null) {
+            // if no tile has been selected before, and it's an edge tile
+            if (edges.contains(tileCoordinate) && selectedTile == null) {
                 deselectTiles(tiledMap);
                 selectedTile = selectTile(tiledMap, tileX, tileY);
-            } else {
+            }
+            // if a tile has been selected before
+            else if (selectedTile != null) {
                 rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
                 selectedTile = null;
             }
+            System.out.println(tileCoordinate + "edge piece?: " + edges.contains(tileCoordinate));
         }
         
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
@@ -188,5 +197,37 @@ public class GameScreen extends SignIn implements Screen {
                 }
             }
         }
+    }
+    
+    private Set<String> initializeEdgeCoords()
+    {
+        Set<String> edgeCoords = new HashSet<>();
+        
+        edgeCoords.add("2,0");
+        edgeCoords.add("3,0");
+        edgeCoords.add("4,0");
+        edgeCoords.add("5,0");
+        edgeCoords.add("6,0");
+        edgeCoords.add("2,1");
+        edgeCoords.add("6,1");
+        edgeCoords.add("1,2");
+        edgeCoords.add("7,2");
+        edgeCoords.add("1,3");
+        edgeCoords.add("7,3");
+        edgeCoords.add("0,4");
+        edgeCoords.add("8,4");
+        edgeCoords.add("1,5");
+        edgeCoords.add("7,5");
+        edgeCoords.add("1,6");
+        edgeCoords.add("7,6");
+        edgeCoords.add("2,7");
+        edgeCoords.add("6,7");
+        edgeCoords.add("2,8");
+        edgeCoords.add("3,8");
+        edgeCoords.add("4,8");
+        edgeCoords.add("5,8");
+        edgeCoords.add("6,8");
+        
+        return edgeCoords;
     }
 }
