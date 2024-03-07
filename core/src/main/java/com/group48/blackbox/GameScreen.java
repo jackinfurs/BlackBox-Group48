@@ -12,12 +12,97 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.HashSet;
 import java.util.Set;
 
+class TileCoordinates {
+    private Set<String> excludedCoords, edgeCoords, cornerCoords;
+    
+    public TileCoordinates()
+    {
+        this.excludedCoords = getExcludedCoords();
+        this.edgeCoords = getEdgeCoords();
+        this.cornerCoords = getCornerCoords();
+    }
+    
+    public Set<String> getExcludedCoords()
+    {
+        if (excludedCoords == null) {
+            excludedCoords = new HashSet<>();
+            excludedCoords.add("0,0");
+            excludedCoords.add("1,0");
+            excludedCoords.add("7,0");
+            excludedCoords.add("8,0");
+            excludedCoords.add("0,1");
+            excludedCoords.add("7,1");
+            excludedCoords.add("8,1");
+            excludedCoords.add("0,2");
+            excludedCoords.add("8,2");
+            excludedCoords.add("8,3");
+            excludedCoords.add("8,5");
+            excludedCoords.add("0,6");
+            excludedCoords.add("8,6");
+            excludedCoords.add("0,7");
+            excludedCoords.add("7,7");
+            excludedCoords.add("8,7");
+            excludedCoords.add("0,8");
+            excludedCoords.add("1,8");
+            excludedCoords.add("7,8");
+            excludedCoords.add("8,8");
+        }
+        return excludedCoords;
+    }
+    
+    public Set<String> getEdgeCoords()
+    {
+        if (edgeCoords == null) {
+            edgeCoords = new HashSet<>();
+            edgeCoords.add("2,0");
+            edgeCoords.add("3,0");
+            edgeCoords.add("4,0");
+            edgeCoords.add("5,0");
+            edgeCoords.add("6,0");
+            edgeCoords.add("2,1");
+            edgeCoords.add("6,1");
+            edgeCoords.add("1,2");
+            edgeCoords.add("7,2");
+            edgeCoords.add("1,3");
+            edgeCoords.add("7,3");
+            edgeCoords.add("0,4");
+            edgeCoords.add("8,4");
+            edgeCoords.add("1,5");
+            edgeCoords.add("7,5");
+            edgeCoords.add("1,6");
+            edgeCoords.add("7,6");
+            edgeCoords.add("2,7");
+            edgeCoords.add("6,7");
+            edgeCoords.add("2,8");
+            edgeCoords.add("3,8");
+            edgeCoords.add("4,8");
+            edgeCoords.add("5,8");
+            edgeCoords.add("6,8");
+        }
+        return edgeCoords;
+    }
+    
+    private Set<String> getCornerCoords()
+    {
+        if (cornerCoords == null) {
+            cornerCoords = new HashSet<>();
+            cornerCoords.add("2,0");
+            cornerCoords.add("6,0");
+            cornerCoords.add("0,4");
+            cornerCoords.add("8,4");
+            cornerCoords.add("2,8");
+            cornerCoords.add("6,8");
+        }
+        return cornerCoords;
+    }
+}
+
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
     
     TiledMap tiledMap;
     TiledMapRenderer renderer;
-    private Set<String> edges;
+    private TileCoordinates specialCoords;
     private Atoms atoms;
     private Rays rays;
     private TiledMapTileLayer.Cell selectedTile;
@@ -53,13 +138,11 @@ public class GameScreen extends SignIn implements Screen {
     {
         tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
         renderer = new HexagonalTiledMapRenderer(tiledMap);
-        
+        specialCoords = new TileCoordinates();
         atoms = new Atoms(tiledMap);
         atoms.placeRandomAtoms();
         rays = new Rays(tiledMap);
         selectedTile = null;
-        
-        edges = initializeEdgeCoords();
     }
     
     // TODO implement direction + proper tile selection
@@ -77,16 +160,18 @@ public class GameScreen extends SignIn implements Screen {
             String tileCoordinate = tileX + "," + tileY;
             
             // if no tile has been selected before, and it's an edge tile
-            if (edges.contains(tileCoordinate) && selectedTile == null) {
+            if (specialCoords.getEdgeCoords().contains(tileCoordinate) && selectedTile == null) {
                 deselectTiles(tiledMap);
                 selectedTile = selectTile(tiledMap, tileX, tileY);
             }
             // if a tile has been selected before
             else if (selectedTile != null) {
-                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                if (!atoms.getExcludedCoords().contains(tileCoordinate)) {
+                    rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                }
                 selectedTile = null;
             }
-            System.out.println(tileCoordinate + "edge piece?: " + edges.contains(tileCoordinate));
+            System.out.println(tileCoordinate + "\nedge piece?: " + specialCoords.getEdgeCoords().contains(tileCoordinate));
         }
         
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
@@ -164,7 +249,7 @@ public class GameScreen extends SignIn implements Screen {
         if (x > map.get("width", Integer.class) - 1 ||
                 y > map.get("height", Integer.class) - 1) {
             return null;
-        } else if (atoms.getExcludedCoords().contains(x + "," + y)) { // error checking; unrendered tile
+        } else if (specialCoords.getExcludedCoords().contains(x + "," + y)) { // error checking; unrendered tile
             return null;
         } else {
             // get green tile tilemap (image)
@@ -197,37 +282,5 @@ public class GameScreen extends SignIn implements Screen {
                 }
             }
         }
-    }
-    
-    private Set<String> initializeEdgeCoords()
-    {
-        Set<String> edgeCoords = new HashSet<>();
-        
-        edgeCoords.add("2,0");
-        edgeCoords.add("3,0");
-        edgeCoords.add("4,0");
-        edgeCoords.add("5,0");
-        edgeCoords.add("6,0");
-        edgeCoords.add("2,1");
-        edgeCoords.add("6,1");
-        edgeCoords.add("1,2");
-        edgeCoords.add("7,2");
-        edgeCoords.add("1,3");
-        edgeCoords.add("7,3");
-        edgeCoords.add("0,4");
-        edgeCoords.add("8,4");
-        edgeCoords.add("1,5");
-        edgeCoords.add("7,5");
-        edgeCoords.add("1,6");
-        edgeCoords.add("7,6");
-        edgeCoords.add("2,7");
-        edgeCoords.add("6,7");
-        edgeCoords.add("2,8");
-        edgeCoords.add("3,8");
-        edgeCoords.add("4,8");
-        edgeCoords.add("5,8");
-        edgeCoords.add("6,8");
-        
-        return edgeCoords;
     }
 }

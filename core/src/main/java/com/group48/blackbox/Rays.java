@@ -65,8 +65,6 @@ public class Rays extends BlackBox {
     public void newRay(TiledMapTileLayer.Cell startTile, TiledMapTileLayer.Cell pointerTile)
     {
         // get the x,y coords of both tiles
-        System.out.println(
-                startTile.getTile().getProperties().getKeys().toString());
         // determine the length (startTile.x - endTile.x)
         // determine the angle relative to the origin
         // pedal it back by half the length in the other direction of the angle
