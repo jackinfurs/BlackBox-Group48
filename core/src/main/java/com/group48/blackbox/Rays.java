@@ -41,8 +41,7 @@ import java.util.ArrayList;
 
 public class Rays extends BlackBox {
     TiledMap tiledMap;
-    // RayList = ArrayList - Ar. sidesplitting.
-    ArrayList<Ray> RayList;
+    ArrayList<Ray> RayList; // RayList = ArrayList - Ar. sidesplitting.
     
     public Rays(TiledMap tiledMap)
     {
@@ -65,8 +64,7 @@ public class Rays extends BlackBox {
     public void newRay(TiledMapTileLayer.Cell startTile, TiledMapTileLayer.Cell pointerTile)
     {
         // get the x,y coords of both tiles
-        // determine the length (startTile.x - endTile.x)
-        // determine the angle relative to the origin
+        // draw line between the two
         // pedal it back by half the length in the other direction of the angle
         
         //        RayList.add(new Ray(tileX, tileY, direction));

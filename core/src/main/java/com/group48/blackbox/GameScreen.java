@@ -145,24 +145,33 @@ public class GameScreen extends SignIn implements Screen {
             // if a tile has been selected before
             else if (selectedTile != null) {
                 System.out.println("starting tile defined");
-                // if it's not an edge tile, cast a ray
-                if (!specialCoords.getEdgeCoords().contains(tileCoordinate)) {
-                    System.out.println("selection is not an edge tile, casting ray...");
-                    rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                
+                // difference in X and Y
+                int tileDiffX = selectTileX - tileX, tileDiffY = selectTileY - tileY;
+                if (Math.abs(tileDiffX) == 0 || Math.abs(tileDiffX) == 1) {
+                    if (Math.abs(tileDiffY) == 0 || Math.abs(tileDiffY) == 1) {
+                        // if it's not an edge tile, cast a ray
+                        if (!specialCoords.getEdgeCoords().contains(tileCoordinate)) {
+                            System.out.println("selection is not an edge tile, casting ray...");
+                            rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                        }
+                        // if the starter tile is a corner tile, cast a ray
+                        else if (specialCoords.getCornerCoords().contains(selectTileX + "," + selectTileY)) {
+                            System.out.println("first selection was a corner tile, casting ray...");
+                            rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                        }
+                    } else {
+                        System.out.println("invalid selection");
+                        deselectTiles(tiledMap);
+                    }
+                } else {
+                    System.out.println("invalid selection");
+                    deselectTiles(tiledMap);
                 }
-                // if the starter tile is a corner tile, cast a ray
-                else if (specialCoords.getCornerCoords().contains(selectTileX + "," + selectTileY)) {
-                    System.out.println("first selection was a corner tile, casting ray...");
-                    rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
-                }
-//                else {
-//                    System.out.println("invalid selection");
-//                    deselectTiles(tiledMap);
-//                }
                 
                 selectedTile = null;
             }
-            System.out.println("");
+            System.out.println();
         }
         
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
@@ -229,6 +238,17 @@ public class GameScreen extends SignIn implements Screen {
     {
         tiledMap.dispose();
     }
+    
+    //    // TODO figure this out
+    //    boolean validSelection(int x, int y)
+    //    {
+    //        // x-1
+    //        if (x - 1 == y - 1 || x - 1 == y || x - 1 == y + 1) return true;
+    //        // x
+    //        if (x == y - 1 || x == y + 1) return true;
+    //        // x+1
+    //        return x + 1 == y;
+    //    }
     
     int selectTileX, selectTileY;
     

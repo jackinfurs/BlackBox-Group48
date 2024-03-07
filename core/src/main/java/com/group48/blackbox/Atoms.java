@@ -114,6 +114,8 @@ public class Atoms {
         return excludedCoords.contains(x + "," + y);
     }
     
+    
+    
     private void initializeExcludedCoords()
     {
         
