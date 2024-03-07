@@ -146,6 +146,12 @@ public class GameScreen extends SignIn implements Screen {
             else if (selectedTile != null) {
                 System.out.println("starting tile defined");
                 
+                // if same tile is selected, then deselect tiles
+                if (tileX == selectTileX && tileY == selectTileY) {
+                    System.out.println("selected the same cell, deselecting...");
+                    deselectTiles(tiledMap);
+                }
+                
                 // difference in X and Y
                 int tileDiffX = selectTileX - tileX, tileDiffY = selectTileY - tileY;
                 if (Math.abs(tileDiffX) == 0 || Math.abs(tileDiffX) == 1) {
@@ -159,7 +165,7 @@ public class GameScreen extends SignIn implements Screen {
                         else if (specialCoords.getCornerCoords().contains(selectTileX + "," + selectTileY)) {
                             System.out.println("first selection was a corner tile, casting ray...");
                             rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
-                        }
+                        } else deselectTiles(tiledMap);
                     } else {
                         System.out.println("invalid selection");
                         deselectTiles(tiledMap);
