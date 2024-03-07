@@ -40,25 +40,24 @@ import java.util.ArrayList;
 //}
 
 public class Rays extends BlackBox {
-    TiledMap tiledMap;
+    TiledMapTileLayer atomsLayer;
     ArrayList<Ray> RayList; // RayList = ArrayList - Ar. sidesplitting.
     
     public Rays(TiledMap tiledMap)
     {
-        this.tiledMap = tiledMap;
+        atomsLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Atoms");
         RayList = new ArrayList<>();
     }
     
-    public void draw()
-    // TODO change opacity of line
-    {
-        //        for (Ray ray : RayList) {
-        //            if (!ray.isShown()) {
-        //
-        //            }
-        //        }
-        
-    }
+//    // TODO change opacity of line
+//    public void draw()
+//    {
+//        //        for (Ray ray : RayList) {
+//        //            if (!ray.isShown()) {
+//        //
+//        //            }
+//        //        }
+//    }
     
     // https://www.redblobgames.com/grids/hexagons/
     public void newRay(TiledMapTileLayer.Cell startTile, TiledMapTileLayer.Cell pointerTile)

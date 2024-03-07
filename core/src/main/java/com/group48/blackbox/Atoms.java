@@ -109,12 +109,10 @@ public class Atoms {
         return atomCoordinates.contains(x + "," + y);
     }
     
-    private boolean isExcluded(int x, int y)
+    public boolean isExcluded(int x, int y)
     {
         return excludedCoords.contains(x + "," + y);
     }
-    
-    
     
     private void initializeExcludedCoords()
     {
@@ -141,10 +139,5 @@ public class Atoms {
         excludedCoords.add("1,8");
         excludedCoords.add("7,8");
         excludedCoords.add("8,8");
-    }
-    
-    public Set<String> getExcludedCoords()
-    {
-        return excludedCoords;
     }
 }

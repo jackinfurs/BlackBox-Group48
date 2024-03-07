@@ -12,6 +12,7 @@ import com.badlogic.gdx.utils.ScreenUtils;
 import java.util.HashSet;
 import java.util.Set;
 
+// TODO get atoms.excludedCoords() in here
 class TileCoordinates {
     private Set<String> edgeCoords, cornerCoords;
     
@@ -53,6 +54,11 @@ class TileCoordinates {
         return edgeCoords;
     }
     
+    public boolean isEdge(int x, int y)
+    {
+        return edgeCoords.contains(x + "," + y);
+    }
+    
     public Set<String> getCornerCoords()
     {
         if (cornerCoords == null) {
@@ -68,40 +74,35 @@ class TileCoordinates {
     }
 }
 
+enum Tile {
+    BLACK(1), GREEN(2);
+    private final int value;
+    
+    Tile(int value)
+    {
+        this.value = value;
+    }
+    
+    public int getValue()
+    {
+        return value;
+    }
+}
+
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
     
-    TiledMap tiledMap;
-    TiledMapRenderer renderer;
+    private TiledMap tiledMap;
+    private TiledMapRenderer renderer;
     private TileCoordinates specialCoords;
+    
     private Atoms atoms;
     private Rays rays;
     private TiledMapTileLayer.Cell selectedTile;
     
-    private enum Tile {
-        BLACK(1), GREEN(2);
-        private final int value;
-        
-        Tile(int value)
-        {
-            this.value = value;
-        }
-        
-        public int getValue()
-        {
-            return value;
-        }
-    }
-    
     public GameScreen(BlackBox game)
     {
         this.game = game;
-        
-        // ESC key exits to main menu
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            System.out.println("ESC button clicked!");
-            game.setScreen(new MainMenuScreen(game));
-        }
     }
     
     @Override
@@ -113,13 +114,20 @@ public class GameScreen extends SignIn implements Screen {
         atoms = new Atoms(tiledMap);
         atoms.placeRandomAtoms();
         rays = new Rays(tiledMap);
-        selectedTile = null;
     }
     
     // TODO implement direction + proper tile selection
     @Override
     public void render(float delta)
     {
+        ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
+        
+        game.camera.update();
+        game.batch.setProjectionMatrix(game.camera.combined);
+        
+        renderer.setView(game.camera);
+        game.camera.position.set(360, 110, 0);
+        renderer.render();
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             // Check for button presses
@@ -129,15 +137,14 @@ public class GameScreen extends SignIn implements Screen {
             // get coordinates of selected tile
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 34);
-            String tileCoordinate = tileX + "," + tileY;
             
             // if selected tile is invalid, deselect all tiles
-            if (atoms.getExcludedCoords().contains(tileCoordinate)) {
+            if (atoms.isExcluded(tileX, tileY)) {
                 System.out.println("selected tile invalid");
                 deselectTiles(tiledMap);
             }
             // if it's an edge, select the first tile
-            else if (specialCoords.getEdgeCoords().contains(tileCoordinate) && selectedTile == null) {
+            else if (specialCoords.isEdge(tileX, tileY) && selectedTile == null) {
                 System.out.println("first tile is an edge, selecting...");
                 deselectTiles(tiledMap);
                 selectedTile = selectTile(tiledMap, tileX, tileY);
@@ -150,54 +157,36 @@ public class GameScreen extends SignIn implements Screen {
                 if (tileX == selectTileX && tileY == selectTileY) {
                     System.out.println("selected the same cell, deselecting...");
                     deselectTiles(tiledMap);
-                }
-                
-                // difference in X and Y
-                int tileDiffX = selectTileX - tileX, tileDiffY = selectTileY - tileY;
-                if (Math.abs(tileDiffX) == 0 || Math.abs(tileDiffX) == 1) {
-                    if (Math.abs(tileDiffY) == 0 || Math.abs(tileDiffY) == 1) {
-                        // if it's not an edge tile, cast a ray
-                        if (!specialCoords.getEdgeCoords().contains(tileCoordinate)) {
-                            System.out.println("selection is not an edge tile, casting ray...");
-                            rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                } else {
+                    // difference in X and Y
+                    int tileDiffX = selectTileX - tileX, tileDiffY = selectTileY - tileY;
+                    // TODO improve surrounding tile error checking
+                    if (Math.abs(tileDiffX) == 0 || Math.abs(tileDiffX) == 1) {
+                        if (Math.abs(tileDiffY) == 0 || Math.abs(tileDiffY) == 1) {
+                            // if it's not an edge tile, cast a ray
+                            if (!specialCoords.isEdge(tileX, tileY)) {
+                                System.out.println("selection is not an edge tile, casting ray...");
+                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                            }
+                            // if the starter tile is a corner tile, cast a ray
+                            else if (specialCoords.getCornerCoords().contains(selectTileX + "," + selectTileY)) {
+                                System.out.println("first selection was a corner tile, casting ray...");
+                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                            } else deselectTiles(tiledMap);
+                        } else {
+                            System.out.println("invalid selection");
+                            deselectTiles(tiledMap);
                         }
-                        // if the starter tile is a corner tile, cast a ray
-                        else if (specialCoords.getCornerCoords().contains(selectTileX + "," + selectTileY)) {
-                            System.out.println("first selection was a corner tile, casting ray...");
-                            rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
-                        } else deselectTiles(tiledMap);
                     } else {
                         System.out.println("invalid selection");
                         deselectTiles(tiledMap);
                     }
-                } else {
-                    System.out.println("invalid selection");
-                    deselectTiles(tiledMap);
+                    selectedTile = null;
                 }
-                
-                selectedTile = null;
+            } else {
+                deselectTiles(tiledMap);
             }
             System.out.println();
-        }
-        
-        ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
-        
-        game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
-        
-        renderer.setView(game.camera);
-        game.camera.position.set(360, 110, 0);
-        renderer.render();
-        
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            System.out.println("ESC button clicked!");
-            game.setScreen(new MainMenuScreen(game));
-        }
-        
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            System.out.println("SPACEBAR clicked!");
-            atoms.setGameFinished();
-            renderer.render();
         }
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
@@ -210,6 +199,16 @@ public class GameScreen extends SignIn implements Screen {
             int tileY = (int) (mousePos.y / 34);
             System.out.println("position x: " + tileX + " position y: " + tileY);
             atoms.addGuessAtom(tileX, tileY);
+        }
+        
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            System.out.println("ESC button clicked!");
+            game.setScreen(new MainMenuScreen(game));
+        }
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
+            System.out.println("SPACEBAR clicked!");
+            atoms.setGameFinished();
         }
         
         renderer.render();
@@ -245,17 +244,6 @@ public class GameScreen extends SignIn implements Screen {
         tiledMap.dispose();
     }
     
-    //    // TODO figure this out
-    //    boolean validSelection(int x, int y)
-    //    {
-    //        // x-1
-    //        if (x - 1 == y - 1 || x - 1 == y || x - 1 == y + 1) return true;
-    //        // x
-    //        if (x == y - 1 || x == y + 1) return true;
-    //        // x+1
-    //        return x + 1 == y;
-    //    }
-    
     int selectTileX, selectTileY;
     
     // this method changes a tile from black to green to signify that it has been selected
@@ -271,7 +259,7 @@ public class GameScreen extends SignIn implements Screen {
         if (selectTileX > map.get("width", Integer.class) - 1 ||
                 selectTileY > map.get("height", Integer.class) - 1) {
             return null;
-        } else if (atoms.getExcludedCoords().contains(selectTileX + "," + selectTileY)) { // error checking; unrendered tile
+        } else if (atoms.isExcluded(selectTileX, selectTileY)) { // error checking; unrendered tile
             return null;
         } else {
             // get green tile tilemap (image)
