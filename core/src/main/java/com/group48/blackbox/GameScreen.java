@@ -19,6 +19,21 @@ public class GameScreen extends SignIn implements Screen {
     private Rays rays;
     private TiledMapTileLayer.Cell selectedTile;
     
+    private enum Tile {
+        BLACK(1), GREEN(2);
+        private final int value;
+        
+        Tile(int value)
+        {
+            this.value = value;
+        }
+        
+        public int getValue()
+        {
+            return value;
+        }
+    }
+    
     public GameScreen(BlackBox game)
     {
         this.game = game;
@@ -144,8 +159,7 @@ public class GameScreen extends SignIn implements Screen {
             return null;
         } else {
             // get green tile tilemap (image)
-            // getTile(1) = black, getTile(2) = green
-            TiledMapTile selectedTile = tiledMap.getTileSets().getTileSet("Hex").getTile(2);
+            TiledMapTile selectedTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.GREEN.getValue());
             // select "Base" tile layer from Hex.tmx; makes next line more concise
             TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
             // use this to select a specific tile by the X and Y coordinate (in the range of 0-8)
@@ -164,7 +178,7 @@ public class GameScreen extends SignIn implements Screen {
     {
         selectedTile = null;
         TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
-        TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(1);
+        TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.BLACK.getValue());
         
         for (int y = 0 ; y < tileLayer.getHeight() ; y++) {
             for (int x = 0 ; x < tileLayer.getWidth() ; x++) {
