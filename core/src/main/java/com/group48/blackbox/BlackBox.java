@@ -16,8 +16,8 @@ public class BlackBox extends Game {
         font = new BitmapFont(); // use libGDX's default Arial font
         camera = new OrthographicCamera(800, 600);
         // TODO PLEASE CHANGE THIS BACK ONCE DONE
-//        this.setScreen(new MainMenuScreen(this));
-        this.setScreen(new GameScreen(this));
+        this.setScreen(new MainMenuScreen(this));
+//        this.setScreen(new GameScreen(this));
     }
     
     public void dispose()
