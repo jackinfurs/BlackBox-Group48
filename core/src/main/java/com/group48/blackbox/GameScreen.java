@@ -13,41 +13,12 @@ import java.util.HashSet;
 import java.util.Set;
 
 class TileCoordinates {
-    private Set<String> excludedCoords, edgeCoords, cornerCoords;
+    private Set<String> edgeCoords, cornerCoords;
     
     public TileCoordinates()
     {
-        this.excludedCoords = getExcludedCoords();
         this.edgeCoords = getEdgeCoords();
         this.cornerCoords = getCornerCoords();
-    }
-    
-    public Set<String> getExcludedCoords()
-    {
-        if (excludedCoords == null) {
-            excludedCoords = new HashSet<>();
-            excludedCoords.add("0,0");
-            excludedCoords.add("1,0");
-            excludedCoords.add("7,0");
-            excludedCoords.add("8,0");
-            excludedCoords.add("0,1");
-            excludedCoords.add("7,1");
-            excludedCoords.add("8,1");
-            excludedCoords.add("0,2");
-            excludedCoords.add("8,2");
-            excludedCoords.add("8,3");
-            excludedCoords.add("8,5");
-            excludedCoords.add("0,6");
-            excludedCoords.add("8,6");
-            excludedCoords.add("0,7");
-            excludedCoords.add("7,7");
-            excludedCoords.add("8,7");
-            excludedCoords.add("0,8");
-            excludedCoords.add("1,8");
-            excludedCoords.add("7,8");
-            excludedCoords.add("8,8");
-        }
-        return excludedCoords;
     }
     
     public Set<String> getEdgeCoords()
@@ -82,7 +53,7 @@ class TileCoordinates {
         return edgeCoords;
     }
     
-    private Set<String> getCornerCoords()
+    public Set<String> getCornerCoords()
     {
         if (cornerCoords == null) {
             cornerCoords = new HashSet<>();
@@ -159,16 +130,18 @@ public class GameScreen extends SignIn implements Screen {
             int tileY = (int) (mousePos.y / 34);
             String tileCoordinate = tileX + "," + tileY;
             
-            // if no tile has been selected before, and it's an edge tile
-            if (specialCoords.getEdgeCoords().contains(tileCoordinate) && selectedTile == null) {
+            if (atoms.getExcludedCoords().contains(tileCoordinate)) deselectTiles(tiledMap);
+                // if no tile has been selected before, and it's an edge tile
+            else if (specialCoords.getEdgeCoords().contains(tileCoordinate) && selectedTile == null) {
                 deselectTiles(tiledMap);
                 selectedTile = selectTile(tiledMap, tileX, tileY);
             }
             // if a tile has been selected before
             else if (selectedTile != null) {
-                if (!atoms.getExcludedCoords().contains(tileCoordinate)) {
+                // if it's not an excluded tile, cast a ray
+                if (!specialCoords.getEdgeCoords().contains(tileCoordinate) || specialCoords.getCornerCoords().contains(tileCoordinate))
                     rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
-                }
+                
                 selectedTile = null;
             }
             System.out.println(tileCoordinate + "\nedge piece?: " + specialCoords.getEdgeCoords().contains(tileCoordinate));
@@ -249,7 +222,7 @@ public class GameScreen extends SignIn implements Screen {
         if (x > map.get("width", Integer.class) - 1 ||
                 y > map.get("height", Integer.class) - 1) {
             return null;
-        } else if (specialCoords.getExcludedCoords().contains(x + "," + y)) { // error checking; unrendered tile
+        } else if (atoms.getExcludedCoords().contains(x + "," + y)) { // error checking; unrendered tile
             return null;
         } else {
             // get green tile tilemap (image)
