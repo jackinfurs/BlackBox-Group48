@@ -89,6 +89,28 @@ enum Tile {
     }
 }
 
+class CoordCell {
+    private TiledMapTileLayer.Cell selectedTile;
+    private int x, y;
+    
+    public CoordCell(TiledMapTileLayer.Cell selectedTile, int x, int y)
+    {
+        this.selectedTile = selectedTile;
+        this.x = x;
+        this.y = y;
+    }
+    
+    public int getX()
+    {
+        return x;
+    }
+    
+    public int getY()
+    {
+        return y;
+    }
+}
+
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
     
