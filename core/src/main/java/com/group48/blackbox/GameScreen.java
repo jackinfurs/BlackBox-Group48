@@ -147,10 +147,9 @@ public class GameScreen extends SignIn implements Screen {
     public void render(float delta)
     {
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
-        
         game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
         
+        // TODO redo this please
         TextButton endButton = new TextButton("End game", new Skin(Gdx.files.internal("uiskin.json")));
         endButton.setPosition(500, 150);
         Rectangle endButtonBounds = new Rectangle(endButton.getX(), endButton.getY(), endButton.getWidth(), endButton.getHeight());
@@ -159,21 +158,23 @@ public class GameScreen extends SignIn implements Screen {
         exitButton.setPosition(500, 50);
         Rectangle exitButtonBounds = new Rectangle(exitButton.getX(), exitButton.getY(), exitButton.getWidth(), exitButton.getHeight());
         
-        renderer.setView(game.camera);
         game.camera.position.set(360, 110, 0);
+        game.camera.update();
+        renderer.setView(game.camera);
+        game.batch.setProjectionMatrix(game.camera.combined);
         
         game.batch.begin();
         endButton.draw(game.batch, 1f);
         exitButton.draw(game.batch, 1f);
-        
-        renderer.render();
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             game.camera.unproject(mousePos);
             
-            if (endButtonBounds.contains(mousePos.x, mousePos.y)) atoms.setGameFinished();
+            if (endButtonBounds.contains(mousePos.x, mousePos.y)) {
+                atoms.setGameFinished();
+            }
             if (exitButtonBounds.contains(mousePos.x, mousePos.y)) game.setScreen(new MainMenuScreen(game));
             
             // get coordinates of selected tile
@@ -290,22 +291,17 @@ public class GameScreen extends SignIn implements Screen {
         tiledMap.dispose();
     }
     
-    int selectTileX, selectTileY;
-    
     // this method changes a tile from black to green to signify that it has been selected
     TiledMapTileLayer.Cell selectTile(TiledMap tiledMap, int x, int y)
     {
         TiledMapTileLayer.Cell cell;
         
-        selectTileX = x;
-        selectTileY = y;
-        
         // error checking; not in tilemap region
         MapProperties map = tiledMap.getProperties();
-        if (selectTileX > map.get("width", Integer.class) - 1 ||
-                selectTileY > map.get("height", Integer.class) - 1) {
+        if (x > map.get("width", Integer.class) - 1 ||
+                y > map.get("height", Integer.class) - 1) {
             return null;
-        } else if (atoms.isExcluded(selectTileX, selectTileY)) { // error checking; unrendered tile
+        } else if (atoms.isExcluded(x, y)) { // error checking; unrendered tile
             return null;
         } else {
             // get green tile tilemap (image)
@@ -315,7 +311,7 @@ public class GameScreen extends SignIn implements Screen {
             // use this to select a specific tile by the X and Y coordinate (in the range of 0-8)
             // x: 0 = leftmost, 8 = rightmost on board
             // y: 0 = lowest, 8 = highest on board
-            cell = tileLayer.getCell(selectTileX, selectTileY);
+            cell = tileLayer.getCell(x, y);
             // change cell to green tile (selectedTile above)
             
             // finally render (please make sure to call this anytime you change the board)

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 public class BlackBox extends Game {
     public SpriteBatch batch;
@@ -15,7 +16,7 @@ public class BlackBox extends Game {
         batch = new SpriteBatch();
         font = new BitmapFont(); // use libGDX's default Arial font
         camera = new OrthographicCamera(800, 600);
-//        this.setScreen(new MainMenuScreen(this));
+        //        this.setScreen(new MainMenuScreen(this));
         this.setScreen(new GameScreen(this));
     }
     
