@@ -3,12 +3,14 @@ package com.group48.blackbox;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
+
 import java.util.ArrayList;
 
 //
 //// SET THE RAY TO JERRY
 class Ray {
-    private CoordCell startCell, pointerCell;
+    private final CoordCell startCell;
+    private final CoordCell pointerCell;
     private boolean isShown;
     
     public Ray(CoordCell startCell, CoordCell pointerCell)

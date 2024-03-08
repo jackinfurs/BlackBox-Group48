@@ -95,8 +95,9 @@ class TileCoordinates {
 }
 
 class CoordCell {
-    private TiledMapTileLayer.Cell selectedTile;
-    private int x, y;
+    private final TiledMapTileLayer.Cell selectedTile;
+    private final int x;
+    private final int y;
     
     public CoordCell(TiledMapTileLayer.Cell selectedTile, int x, int y)
     {
@@ -158,7 +159,6 @@ public class GameScreen extends SignIn implements Screen {
         TextButton endButton = new TextButton("End game", new Skin(Gdx.files.internal("uiskin.json")));
         endButton.setPosition(500, 150);
         Rectangle endButtonBounds = new Rectangle(endButton.getX(), endButton.getY(), endButton.getWidth(), endButton.getHeight());
-        
         TextButton exitButton = new TextButton("Exit to main menu", new Skin(Gdx.files.internal("uiskin.json")));
         exitButton.setPosition(500, 50);
         Rectangle exitButtonBounds = new Rectangle(exitButton.getX(), exitButton.getY(), exitButton.getWidth(), exitButton.getHeight());

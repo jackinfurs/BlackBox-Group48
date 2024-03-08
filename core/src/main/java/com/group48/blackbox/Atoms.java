@@ -68,7 +68,7 @@ public class Atoms {
     
     public void addGuessAtom(int x, int y)
     {
-        if (guessAtomsCount != 6 && guessAtomsLayer.getCell(x,y) == null && !excludedCoords.contains(x+","+y)) {
+        if (guessAtomsCount != 6 && guessAtomsLayer.getCell(x, y) == null && !excludedCoords.contains(x + "," + y)) {
             TiledMapTileLayer.Cell guessAtomCell = new TiledMapTileLayer.Cell();
             guessAtomCell.setTile(guessTileset.getTile(2));
             guessAtomsLayer.setCell(x, y, guessAtomCell);
@@ -119,7 +119,8 @@ public class Atoms {
         return excludedCoords.contains(x + "," + y);
     }
     
-    public Set<String> getAtomCoordinates () {
+    public Set<String> getAtomCoordinates()
+    {
         return atomCoordinates;
     }
     
