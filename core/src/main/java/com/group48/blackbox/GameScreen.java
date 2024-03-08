@@ -3,10 +3,10 @@ package com.group48.blackbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
@@ -151,26 +151,30 @@ public class GameScreen extends SignIn implements Screen {
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
         
-        TextButton b = new TextButton("Exit game", new Skin(Gdx.files.internal("uiskin.json")));
-        ShapeRenderer shape = new ShapeRenderer();
-        shape.setProjectionMatrix(game.camera.combined);
+        TextButton endButton = new TextButton("End game", new Skin(Gdx.files.internal("uiskin.json")));
+        endButton.setPosition(500, 150);
+        Rectangle endButtonBounds = new Rectangle(endButton.getX(), endButton.getY(), endButton.getWidth(), endButton.getHeight());
         
-        game.batch.begin();
-        
-        b.setPosition(500, 100);
-        b.draw(game.batch, 1f);
-        if (b.isPressed()) {
-            System.out.println("YES");
-        }
+        TextButton exitButton = new TextButton("Exit to main menu", new Skin(Gdx.files.internal("uiskin.json")));
+        exitButton.setPosition(500, 50);
+        Rectangle exitButtonBounds = new Rectangle(exitButton.getX(), exitButton.getY(), exitButton.getWidth(), exitButton.getHeight());
         
         renderer.setView(game.camera);
         game.camera.position.set(360, 110, 0);
+        
+        game.batch.begin();
+        endButton.draw(game.batch, 1f);
+        exitButton.draw(game.batch, 1f);
+        
         renderer.render();
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             game.camera.unproject(mousePos);
+            
+            if (endButtonBounds.contains(mousePos.x, mousePos.y)) atoms.setGameFinished();
+            if (exitButtonBounds.contains(mousePos.x, mousePos.y)) game.setScreen(new MainMenuScreen(game));
             
             // get coordinates of selected tile
             int tileX = (int) (mousePos.x / 32);
