@@ -59,7 +59,7 @@ class TileCoordinates {
         return edgeCoords.contains(x + "," + y);
     }
     
-    public Set<String> getCornerCoords()
+public Set<String> getCornerCoords()
     {
         if (cornerCoords == null) {
             cornerCoords = new HashSet<>();
@@ -127,23 +127,23 @@ public class GameScreen extends SignIn implements Screen {
     {
         this.game = game;
     }
-    
+
     @Override
     public void show()
     {
         tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
         renderer = new HexagonalTiledMapRenderer(tiledMap);
-        specialCoords = new TileCoordinates();
+specialCoords = new TileCoordinates();
         atoms = new Atoms(tiledMap);
         atoms.placeRandomAtoms();
         rays = new Rays(tiledMap);
     }
-    
+
     // TODO implement direction + proper tile selection
     @Override
     public void render(float delta)
     {
-        ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
+ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
         
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
@@ -159,9 +159,9 @@ public class GameScreen extends SignIn implements Screen {
             
             // get coordinates of selected tile
             int tileX = (int) (mousePos.x / 32);
-            int tileY = (int) (mousePos.y / 34);
+            int tileY = (int) (mousePos.y / 26);
             
-            // if selected tile is invalid, deselect all tiles
+// if selected tile is invalid, deselect all tiles
             if (atoms.isExcluded(tileX, tileY)) {
                 System.out.println("selected tile invalid");
                 deselectTiles(tiledMap);
@@ -216,13 +216,13 @@ public class GameScreen extends SignIn implements Screen {
         }
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            
+
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             game.camera.unproject(mousePos);
-            
+
             int tileX = (int) (mousePos.x / 32);
-            int tileY = (int) (mousePos.y / 34);
+            int tileY = (int) (mousePos.y / 26);
             System.out.println("position x: " + tileX + " position y: " + tileY);
             atoms.addGuessAtom(tileX, tileY);
         }
@@ -239,31 +239,31 @@ public class GameScreen extends SignIn implements Screen {
         
         renderer.render();
     }
-    
+
     @Override
     public void resize(int width, int height)
     {
-    
+
     }
-    
+
     @Override
     public void pause()
     {
-    
+
     }
-    
+
     @Override
     public void resume()
     {
-    
+
     }
-    
+
     @Override
     public void hide()
     {
-    
+
     }
-    
+
     @Override
     public void dispose()
     {
@@ -298,19 +298,19 @@ public class GameScreen extends SignIn implements Screen {
             // y: 0 = lowest, 8 = highest on board
             cell = tileLayer.getCell(selectTileX, selectTileY);
             // change cell to green tile (selectedTile above)
-            
+
             // finally render (please make sure to call this anytime you change the board)
             renderer.render();
             return cell.setTile(selectedTile);
         }
     }
-    
+
     void deselectTiles(TiledMap tiledMap)
     {
         selectedTile = null;
         TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
         TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.BLACK.getValue());
-        
+
         for (int y = 0 ; y < tileLayer.getHeight() ; y++) {
             for (int x = 0 ; x < tileLayer.getWidth() ; x++) {
                 TiledMapTileLayer.Cell cell = tileLayer.getCell(x, y);
