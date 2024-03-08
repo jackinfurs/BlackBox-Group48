@@ -242,7 +242,6 @@ public class GameScreen extends SignIn implements Screen {
             
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 26);
-            System.out.println("position x: " + tileX + " position y: " + tileY);
             atoms.addGuessAtom(tileX, tileY);
         }
         

@@ -8,6 +8,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -19,15 +20,21 @@ public class Atoms {
     private TiledMapTileLayer guessAtomsLayer; // Layer for guess atoms
     private TiledMapTileSet tileset;
     private TiledMapTileSet guessTileset; // Tileset for guess atoms
+    private int guessAtomsCount;
     private Set<String> excludedCoords;
+    private HashSet<String> circles;
+    private Texture circleTexture;
     
     public Atoms(TiledMap tiledMap)
     {
         this.tiledMap = tiledMap;
         initializeExcludedCoords();
         atomCoordinates = new HashSet<>();
+        circles = new HashSet<>();
+        circleTexture = new Texture("GameScreen/circle.png");
         createAtoms();
         createGuessAtoms();
+        guessAtomsCount = 0;
     }
     
     private void createAtoms()
@@ -66,9 +73,12 @@ public class Atoms {
     
     public void addGuessAtom(int x, int y)
     {
-        TiledMapTileLayer.Cell guessAtomCell = new TiledMapTileLayer.Cell();
-        guessAtomCell.setTile(guessTileset.getTile(2));
-        guessAtomsLayer.setCell(x, y, guessAtomCell);
+        if (guessAtomsCount != 6) {
+            TiledMapTileLayer.Cell guessAtomCell = new TiledMapTileLayer.Cell();
+            guessAtomCell.setTile(guessTileset.getTile(2));
+            guessAtomsLayer.setCell(x, y, guessAtomCell);
+            guessAtomsCount++;
+        }
     }
     
     public void setGameFinished()
