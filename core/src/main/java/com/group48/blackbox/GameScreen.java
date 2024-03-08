@@ -3,6 +3,7 @@ package com.group48.blackbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
@@ -12,11 +13,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-import java.io.FileWriter;  // Import the File class
 
 enum Tile {
     BLACK(1), GREEN(2);
@@ -128,9 +126,9 @@ public class GameScreen extends SignIn implements Screen {
     private Atoms atoms;
     private Rays rays;
     private CoordCell startTile;
+    private Texture circleTexture;
     
-    private int cX, cY;
-    private FileWriter coords;
+    private boolean gameFinished;
     
     public GameScreen(BlackBox game)
     {
@@ -146,14 +144,7 @@ public class GameScreen extends SignIn implements Screen {
         atoms = new Atoms(tiledMap);
         atoms.placeRandomAtoms();
         rays = new Rays(tiledMap);
-        
-        try {
-            coords = new FileWriter("C:\\Users\\dynam\\Desktop\\coords.txt");
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
-        cX = 0;
-        cY = 0;
+        circleTexture = new Texture("GameScreen/circle.png");
     }
     
     // TODO implement direction + proper tile selection
@@ -181,33 +172,13 @@ public class GameScreen extends SignIn implements Screen {
         endButton.draw(game.batch, 1f);
         exitButton.draw(game.batch, 1f);
         
-        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
-            // Check for button presses
-            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(mousePos);
-            
-            try {
-                coords.write("circleCoords[" + cY + "][" + cX + "] = \"" + mousePos.x + "," + mousePos.y + "\";\n");
-                System.out.println("circleCoords[" + cY + "][" + cX + "] = \"" + mousePos.x + "," + mousePos.y + "\";\n");
-                
-                cX++;
-                if (cX > 9) {
-                    cY++;
-                    cX = 0;
-                }
-                if (cY > 9) coords.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             game.camera.unproject(mousePos);
             
             if (endButtonBounds.contains(mousePos.x, mousePos.y)) {
-                atoms.setGameFinished();
+                gameFinished = true;
             }
             if (exitButtonBounds.contains(mousePos.x, mousePos.y)) game.setScreen(new MainMenuScreen(game));
             
@@ -286,7 +257,19 @@ public class GameScreen extends SignIn implements Screen {
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             System.out.println("SPACEBAR clicked!");
+            gameFinished = true;
+        }
+        
+        if (gameFinished) {
             atoms.setGameFinished();
+            for (String s : atoms.getAtomCoordinates()) {
+                String[] temp = s.split(",");
+                if (Integer.parseInt(temp[1]) % 2 == 1)
+                    game.batch.draw(circleTexture, (Integer.parseInt(temp[0]) * 32) + 8, (Integer.parseInt(temp[1]) * 25) - 7);
+                else
+                    game.batch.draw(circleTexture, (Integer.parseInt(temp[0]) * 32) - 8, (Integer.parseInt(temp[1]) * 25) - 7);
+                renderer.render();
+            }
         }
         
         renderer.render();

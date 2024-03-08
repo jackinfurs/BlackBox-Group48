@@ -8,7 +8,6 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
 
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
@@ -22,16 +21,12 @@ public class Atoms {
     private TiledMapTileSet guessTileset; // Tileset for guess atoms
     private int guessAtomsCount;
     private Set<String> excludedCoords;
-    private HashSet<String> circles;
-    private Texture circleTexture;
     
     public Atoms(TiledMap tiledMap)
     {
         this.tiledMap = tiledMap;
         initializeExcludedCoords();
         atomCoordinates = new HashSet<>();
-        circles = new HashSet<>();
-        circleTexture = new Texture("GameScreen/circle.png");
         createAtoms();
         createGuessAtoms();
         guessAtomsCount = 0;
@@ -122,6 +117,10 @@ public class Atoms {
     public boolean isExcluded(int x, int y)
     {
         return excludedCoords.contains(x + "," + y);
+    }
+    
+    public Set<String> getAtomCoordinates () {
+        return atomCoordinates;
     }
     
     private void initializeExcludedCoords()
