@@ -75,6 +75,9 @@ public class Atoms {
             guessAtomCell.setTile(guessTileset.getTile(2));
             guessAtomsLayer.setCell(x, y, guessAtomCell);
             guessAtomsCount++;
+        } else if (guessAtomsLayer.getCell(x, y) != null) {
+            guessAtomsLayer.setCell(x, y, null);
+            guessAtomsCount--;
         }
     }
     
