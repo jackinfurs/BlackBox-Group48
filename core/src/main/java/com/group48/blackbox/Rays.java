@@ -60,9 +60,10 @@ public class Rays {
         RayList.add(ray);
     }
     
-    public void render() {
+    public void render()
+    {
         // iterate through RayList, call show on each
-        for (Ray r : RayList) r.show();
+        for (Ray r : RayList) {r.show();}
     }
     
     public void dispose()
