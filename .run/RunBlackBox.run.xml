@@ -3,7 +3,7 @@
     <option name="ALTERNATIVE_JRE_PATH" value="21" />
     <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="true" />
     <option name="MAIN_CLASS_NAME" value="com.group48.blackbox.lwjgl3.Lwjgl3Launcher" />
-    <module name="COMP20050SEP2-48" />
+    <module name="COMP20050SEP2-48.lwjgl3.main" />
     <option name="PROGRAM_PARAMETERS" value="--warning-mode all" />
     <method v="2">
       <option name="Make" enabled="true" />
