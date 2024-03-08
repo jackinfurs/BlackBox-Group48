@@ -60,7 +60,7 @@ public class Rays extends BlackBox {
 //    }
     
     // https://www.redblobgames.com/grids/hexagons/
-    public void newRay(TiledMapTileLayer.Cell startTile, TiledMapTileLayer.Cell pointerTile)
+    public void newRay(CoordCell startTile, CoordCell pointerTile)
     {
         // get the x,y coords of both tiles
         // draw line between the two

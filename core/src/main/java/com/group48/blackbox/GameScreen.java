@@ -121,6 +121,7 @@ public class GameScreen extends SignIn implements Screen {
     private Atoms atoms;
     private Rays rays;
     private TiledMapTileLayer.Cell selectedTile;
+    private CoordCell startTile;
     
     public GameScreen(BlackBox game)
     {
@@ -166,34 +167,36 @@ public class GameScreen extends SignIn implements Screen {
                 deselectTiles(tiledMap);
             }
             // if it's an edge, select the first tile
-            else if (specialCoords.isEdge(tileX, tileY) && selectedTile == null) {
+            else if (specialCoords.isEdge(tileX, tileY) && startTile == null) {
                 System.out.println("first tile is an edge, selecting...");
                 deselectTiles(tiledMap);
-                selectedTile = selectTile(tiledMap, tileX, tileY);
+                startTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
             }
             // if a tile has been selected before
-            else if (selectedTile != null) {
+            else if (startTile != null) {
                 System.out.println("starting tile defined");
                 
                 // if same tile is selected, then deselect tiles
-                if (tileX == selectTileX && tileY == selectTileY) {
+                if (tileX == startTile.getX() && tileY == startTile.getY()) {
                     System.out.println("selected the same cell, deselecting...");
                     deselectTiles(tiledMap);
                 } else {
                     // difference in X and Y
-                    int tileDiffX = selectTileX - tileX, tileDiffY = selectTileY - tileY;
+                    int tileDiffX = startTile.getX() - tileX, tileDiffY = startTile.getY() - tileY;
                     // TODO improve surrounding tile error checking
                     if (Math.abs(tileDiffX) == 0 || Math.abs(tileDiffX) == 1) {
                         if (Math.abs(tileDiffY) == 0 || Math.abs(tileDiffY) == 1) {
                             // if it's not an edge tile, cast a ray
                             if (!specialCoords.isEdge(tileX, tileY)) {
                                 System.out.println("selection is not an edge tile, casting ray...");
-                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+//                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                                rays.newRay(startTile, new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY));
                             }
                             // if the starter tile is a corner tile, cast a ray
-                            else if (specialCoords.getCornerCoords().contains(selectTileX + "," + selectTileY)) {
+                            else if (specialCoords.getCornerCoords().contains(startTile.getX() + "," + startTile.getY())) {
                                 System.out.println("first selection was a corner tile, casting ray...");
-                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+//                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
+                                rays.newRay(startTile, new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY));
                             } else deselectTiles(tiledMap);
                         } else {
                             System.out.println("invalid selection");
@@ -204,6 +207,7 @@ public class GameScreen extends SignIn implements Screen {
                         deselectTiles(tiledMap);
                     }
                     selectedTile = null;
+                    startTile = null;
                 }
             } else {
                 deselectTiles(tiledMap);
