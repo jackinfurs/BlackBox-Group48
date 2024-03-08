@@ -6,37 +6,38 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 import java.util.ArrayList;
 
-//
-//// SET THE RAY TO JERRY
+//// TODO SET THE RAY TO JERRY
 class Ray {
     private final CoordCell startCell;
     private final CoordCell pointerCell;
-    private boolean isShown;
+    
+    // random colour here except red, yellow
     
     public Ray(CoordCell startCell, CoordCell pointerCell)
     {
         this.startCell = startCell;
         this.pointerCell = pointerCell;
+        cast();
     }
     
-    public boolean isShown()
+    public void show()
     {
-        return isShown;
+        // change opacity of line
     }
     
-    public void setShown(boolean shown)
-    {
-        this.isShown = shown;
-    }
-    
-    // TODO
     public void cast()
     {
         // get world x,y coords of both tiles
         
         // draw line between the two
         
-        // pedal it back by half the length in the other direction of the angle
+        // startLine = pedal it back by half the length in the other direction of the angle
+        
+        // ray logic
+        // if tile directly ahead has an atom, set ray to red
+        // if tile slightly left/right has an atom, change direction by 30 degrees
+        // if no tile ahead (end of board) render endLine
+        // else (no problems) advance forward one tile
     }
 }
 
@@ -52,22 +53,16 @@ public class Rays {
         shapeRenderer = new ShapeRenderer();
     }
     
-    //    // TODO change opacity of line
-    //    public void draw()
-    //    {
-    //        //        for (Ray ray : RayList) {
-    //        //            if (!ray.isShown()) {
-    //        //
-    //        //            }
-    //        //        }
-    //    }
-    
     // https://www.redblobgames.com/grids/hexagons/
     public void newRay(CoordCell startTile, CoordCell pointerTile)
     {
         Ray ray = new Ray(startTile, pointerTile);
         RayList.add(ray);
-        ray.cast();
+    }
+    
+    public void render() {
+        // iterate through RayList, call show on each
+        for (Ray r : RayList) r.show();
     }
     
     public void dispose()
