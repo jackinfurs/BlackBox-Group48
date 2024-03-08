@@ -63,6 +63,14 @@ public class Rays extends BlackBox {
     public void newRay(CoordCell startTile, CoordCell pointerTile)
     {
         // get the x,y coords of both tiles
+        int startWorldX = startTile.getX() * 32, startWorldY = startTile.getY() * 34;
+        int pointerWorldX = pointerTile.getX() * 32, pointerWorldY = pointerTile.getY() * 34;
+        
+        System.out.println(startWorldX);
+        System.out.println(startWorldY);
+        System.out.println(pointerWorldX);
+        System.out.println(pointerWorldY);
+        
         // draw line between the two
         // pedal it back by half the length in the other direction of the angle
         
