@@ -68,4 +68,8 @@ public class Rays extends BlackBox {
         
         //        RayList.add(new Ray(tileX, tileY, direction));
     }
+    
+    public void clear() {
+        RayList = null;
+    }
 }

@@ -241,6 +241,7 @@ public class GameScreen extends SignIn implements Screen {
     @Override
     public void dispose()
     {
+        rays.clear();
         tiledMap.dispose();
     }
     
