@@ -1,4 +1,5 @@
 package com.group48.blackbox;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
@@ -38,7 +39,6 @@ import com.badlogic.gdx.math.Vector3;
 public class MainMenuScreen implements Screen {
     // TODO might switch below for class methods; to make a button class and have .isClicked(), etc
     //  makes code cleaner when these buttons are objects, shortens code, reduces lines, looks nicer
-    //  all following TODOs have to do with buttons
     final BlackBox game;
     Texture backgroundTexture;
     Texture tutorialButtonTexture;

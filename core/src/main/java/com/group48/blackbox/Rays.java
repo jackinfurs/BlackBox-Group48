@@ -3,42 +3,40 @@ package com.group48.blackbox;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.math.collision.Ray;
-
 import java.util.ArrayList;
+
 //
 //// SET THE RAY TO JERRY
-//class Ray {
-//    private int startX, startY;
-//    private int endX, endY;
-//    private int direction;
-//    private String outcome;
-//    private boolean isShown;
-//
-//    public Ray(int tileX, int tileY, char direction)
-//    {
-//        outcome = "";
-//        this.tileX = tileX;
-//        this.tileY = tileY;
-//        this.direction = direction;
-//    }
-//
-//    public boolean isShown()
-//    {
-//        return isShown;
-//    }
-//
-//    public void setShown(boolean shown)
-//    {
-//        this.isShown = shown;
-//    }
-//
-//    // TODO
-//    public void cast()
-//    {
-//
-//    }
-//}
+class Ray {
+    private CoordCell startCell, pointerCell;
+    private boolean isShown;
+    
+    public Ray(CoordCell startCell, CoordCell pointerCell)
+    {
+        this.startCell = startCell;
+        this.pointerCell = pointerCell;
+    }
+    
+    public boolean isShown()
+    {
+        return isShown;
+    }
+    
+    public void setShown(boolean shown)
+    {
+        this.isShown = shown;
+    }
+    
+    // TODO
+    public void cast()
+    {
+        // get world x,y coords of both tiles
+        
+        // draw line between the two
+        
+        // pedal it back by half the length in the other direction of the angle
+    }
+}
 
 public class Rays extends BlackBox {
     TiledMapTileLayer atomsLayer;
@@ -65,20 +63,9 @@ public class Rays extends BlackBox {
     // https://www.redblobgames.com/grids/hexagons/
     public void newRay(CoordCell startTile, CoordCell pointerTile)
     {
-        // get the x,y coords of both tiles
-        int startWorldX = startTile.getX() + 360, startWorldY = startTile.getY() + 110;
-        int pointerWorldX = pointerTile.getX() + 360, pointerWorldY = pointerTile.getY() + 110;
-        
-        System.out.println(startWorldX);
-        System.out.println(startWorldY);
-        System.out.println(pointerWorldX);
-        System.out.println(pointerWorldY);
-        
-        // draw line between the two
-        
-        // pedal it back by half the length in the other direction of the angle
-        
-        //        RayList.add(new Ray(tileX, tileY, direction));
+        Ray ray = new Ray(startTile, pointerTile);
+        RayList.add(ray);
+        ray.cast();
     }
     
     public void clear()

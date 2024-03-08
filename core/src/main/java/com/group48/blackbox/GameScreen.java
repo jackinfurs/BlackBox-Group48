@@ -3,10 +3,13 @@ package com.group48.blackbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 import java.util.HashSet;
@@ -91,7 +94,6 @@ class TileCoordinates {
 }
 
 class CoordCell {
-    
     private TiledMapTileLayer.Cell selectedTile;
     private int x, y;
     
@@ -148,6 +150,18 @@ public class GameScreen extends SignIn implements Screen {
         
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
+        
+        TextButton b = new TextButton("Exit game", new Skin(Gdx.files.internal("uiskin.json")));
+        ShapeRenderer shape = new ShapeRenderer();
+        shape.setProjectionMatrix(game.camera.combined);
+        
+        game.batch.begin();
+        
+        b.setPosition(500, 100);
+        b.draw(game.batch, 1f);
+        if (b.isPressed()) {
+            System.out.println("YES");
+        }
         
         renderer.setView(game.camera);
         game.camera.position.set(360, 110, 0);
@@ -238,6 +252,7 @@ public class GameScreen extends SignIn implements Screen {
         }
         
         renderer.render();
+        game.batch.end();
     }
     
     @Override
