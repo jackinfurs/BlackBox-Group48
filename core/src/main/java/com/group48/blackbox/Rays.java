@@ -1,5 +1,6 @@
 package com.group48.blackbox;
 
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.collision.Ray;
@@ -42,29 +43,31 @@ import java.util.ArrayList;
 public class Rays extends BlackBox {
     TiledMapTileLayer atomsLayer;
     ArrayList<Ray> RayList; // RayList = ArrayList - Ar. sidesplitting.
+    ShapeRenderer shapeRenderer;
     
     public Rays(TiledMap tiledMap)
     {
         atomsLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Atoms");
         RayList = new ArrayList<>();
+        shapeRenderer = new ShapeRenderer();
     }
     
-//    // TODO change opacity of line
-//    public void draw()
-//    {
-//        //        for (Ray ray : RayList) {
-//        //            if (!ray.isShown()) {
-//        //
-//        //            }
-//        //        }
-//    }
+    //    // TODO change opacity of line
+    //    public void draw()
+    //    {
+    //        //        for (Ray ray : RayList) {
+    //        //            if (!ray.isShown()) {
+    //        //
+    //        //            }
+    //        //        }
+    //    }
     
     // https://www.redblobgames.com/grids/hexagons/
     public void newRay(CoordCell startTile, CoordCell pointerTile)
     {
         // get the x,y coords of both tiles
-        int startWorldX = startTile.getX() * 32, startWorldY = startTile.getY() * 34;
-        int pointerWorldX = pointerTile.getX() * 32, pointerWorldY = pointerTile.getY() * 34;
+        int startWorldX = startTile.getX() + 360, startWorldY = startTile.getY() + 110;
+        int pointerWorldX = pointerTile.getX() + 360, pointerWorldY = pointerTile.getY() + 110;
         
         System.out.println(startWorldX);
         System.out.println(startWorldY);
@@ -72,12 +75,14 @@ public class Rays extends BlackBox {
         System.out.println(pointerWorldY);
         
         // draw line between the two
+        
         // pedal it back by half the length in the other direction of the angle
         
         //        RayList.add(new Ray(tileX, tileY, direction));
     }
     
-    public void clear() {
+    public void clear()
+    {
         RayList = null;
     }
 }
