@@ -12,8 +12,11 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
+import java.io.FileWriter;  // Import the File class
 
 enum Tile {
     BLACK(1), GREEN(2);
@@ -126,6 +129,9 @@ public class GameScreen extends SignIn implements Screen {
     private Rays rays;
     private CoordCell startTile;
     
+    private int cX, cY;
+    private FileWriter coords;
+    
     public GameScreen(BlackBox game)
     {
         this.game = game;
@@ -140,6 +146,14 @@ public class GameScreen extends SignIn implements Screen {
         atoms = new Atoms(tiledMap);
         atoms.placeRandomAtoms();
         rays = new Rays(tiledMap);
+        
+        try {
+            coords = new FileWriter("C:\\Users\\dynam\\Desktop\\coords.txt");
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        cX = 0;
+        cY = 0;
     }
     
     // TODO implement direction + proper tile selection
@@ -166,6 +180,26 @@ public class GameScreen extends SignIn implements Screen {
         game.batch.begin();
         endButton.draw(game.batch, 1f);
         exitButton.draw(game.batch, 1f);
+        
+        if (Gdx.input.isKeyJustPressed(Input.Keys.W)) {
+            // Check for button presses
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            game.camera.unproject(mousePos);
+            
+            try {
+                coords.write("circleCoords[" + cY + "][" + cX + "] = \"" + mousePos.x + "," + mousePos.y + "\";\n");
+                System.out.println("circleCoords[" + cY + "][" + cX + "] = \"" + mousePos.x + "," + mousePos.y + "\";\n");
+                
+                cX++;
+                if (cX > 9) {
+                    cY++;
+                    cX = 0;
+                }
+                if (cY > 9) coords.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             // Check for button presses
@@ -286,7 +320,7 @@ public class GameScreen extends SignIn implements Screen {
     @Override
     public void dispose()
     {
-        rays.clear();
+        rays.dispose();
         tiledMap.dispose();
     }
     

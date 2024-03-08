@@ -38,7 +38,7 @@ class Ray {
     }
 }
 
-public class Rays extends BlackBox {
+public class Rays {
     TiledMapTileLayer atomsLayer;
     ArrayList<Ray> RayList; // RayList = ArrayList - Ar. sidesplitting.
     ShapeRenderer shapeRenderer;
@@ -68,8 +68,9 @@ public class Rays extends BlackBox {
         ray.cast();
     }
     
-    public void clear()
+    public void dispose()
     {
         RayList = null;
+        shapeRenderer.dispose();
     }
 }
