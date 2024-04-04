@@ -135,14 +135,15 @@ public class MainMenuScreen implements Screen {
     public void dispose()
     {
         backgroundTexture.dispose();
-        tutorialButtonTexture.dispose();
-        playButtonTexture.dispose();
-        leaderboardButtonTexture.dispose();
+        
         exitButtonTexture.dispose();
-        tutorialButtonHoverTexture.dispose();
-        playButtonHoverTexture.dispose();
-        leaderboardButtonHoverTexture.dispose();
         exitButtonHoverTexture.dispose();
+        tutorialButtonTexture.dispose();
+        tutorialButtonHoverTexture.dispose();
+        playButtonTexture.dispose();
+        playButtonHoverTexture.dispose();
+        leaderboardButtonTexture.dispose();
+        leaderboardButtonHoverTexture.dispose();
     }
     
     // Add methods for button clicks here
