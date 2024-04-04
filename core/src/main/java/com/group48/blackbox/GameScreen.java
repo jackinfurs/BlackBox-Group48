@@ -3,116 +3,13 @@ package com.group48.blackbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 
-import java.util.HashSet;
-import java.util.Set;
-
-enum Tile {
-    BLACK(1), GREEN(2);
-    private final int value;
-    
-    Tile(int value)
-    {
-        this.value = value;
-    }
-    
-    public int getValue()
-    {
-        return value;
-    }
-}
-
 // TODO get atoms.excludedCoords() in here
-class TileCoordinates {
-    
-    private Set<String> edgeCoords, cornerCoords;
-    
-    public TileCoordinates()
-    {
-        this.edgeCoords = getEdgeCoords();
-        this.cornerCoords = getCornerCoords();
-    }
-    
-    public Set<String> getEdgeCoords()
-    {
-        if (edgeCoords == null) {
-            edgeCoords = new HashSet<>();
-            edgeCoords.add("2,0");
-            edgeCoords.add("3,0");
-            edgeCoords.add("4,0");
-            edgeCoords.add("5,0");
-            edgeCoords.add("6,0");
-            edgeCoords.add("1,1");
-            edgeCoords.add("6,1");
-            edgeCoords.add("1,2");
-            edgeCoords.add("7,2");
-            edgeCoords.add("0,3");
-            edgeCoords.add("7,3");
-            edgeCoords.add("0,4");
-            edgeCoords.add("8,4");
-            edgeCoords.add("0,5");
-            edgeCoords.add("7,5");
-            edgeCoords.add("1,6");
-            edgeCoords.add("7,6");
-            edgeCoords.add("1,7");
-            edgeCoords.add("6,7");
-            edgeCoords.add("2,8");
-            edgeCoords.add("3,8");
-            edgeCoords.add("4,8");
-            edgeCoords.add("5,8");
-            edgeCoords.add("6,8");
-        }
-        return edgeCoords;
-    }
-    
-    public boolean isEdge(int x, int y)
-    {
-        return edgeCoords.contains(x + "," + y);
-    }
-    
-    public Set<String> getCornerCoords()
-    {
-        if (cornerCoords == null) {
-            cornerCoords = new HashSet<>();
-            cornerCoords.add("2,0");
-            cornerCoords.add("6,0");
-            cornerCoords.add("0,4");
-            cornerCoords.add("8,4");
-            cornerCoords.add("2,8");
-            cornerCoords.add("6,8");
-        }
-        return cornerCoords;
-    }
-}
-
-class CoordCell {
-    private final TiledMapTileLayer.Cell selectedTile;
-    private final int x;
-    private final int y;
-    
-    public CoordCell(TiledMapTileLayer.Cell selectedTile, int x, int y)
-    {
-        this.selectedTile = selectedTile;
-        this.x = x;
-        this.y = y;
-    }
-    
-    public int getX()
-    {
-        return x;
-    }
-    
-    public int getY()
-    {
-        return y;
-    }
-}
 
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
@@ -139,7 +36,7 @@ public class GameScreen extends SignIn implements Screen {
     {
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
         game.camera.update();
-        tiledMap.renderer.render();
+        tiledMap.getRenderer().render();
         
         // TODO redo this please
         TextButton endButton = new TextButton("End game", new Skin(Gdx.files.internal("uiskin.json")));
