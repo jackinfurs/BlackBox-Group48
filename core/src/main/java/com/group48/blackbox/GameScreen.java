@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
+import org.w3c.dom.Text;
 
 // TODO get atoms.excludedCoords() in here
 
@@ -18,11 +19,37 @@ public class GameScreen extends SignIn implements Screen {
     private GameBoard tiledMap;
     
     private final int CAMERAOFFSET_X = 360, CAMERAOFFSET_Y = 110;
+    private final int FONT_X = 20, FONT_Y = -80;
     private boolean gameFinished;
+    private TextBox textBox = TextBox.EMPTY;
     
     public GameScreen(BlackBox game)
     {
         this.game = game;
+    }
+    
+    enum TextBox {
+        EMPTY(0),
+        INVALID_TILE(1),
+        END_GAME(2),
+        SELECT_TILE(3),
+        RAY_HIT(4),
+        RAY_REFLECT(5),
+        RAY_DEFLECT(6),
+        RAY_MISS(7),
+        ATOM_GUESS(8);
+        
+        private final int value;
+        
+        TextBox(int value)
+        {
+            this.value = value;
+        }
+        
+        public int getValue()
+        {
+            return value;
+        }
     }
     
     @Override
@@ -58,8 +85,10 @@ public class GameScreen extends SignIn implements Screen {
         game.batch.begin();
         endButton.draw(game.batch, 1f);
         exitButton.draw(game.batch, 1f);
+        game.font.getData().setScale(1.2f, 1.2f);
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            textBox = TextBox.EMPTY;
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             game.camera.unproject(mousePos);
@@ -72,9 +101,9 @@ public class GameScreen extends SignIn implements Screen {
                 game.setScreen(new MainMenuScreen(game));
             }
             
-            tiledMap.selectTile(mousePos);
+            if (tiledMap.selectTile(mousePos) == -1) textBox = TextBox.INVALID_TILE;
+            else {textBox = TextBox.SELECT_TILE;}
         }
-        // if selected tile is invalid, deselect all tiles
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             // Check for button presses
@@ -82,6 +111,7 @@ public class GameScreen extends SignIn implements Screen {
             game.camera.unproject(mousePos);
             
             tiledMap.addGuessAtom(mousePos);
+            textBox = TextBox.ATOM_GUESS;
         }
         
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -98,6 +128,7 @@ public class GameScreen extends SignIn implements Screen {
         // not my proudest work.
         if (gameFinished) {
             tiledMap.getAtoms().setGameFinished();
+            textBox = TextBox.END_GAME;
             for (String s : tiledMap.getAtoms().getAtomCoordinates()) {
                 String[] temp = s.split(",");
                 if (Integer.parseInt(temp[1]) % 2 == 1)
@@ -107,6 +138,20 @@ public class GameScreen extends SignIn implements Screen {
                 tiledMap.getRenderer().render();
             }
         }
+        
+        switch (textBox) {
+            case EMPTY -> game.font.draw(game.batch, "", FONT_X, FONT_Y);
+            case INVALID_TILE -> game.font.draw(game.batch, "Invalid tile selection.", FONT_X, FONT_Y);
+            case END_GAME -> game.font.draw(game.batch, "Game over.", FONT_X, FONT_Y);
+            case SELECT_TILE -> game.font.draw(game.batch, "Tile selected.", FONT_X, FONT_Y);
+            case RAY_HIT -> game.font.draw(game.batch, "Ray has hit an Atom.", FONT_X, FONT_Y);
+            case RAY_REFLECT -> game.font.draw(game.batch, "Ray has reflected from an Atom.", FONT_X, FONT_Y);
+            case RAY_DEFLECT -> game.font.draw(game.batch, "Ray has deflected an Atom.", FONT_X, FONT_Y);
+            case RAY_MISS -> game.font.draw(game.batch, "Ray has missed an Atom.", FONT_X, FONT_Y);
+            case ATOM_GUESS ->
+                    game.font.draw(game.batch, "Guess atom #" + tiledMap.getAtoms().getGuessAtomsCount() + " placed.", FONT_X, FONT_Y);
+        }
+        
         tiledMap.getRenderer().render();
         game.batch.end();
     }

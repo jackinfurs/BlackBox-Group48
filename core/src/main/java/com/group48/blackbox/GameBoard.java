@@ -110,7 +110,7 @@ public class GameBoard {
         atoms.placeRandomAtoms();
     }
     
-    public void selectTile(Vector3 Mouse)
+    public int selectTile(Vector3 Mouse)
     {
         int tileX = getTileXCoord(Mouse);
         int tileY = getTileYCoord(Mouse);
@@ -118,6 +118,7 @@ public class GameBoard {
         if (atoms.isExcluded(tileX, tileY)) {
             System.out.println("selected tile invalid");
             deselectTiles(tiledMap);
+            return -1;
         }
         // if it's an edge, select the first tile
         else if (specialCoords.isEdge(tileX, tileY) && startTile == null) {
@@ -133,6 +134,7 @@ public class GameBoard {
             if (tileX == startTile.getX() && tileY == startTile.getY()) {
                 System.out.println("selected the same cell, deselecting...");
                 deselectTiles(tiledMap);
+                return -1;
             } else {
                 // difference in X and Y
                 int tileDiffX = startTile.getX() - tileX, tileDiffY = startTile.getY() - tileY;
@@ -144,6 +146,7 @@ public class GameBoard {
                             System.out.println("selection is not an edge tile, casting ray...");
                             //                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
                             rays.newRay(startTile, new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY));
+                            return 0;
                         }
                         // if the starter tile is a corner tile, cast a ray
                         else if (specialCoords.getCornerCoords().contains(startTile.getX() + "," + startTile.getY())) {
@@ -154,17 +157,21 @@ public class GameBoard {
                     } else {
                         System.out.println("invalid selection");
                         deselectTiles(tiledMap);
+                        return -1;
                     }
                 } else {
                     System.out.println("invalid selection");
                     deselectTiles(tiledMap);
+                    return -1;
                 }
                 startTile = null;
             }
         } else {
             deselectTiles(tiledMap);
+            return -1;
         }
         System.out.println();
+        return 0;
     }
     
     private int getTileXCoord(Vector3 Mouse)
@@ -209,6 +216,15 @@ public class GameBoard {
     public void addGuessAtom(Vector3 Mouse)
     {
         atoms.addGuessAtom(getTileXCoord(Mouse), getTileYCoord(Mouse));
+    }
+    
+    public void addTutorialGuessAtom()
+    {
+        atoms.addGuessAtom(3,4);
+    }
+    
+    public void addTutorialAtom() {
+        atoms.addAtom(4, 4);
     }
     
     public Atoms getAtoms()
