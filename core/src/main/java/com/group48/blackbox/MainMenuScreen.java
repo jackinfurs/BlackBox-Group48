@@ -91,10 +91,25 @@ public class MainMenuScreen implements Screen {
         inputHandler = new InputHandler();
         Gdx.input.setInputProcessor(inputHandler);
     }
-    
-    private void drawButton(Rectangle bounds, Texture texture, Texture hoverTexture)
-    {
-        if (bounds.contains(Gdx.input.getX(), Gdx.graphics.getHeight() - Gdx.input.getY())) {
+
+    private void drawButton(Rectangle bounds, Texture texture, Texture hoverTexture) {
+        // Base resolution
+        final float baseWidth = 800;
+        final float baseHeight = 600;
+
+        // Current screen size
+        float currentWidth = Gdx.graphics.getWidth();
+        float currentHeight = Gdx.graphics.getHeight();
+
+        // Scale factors
+        float scaleX = currentWidth / baseWidth;
+        float scaleY = currentHeight / baseHeight;
+
+        // Adjusted mouse position
+        float mouseX = Gdx.input.getX() / scaleX;
+        float mouseY = (Gdx.graphics.getHeight() - Gdx.input.getY()) / scaleY;
+
+        if (bounds.contains(mouseX, mouseY)) {
             game.batch.draw(hoverTexture, bounds.x, bounds.y, bounds.width, bounds.height);
         } else {
             game.batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
@@ -132,6 +147,7 @@ public class MainMenuScreen implements Screen {
     {
         inputHandler = null;
         backgroundTexture.dispose();
+
         exitButtonTexture.dispose();
         exitButtonHoverTexture.dispose();
         tutorialButtonTexture.dispose();
@@ -151,11 +167,13 @@ public class MainMenuScreen implements Screen {
         } else {
             game.setScreen(new GameScreen(game));
         }
+        dispose();
     }
     
     private void tutorialButtonClicked()
     {
         System.out.println("Tutorial button clicked!");
+        game.setScreen(new TutorialScreen(game));
         dispose();
         game.setScreen(new TutorialScreen(game));
     }
