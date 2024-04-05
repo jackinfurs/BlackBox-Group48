@@ -19,12 +19,12 @@ import java.util.Set;
 enum Tile {
     BLACK(1), GREEN(2);
     private final int value;
-    
+
     Tile(int value)
     {
         this.value = value;
     }
-    
+
     public int getValue()
     {
         return value;
@@ -33,15 +33,15 @@ enum Tile {
 
 // TODO get atoms.excludedCoords() in here
 class TileCoordinates {
-    
+
     private Set<String> edgeCoords, cornerCoords;
-    
+
     public TileCoordinates()
     {
         this.edgeCoords = getEdgeCoords();
         this.cornerCoords = getCornerCoords();
     }
-    
+
     public Set<String> getEdgeCoords()
     {
         if (edgeCoords == null) {
@@ -73,12 +73,12 @@ class TileCoordinates {
         }
         return edgeCoords;
     }
-    
+
     public boolean isEdge(int x, int y)
     {
         return edgeCoords.contains(x + "," + y);
     }
-    
+
     public Set<String> getCornerCoords()
     {
         if (cornerCoords == null) {
@@ -98,19 +98,19 @@ class CoordCell {
     private final TiledMapTileLayer.Cell selectedTile;
     private final int x;
     private final int y;
-    
+
     public CoordCell(TiledMapTileLayer.Cell selectedTile, int x, int y)
     {
         this.selectedTile = selectedTile;
         this.x = x;
         this.y = y;
     }
-    
+
     public int getX()
     {
         return x;
     }
-    
+
     public int getY()
     {
         return y;
@@ -119,23 +119,23 @@ class CoordCell {
 
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
-    
+
     private TiledMap tiledMap;
     private TiledMapRenderer renderer;
     private TileCoordinates specialCoords;
-    
+
     private Atoms atoms;
     private Rays rays;
     private CoordCell startTile;
     private Texture circleTexture;
-    
+
     private boolean gameFinished;
-    
+
     public GameScreen(BlackBox game)
     {
         this.game = game;
     }
-    
+
     @Override
     public void show()
     {
@@ -147,14 +147,14 @@ public class GameScreen extends SignIn implements Screen {
         rays = new Rays(tiledMap);
         circleTexture = new Texture("GameScreen/circle.png");
     }
-    
+
     // TODO implement direction + proper tile selection
     @Override
     public void render(float delta)
     {
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
         game.camera.update();
-        
+
         // TODO redo this please
         TextButton endButton = new TextButton("End game", new Skin(Gdx.files.internal("uiskin.json")));
         endButton.setPosition(500, 150);
@@ -162,30 +162,30 @@ public class GameScreen extends SignIn implements Screen {
         TextButton exitButton = new TextButton("Exit to main menu", new Skin(Gdx.files.internal("uiskin.json")));
         exitButton.setPosition(500, 50);
         Rectangle exitButtonBounds = new Rectangle(exitButton.getX(), exitButton.getY(), exitButton.getWidth(), exitButton.getHeight());
-        
+
         game.camera.position.set(360, 110, 0);
         game.camera.update();
         renderer.setView(game.camera);
         game.batch.setProjectionMatrix(game.camera.combined);
-        
+
         game.batch.begin();
         endButton.draw(game.batch, 1f);
         exitButton.draw(game.batch, 1f);
-        
+
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             game.camera.unproject(mousePos);
-            
+
             if (endButtonBounds.contains(mousePos.x, mousePos.y)) {
                 gameFinished = true;
             }
             if (exitButtonBounds.contains(mousePos.x, mousePos.y)) game.setScreen(new MainMenuScreen(game));
-            
+
             // get coordinates of selected tile
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 26);
-            
+
             // if selected tile is invalid, deselect all tiles
             if (atoms.isExcluded(tileX, tileY)) {
                 System.out.println("selected tile invalid");
@@ -200,7 +200,7 @@ public class GameScreen extends SignIn implements Screen {
             // if a tile has been selected before
             else if (startTile != null) {
                 System.out.println("starting tile defined");
-                
+
                 // if same tile is selected, then deselect tiles
                 if (tileX == startTile.getX() && tileY == startTile.getY()) {
                     System.out.println("selected the same cell, deselecting...");
@@ -238,28 +238,28 @@ public class GameScreen extends SignIn implements Screen {
             }
             System.out.println();
         }
-        
+
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            
+
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             game.camera.unproject(mousePos);
-            
+
             int tileX = (int) (mousePos.x / 32);
             int tileY = (int) (mousePos.y / 26);
             atoms.addGuessAtom(tileX, tileY);
         }
-        
+
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             System.out.println("ESC button clicked!");
             game.setScreen(new MainMenuScreen(game));
         }
-        
+
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             System.out.println("SPACEBAR clicked!");
             gameFinished = true;
         }
-        
+
         if (gameFinished) {
             atoms.setGameFinished();
             for (String s : atoms.getAtomCoordinates()) {
@@ -271,47 +271,47 @@ public class GameScreen extends SignIn implements Screen {
                 renderer.render();
             }
         }
-        
+
         renderer.render();
         game.batch.end();
     }
-    
+
     @Override
     public void resize(int width, int height)
     {
-    
+
     }
-    
+
     @Override
     public void pause()
     {
-    
+
     }
-    
+
     @Override
     public void resume()
     {
-    
+
     }
-    
+
     @Override
     public void hide()
     {
-    
+
     }
-    
+
     @Override
     public void dispose()
     {
         rays.dispose();
         tiledMap.dispose();
     }
-    
+
     // this method changes a tile from black to green to signify that it has been selected
     TiledMapTileLayer.Cell selectTile(TiledMap tiledMap, int x, int y)
     {
         TiledMapTileLayer.Cell cell;
-        
+
         // error checking; not in tilemap region
         MapProperties map = tiledMap.getProperties();
         if (x > map.get("width", Integer.class) - 1 ||
@@ -329,18 +329,18 @@ public class GameScreen extends SignIn implements Screen {
             // y: 0 = lowest, 8 = highest on board
             cell = tileLayer.getCell(x, y);
             // change cell to green tile (selectedTile above)
-            
+
             // finally render (please make sure to call this anytime you change the board)
             renderer.render();
             return cell.setTile(selectedTile);
         }
     }
-    
+
     void deselectTiles(TiledMap tiledMap)
     {
         TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
         TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.BLACK.getValue());
-        
+
         for (int y = 0 ; y < tileLayer.getHeight() ; y++) {
             for (int x = 0 ; x < tileLayer.getWidth() ; x++) {
                 TiledMapTileLayer.Cell cell = tileLayer.getCell(x, y);
