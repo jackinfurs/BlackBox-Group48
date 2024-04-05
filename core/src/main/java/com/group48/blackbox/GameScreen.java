@@ -17,6 +17,7 @@ public class GameScreen extends SignIn implements Screen {
     
     private GameBoard tiledMap;
     
+    private final int CAMERAOFFSET_X = 360, CAMERAOFFSET_Y = 110;
     private boolean gameFinished;
     
     public GameScreen(BlackBox game)
@@ -49,7 +50,7 @@ public class GameScreen extends SignIn implements Screen {
         exitButton.setPosition(500, 50);
         Rectangle exitButtonBounds = new Rectangle(exitButton.getX(), exitButton.getY(), exitButton.getWidth(), exitButton.getHeight());
         
-        game.camera.position.set(360, 110, 0);
+        game.camera.position.set(CAMERAOFFSET_X, CAMERAOFFSET_Y, 0);
         game.camera.update();
         tiledMap.getRenderer().setView(game.camera);
         game.batch.setProjectionMatrix(game.camera.combined);
