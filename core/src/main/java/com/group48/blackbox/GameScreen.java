@@ -67,7 +67,10 @@ public class GameScreen extends SignIn implements Screen {
             if (endButtonBounds.contains(mousePos.x, mousePos.y)) {
                 gameFinished = true;
             }
-            if (exitButtonBounds.contains(mousePos.x, mousePos.y)) game.setScreen(new MainMenuScreen(game));
+            if (exitButtonBounds.contains(mousePos.x, mousePos.y)) {
+                dispose();
+                game.setScreen(new MainMenuScreen(game));
+            }
             
             tiledMap.selectTile(mousePos);
         }

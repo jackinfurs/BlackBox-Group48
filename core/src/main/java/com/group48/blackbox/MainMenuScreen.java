@@ -1,6 +1,7 @@
 package com.group48.blackbox;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -41,6 +42,8 @@ public class MainMenuScreen implements Screen {
     // TODO might switch below for class methods; to make a button class and have .isClicked(), etc
     //  makes code cleaner when these buttons are objects, shortens code, reduces lines, looks nicer
     final BlackBox game;
+    InputHandler inputHandler;
+    
     Texture backgroundTexture;
     Texture tutorialButtonTexture;
     Texture playButtonTexture;
@@ -85,7 +88,8 @@ public class MainMenuScreen implements Screen {
         leaderboardButtonBounds = new Rectangle(buttonX, 400, buttonWidth, buttonHeight);
         exitButtonBounds = new Rectangle(buttonX, 100, buttonWidth, buttonHeight);
         
-        Gdx.input.setInputProcessor(new InputHandler());
+        inputHandler = new InputHandler();
+        Gdx.input.setInputProcessor(inputHandler);
     }
     
     private void drawButton(Rectangle bounds, Texture texture, Texture hoverTexture)
@@ -126,8 +130,8 @@ public class MainMenuScreen implements Screen {
     @Override
     public void dispose()
     {
+        inputHandler = null;
         backgroundTexture.dispose();
-        
         exitButtonTexture.dispose();
         exitButtonHoverTexture.dispose();
         tutorialButtonTexture.dispose();
@@ -141,19 +145,19 @@ public class MainMenuScreen implements Screen {
     private void playButtonClicked()
     {
         System.out.println("Play button clicked!");
+        dispose();
         if (SignIn.getUsername() == null) {
             game.setScreen(new SignInScreen(game));
         } else {
             game.setScreen(new GameScreen(game));
         }
-        dispose();
     }
     
     private void tutorialButtonClicked()
     {
         System.out.println("Tutorial button clicked!");
-        game.setScreen(new TutorialScreen(game));
         dispose();
+        game.setScreen(new TutorialScreen(game));
     }
     
     private void leaderboardButtonClicked()

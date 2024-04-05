@@ -4,14 +4,18 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class TutorialScreen implements Screen {
     
     final BlackBox game;
     private GameBoard tiledMap;
-    private String[] Dialogue = initDialogue();
+    private final String[] Dialogue = initDialogue();
+    private int dialogueN = 0;
     
     private final int CAMERAOFFSET_X = 150, CAMERAOFFSET_Y = 60;
     
@@ -25,12 +29,6 @@ public class TutorialScreen implements Screen {
     public void show()
     {
         tiledMap = new GameBoard();
-        
-        game.camera.position.set(CAMERAOFFSET_X, CAMERAOFFSET_Y, 0);
-        game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
-        
-        tiledMap.getRenderer().setView(game.camera);
     }
     
     @Override
@@ -40,21 +38,43 @@ public class TutorialScreen implements Screen {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
         
+        // draw tutorial title at 17,69
+        
+        // draw textbox at 11,582
+        
+        game.camera.position.set(CAMERAOFFSET_X, CAMERAOFFSET_Y, 0);
+        game.camera.update();
+        tiledMap.getRenderer().setView(game.camera);
+        game.batch.setProjectionMatrix(game.camera.combined);
+        
+        // draw exit to main menu button
+        TextButton exitButton = new TextButton("Exit to main menu", new Skin(Gdx.files.internal("uiskin.json")));
+        exitButton.setPosition(300, 280);
+        Rectangle exitButtonBounds = new Rectangle(exitButton.getX(), exitButton.getY(), exitButton.getWidth(), exitButton.getHeight());
+        
         game.batch.begin();
+        exitButton.draw(game.batch, 1f);
         
         tiledMap.getRenderer().render();
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            
+            if(dialogueN < 13) System.out.println(Dialogue[dialogueN]);
+            else {
+                dispose();
+                game.setScreen(new MainMenuScreen(this.game));
+            }
+            dialogueN++;
+            
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             System.out.println(mousePos.x + "," + mousePos.y);
+            
+            if (exitButtonBounds.contains(mousePos.x, mousePos.y)) {
+                dispose();
+                game.setScreen(new MainMenuScreen(game));
+            }
         }
-        
-        // draw tutorial title at 17,69
-        
-        // draw exit to main menu button at 615,61
-        
-        // draw textbox at 11,582
         
         // if ESC pressed, exit to main menu
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
@@ -63,6 +83,7 @@ public class TutorialScreen implements Screen {
             game.setScreen(new MainMenuScreen(game));
         }
         
+        tiledMap.getRenderer().render();
         game.batch.end();
     }
     
