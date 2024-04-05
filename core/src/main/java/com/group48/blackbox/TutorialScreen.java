@@ -1,8 +1,10 @@
 package com.group48.blackbox;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.utils.ScreenUtils;
 
 public class TutorialScreen implements Screen {
@@ -11,7 +13,7 @@ public class TutorialScreen implements Screen {
     private GameBoard tiledMap;
     private String[] Dialogue = initDialogue();
     
-    private final int CAMERAOFFSET_X = 150, CAMERAOFFSET_Y = 110;
+    private final int CAMERAOFFSET_X = 150, CAMERAOFFSET_Y = 60;
     
     public TutorialScreen(final BlackBox game)
     {
@@ -41,6 +43,25 @@ public class TutorialScreen implements Screen {
         game.batch.begin();
         
         tiledMap.getRenderer().render();
+        
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+            // Check for button presses
+            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            System.out.println(mousePos.x + "," + mousePos.y);
+        }
+        
+        // draw tutorial title at 17,69
+        
+        // draw exit to main menu button at 615,61
+        
+        // draw textbox at 11,582
+        
+        // if ESC pressed, exit to main menu
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            System.out.println("ESC button clicked!");
+            dispose();
+            game.setScreen(new MainMenuScreen(game));
+        }
         
         game.batch.end();
     }
@@ -77,7 +98,7 @@ public class TutorialScreen implements Screen {
     
     private String[] initDialogue()
     {
-        String[] dialogue = new String[12];
+        String[] dialogue = new String[13];
         dialogue[0] = "Welcome to BlackBox+, a match between the Setter and the Experimenter.*";
         dialogue[1] = "The goal of the Experimenter is to deduce the locations of six hidden, randomly placed Atoms \n" +
                 "by sending Rays into the Black Box and observing how they are affected.*";

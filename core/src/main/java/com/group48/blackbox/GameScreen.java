@@ -83,6 +83,7 @@ public class GameScreen extends SignIn implements Screen {
         
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
             System.out.println("ESC button clicked!");
+            dispose();
             game.setScreen(new MainMenuScreen(game));
         }
         
