@@ -124,18 +124,6 @@ public class MainMenuScreen implements Screen {
     }
     
     @Override
-    public void resize(int width, int height) {}
-    
-    @Override
-    public void pause() {}
-    
-    @Override
-    public void resume() {}
-    
-    @Override
-    public void hide() {}
-    
-    @Override
     public void dispose()
     {
         backgroundTexture.dispose();
@@ -150,7 +138,6 @@ public class MainMenuScreen implements Screen {
         leaderboardButtonHoverTexture.dispose();
     }
     
-    // Add methods for button clicks here
     private void playButtonClicked()
     {
         System.out.println("Play button clicked!");
@@ -165,7 +152,8 @@ public class MainMenuScreen implements Screen {
     private void tutorialButtonClicked()
     {
         System.out.println("Tutorial button clicked!");
-        // Add your tutorial logic here
+        game.setScreen(new TutorialScreen(game));
+        dispose();
     }
     
     private void leaderboardButtonClicked()
@@ -177,10 +165,12 @@ public class MainMenuScreen implements Screen {
     private void exitButtonClicked()
     {
         System.out.println("Exit button clicked!");
+        dispose();
         Gdx.app.exit(); // Exit the application
     }
     
     private class InputHandler extends InputAdapter {
+        
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button)
         {
@@ -199,4 +189,16 @@ public class MainMenuScreen implements Screen {
             return true;
         }
     }
+    
+    @Override
+    public void resize(int width, int height) {}
+    
+    @Override
+    public void pause() {}
+    
+    @Override
+    public void resume() {}
+    
+    @Override
+    public void hide() {}
 }

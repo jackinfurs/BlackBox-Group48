@@ -107,6 +107,12 @@ public class GameScreen extends SignIn implements Screen {
     }
     
     @Override
+    public void dispose()
+    {
+        tiledMap.dispose();
+    }
+    
+    @Override
     public void resize(int width, int height)
     {
     
@@ -128,11 +134,5 @@ public class GameScreen extends SignIn implements Screen {
     public void hide()
     {
     
-    }
-    
-    @Override
-    public void dispose()
-    {
-        tiledMap.dispose();
     }
 }
