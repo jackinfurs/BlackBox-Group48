@@ -1,7 +1,6 @@
 package com.group48.blackbox;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -49,20 +48,21 @@ public class MainMenuScreen implements Screen {
     Texture playButtonTexture;
     Texture leaderboardButtonTexture;
     Texture exitButtonTexture;
-
+    
     // Rectangles to store button bounds
     Rectangle playButtonBounds;
     Rectangle tutorialButtonBounds;
     Rectangle leaderboardButtonBounds;
     Rectangle exitButtonBounds;
-
+    
     // Textures for hovered buttons
     Texture playButtonHoverTexture;
     Texture tutorialButtonHoverTexture;
     Texture leaderboardButtonHoverTexture;
     Texture exitButtonHoverTexture;
-
-    public MainMenuScreen(final BlackBox game) {
+    
+    public MainMenuScreen(final BlackBox game)
+    {
         this.game = game;
         // Initialize textures
         backgroundTexture = new Texture("MainMenuScreen/vaporBackground.png");
@@ -70,18 +70,18 @@ public class MainMenuScreen implements Screen {
         playButtonTexture = new Texture("MainMenuScreen/play.png");
         leaderboardButtonTexture = new Texture("MainMenuScreen/leaderboard.png");
         exitButtonTexture = new Texture("MainMenuScreen/exit.png");
-
+        
         // Initialize hover textures
         tutorialButtonHoverTexture = new Texture("MainMenuScreen/tutorial-red.png");
         playButtonHoverTexture = new Texture("MainMenuScreen/play-red.png");
         leaderboardButtonHoverTexture = new Texture("MainMenuScreen/leaderboard-red.png");
         exitButtonHoverTexture = new Texture("MainMenuScreen/exit-red.png");
-
+        
         // Set up button bounds
         float buttonWidth = 200;
         float buttonHeight = 50;
         float buttonX = Gdx.graphics.getWidth() / 2f - buttonWidth / 2;
-
+        
         playButtonBounds = new Rectangle(buttonX, 300, buttonWidth, buttonHeight);
         tutorialButtonBounds = new Rectangle(buttonX, 200, buttonWidth, buttonHeight);
         leaderboardButtonBounds = new Rectangle(buttonX, 400, buttonWidth, buttonHeight);
@@ -90,35 +90,37 @@ public class MainMenuScreen implements Screen {
         inputHandler = new InputHandler();
         Gdx.input.setInputProcessor(inputHandler);
     }
-
-    private void drawButton(Rectangle bounds, Texture texture, Texture hoverTexture) {
+    
+    private void drawButton(Rectangle bounds, Texture texture, Texture hoverTexture)
+    {
         // Base resolution
         final float baseWidth = 800;
         final float baseHeight = 600;
-
+        
         // Current screen size
         float currentWidth = Gdx.graphics.getWidth();
         float currentHeight = Gdx.graphics.getHeight();
-
+        
         // Scale factors
         float scaleX = currentWidth / baseWidth;
         float scaleY = currentHeight / baseHeight;
-
+        
         // Adjusted mouse position
         float mouseX = Gdx.input.getX() / scaleX;
         float mouseY = (Gdx.graphics.getHeight() - Gdx.input.getY()) / scaleY;
-
+        
         if (bounds.contains(mouseX, mouseY)) {
             game.batch.draw(hoverTexture, bounds.x, bounds.y, bounds.width, bounds.height);
         } else {
             game.batch.draw(texture, bounds.x, bounds.y, bounds.width, bounds.height);
         }
     }
-
+    
     @Override
-    public void show() {
+    public void show()
+    {
     }
-
+    
     @Override
     public void render(float delta)
     {
@@ -129,17 +131,37 @@ public class MainMenuScreen implements Screen {
         game.camera.setToOrtho(false, 800, 600);
         game.camera.update();
         game.batch.setProjectionMatrix(game.camera.combined);
-
+        
         game.batch.begin();
         game.batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+        
         // Draw buttons based on hover state
         drawButton(playButtonBounds, playButtonTexture, playButtonHoverTexture);
         drawButton(tutorialButtonBounds, tutorialButtonTexture, tutorialButtonHoverTexture);
         drawButton(leaderboardButtonBounds, leaderboardButtonTexture, leaderboardButtonHoverTexture);
         drawButton(exitButtonBounds, exitButtonTexture, exitButtonHoverTexture);
-
+        
         game.batch.end();
+    }
+    
+    @Override
+    public void resize(int width, int height)
+    {
+    }
+    
+    @Override
+    public void pause()
+    {
+    }
+    
+    @Override
+    public void resume()
+    {
+    }
+    
+    @Override
+    public void hide()
+    {
     }
     
     @Override
@@ -147,7 +169,7 @@ public class MainMenuScreen implements Screen {
     {
         inputHandler = null;
         backgroundTexture.dispose();
-
+        
         exitButtonTexture.dispose();
         exitButtonHoverTexture.dispose();
         tutorialButtonTexture.dispose();
@@ -169,31 +191,35 @@ public class MainMenuScreen implements Screen {
         }
         dispose();
     }
-
-    private void tutorialButtonClicked() {
+    
+    private void tutorialButtonClicked()
+    {
         System.out.println("Tutorial button clicked!");
         game.setScreen(new TutorialScreen(game));
         dispose();
         game.setScreen(new TutorialScreen(game));
     }
-
-    private void leaderboardButtonClicked() {
+    
+    private void leaderboardButtonClicked()
+    {
         System.out.println("Leaderboard button clicked!");
         SignIn.readScores();
     }
-
-    private void exitButtonClicked() {
+    
+    private void exitButtonClicked()
+    {
         System.out.println("Exit button clicked!");
         dispose();
         Gdx.app.exit(); // Exit the application
     }
-
+    
     private class InputHandler extends InputAdapter {
         @Override
-        public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        public boolean touchDown(int screenX, int screenY, int pointer, int button)
+        {
             Vector3 touchPoint = new Vector3(screenX, screenY, 0);
             game.camera.unproject(touchPoint);
-
+            
             if (playButtonBounds.contains(touchPoint.x, touchPoint.y)) {
                 playButtonClicked();
             } else if (tutorialButtonBounds.contains(touchPoint.x, touchPoint.y)) {
@@ -205,21 +231,5 @@ public class MainMenuScreen implements Screen {
             }
             return true;
         }
-    }
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
-    }
-
-    @Override
-    public void hide() {
     }
 }

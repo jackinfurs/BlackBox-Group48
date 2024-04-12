@@ -13,11 +13,10 @@ import com.badlogic.gdx.utils.ScreenUtils;
 public class TutorialScreen implements Screen {
     
     final BlackBox game;
-    private GameBoard tiledMap;
     private final String[] Dialogue = initDialogue();
-    private int dialogueN;
-    
     private final int CAMERAOFFSET_X = 150, CAMERAOFFSET_Y = 60;
+    private GameBoard tiledMap;
+    private int dialogueN;
     
     public TutorialScreen(final BlackBox game)
     {
@@ -114,12 +113,6 @@ public class TutorialScreen implements Screen {
     }
     
     @Override
-    public void dispose()
-    {
-        tiledMap.dispose();
-    }
-    
-    @Override
     public void resize(int i, int i1)
     {
     
@@ -141,6 +134,12 @@ public class TutorialScreen implements Screen {
     public void hide()
     {
     
+    }
+    
+    @Override
+    public void dispose()
+    {
+        tiledMap.dispose();
     }
     
     private String[] initDialogue()

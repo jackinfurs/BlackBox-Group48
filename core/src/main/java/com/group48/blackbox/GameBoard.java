@@ -87,12 +87,12 @@ class TileCoordinates {
 }
 
 public class GameBoard {
-    private TiledMap tiledMap;
-    private TiledMapRenderer renderer;
-    private Atoms atoms;
-    private Rays rays;
     private final TileCoordinates specialCoords;
     private final Texture coiTexture;
+    private final TiledMap tiledMap;
+    private final TiledMapRenderer renderer;
+    private final Atoms atoms;
+    private final Rays rays;
     private CoordCell startTile;
     
     public GameBoard()
@@ -220,10 +220,11 @@ public class GameBoard {
     
     public void addTutorialGuessAtom()
     {
-        atoms.addGuessAtom(3,4);
+        atoms.addGuessAtom(3, 4);
     }
     
-    public void addTutorialAtom() {
+    public void addTutorialAtom()
+    {
         atoms.addAtom(4, 4);
     }
     

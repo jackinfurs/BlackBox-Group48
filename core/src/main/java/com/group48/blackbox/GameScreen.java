@@ -14,42 +14,15 @@ import com.badlogic.gdx.utils.ScreenUtils;
 
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
-    
-    private GameBoard tiledMap;
-    
     private final int CAMERAOFFSET_X = 360, CAMERAOFFSET_Y = 110;
     private final int FONT_X = 20, FONT_Y = -80;
+    private GameBoard tiledMap;
     private boolean gameFinished;
     private TextBox textBox = TextBox.EMPTY;
     
     public GameScreen(BlackBox game)
     {
         this.game = game;
-    }
-    
-    enum TextBox {
-        EMPTY(0),
-        INVALID_TILE(1),
-        END_GAME(2),
-        SELECT_TILE(3),
-        RAY_HIT(4),
-        RAY_REFLECT(5),
-        RAY_DEFLECT(6),
-        RAY_MISS(7),
-        ATOM_GUESS(8),
-        GUESS_INCOMPLETE(9);
-        
-        private final int value;
-        
-        TextBox(int value)
-        {
-            this.value = value;
-        }
-        
-        public int getValue()
-        {
-            return value;
-        }
     }
     
     @Override
@@ -161,12 +134,6 @@ public class GameScreen extends SignIn implements Screen {
     }
     
     @Override
-    public void dispose()
-    {
-        tiledMap.dispose();
-    }
-    
-    @Override
     public void resize(int width, int height)
     {
     
@@ -188,5 +155,36 @@ public class GameScreen extends SignIn implements Screen {
     public void hide()
     {
     
+    }
+    
+    @Override
+    public void dispose()
+    {
+        tiledMap.dispose();
+    }
+    
+    enum TextBox {
+        EMPTY(0),
+        INVALID_TILE(1),
+        END_GAME(2),
+        SELECT_TILE(3),
+        RAY_HIT(4),
+        RAY_REFLECT(5),
+        RAY_DEFLECT(6),
+        RAY_MISS(7),
+        ATOM_GUESS(8),
+        GUESS_INCOMPLETE(9);
+        
+        private final int value;
+        
+        TextBox(int value)
+        {
+            this.value = value;
+        }
+        
+        public int getValue()
+        {
+            return value;
+        }
     }
 }
