@@ -80,6 +80,9 @@ public class Atoms {
             guessAtomsCount--;
         }
     }
+    
+    public int getGuessAtomsCount() {return guessAtomsCount;}
+    
 
     public void setGameFinished()
     {

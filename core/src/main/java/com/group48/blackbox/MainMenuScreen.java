@@ -1,6 +1,7 @@
 package com.group48.blackbox;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -41,6 +42,8 @@ public class MainMenuScreen implements Screen {
     // TODO might switch below for class methods; to make a button class and have .isClicked(), etc
     //  makes code cleaner when these buttons are objects, shortens code, reduces lines, looks nicer
     final BlackBox game;
+    InputHandler inputHandler;
+    
     Texture backgroundTexture;
     Texture tutorialButtonTexture;
     Texture playButtonTexture;
@@ -83,8 +86,9 @@ public class MainMenuScreen implements Screen {
         tutorialButtonBounds = new Rectangle(buttonX, 200, buttonWidth, buttonHeight);
         leaderboardButtonBounds = new Rectangle(buttonX, 400, buttonWidth, buttonHeight);
         exitButtonBounds = new Rectangle(buttonX, 100, buttonWidth, buttonHeight);
-
-        Gdx.input.setInputProcessor(new InputHandler());
+        
+        inputHandler = new InputHandler();
+        Gdx.input.setInputProcessor(inputHandler);
     }
 
     private void drawButton(Rectangle bounds, Texture texture, Texture hoverTexture) {
@@ -116,8 +120,9 @@ public class MainMenuScreen implements Screen {
     }
 
     @Override
-    public void render(float delta) {
-
+    public void render(float delta)
+    {
+        
         Gdx.gl.glClearColor(1, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         // Render the main menu
@@ -136,9 +141,11 @@ public class MainMenuScreen implements Screen {
 
         game.batch.end();
     }
-
+    
     @Override
-    public void dispose() {
+    public void dispose()
+    {
+        inputHandler = null;
         backgroundTexture.dispose();
 
         exitButtonTexture.dispose();
@@ -150,9 +157,11 @@ public class MainMenuScreen implements Screen {
         leaderboardButtonTexture.dispose();
         leaderboardButtonHoverTexture.dispose();
     }
-
-    private void playButtonClicked() {
+    
+    private void playButtonClicked()
+    {
         System.out.println("Play button clicked!");
+        dispose();
         if (SignIn.getUsername() == null) {
             game.setScreen(new SignInScreen(game));
         } else {
@@ -163,8 +172,9 @@ public class MainMenuScreen implements Screen {
 
     private void tutorialButtonClicked() {
         System.out.println("Tutorial button clicked!");
-        //game.setScreen(new TutorialScreen(game));
-        //dispose();
+        game.setScreen(new TutorialScreen(game));
+        dispose();
+        game.setScreen(new TutorialScreen(game));
     }
 
     private void leaderboardButtonClicked() {
@@ -179,7 +189,6 @@ public class MainMenuScreen implements Screen {
     }
 
     private class InputHandler extends InputAdapter {
-
         @Override
         public boolean touchDown(int screenX, int screenY, int pointer, int button) {
             Vector3 touchPoint = new Vector3(screenX, screenY, 0);
