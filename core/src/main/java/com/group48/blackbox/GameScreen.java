@@ -64,7 +64,8 @@ public class GameScreen extends SignIn implements Screen {
             game.camera.unproject(mousePos);
             
             if (endButtonBounds.contains(mousePos.x, mousePos.y)) {
-                gameFinished = true;
+                if (tiledMap.getAtoms().getGuessAtomsCount() == 6) gameFinished = true;
+                else System.out.println("must place 6 atoms to end the game\n");
             }
             if (exitButtonBounds.contains(mousePos.x, mousePos.y)) game.setScreen(new MainMenuScreen(game));
             

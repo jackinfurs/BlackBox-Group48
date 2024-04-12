@@ -129,6 +129,8 @@ public class Atoms {
         return atomCoordinates;
     }
     
+    public int getGuessAtomsCount() { return guessAtomsCount; }
+    
     private void initializeExcludedCoords()
     {
         
