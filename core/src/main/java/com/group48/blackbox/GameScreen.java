@@ -9,7 +9,6 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
-import org.w3c.dom.Text;
 
 // TODO get atoms.excludedCoords() in here
 
@@ -37,7 +36,8 @@ public class GameScreen extends SignIn implements Screen {
         RAY_REFLECT(5),
         RAY_DEFLECT(6),
         RAY_MISS(7),
-        ATOM_GUESS(8);
+        ATOM_GUESS(8),
+        GUESS_INCOMPLETE(9);
         
         private final int value;
         
@@ -93,10 +93,6 @@ public class GameScreen extends SignIn implements Screen {
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             game.camera.unproject(mousePos);
             
-            if (endButtonBounds.contains(mousePos.x, mousePos.y)) {
-                if (tiledMap.getAtoms().getGuessAtomsCount() == 6) gameFinished = true;
-                else System.out.println("must place 6 atoms to end the game\n");
-            }
             if (exitButtonBounds.contains(mousePos.x, mousePos.y)) {
                 dispose();
                 game.setScreen(new MainMenuScreen(game));
@@ -104,6 +100,11 @@ public class GameScreen extends SignIn implements Screen {
             
             if (tiledMap.selectTile(mousePos) == -1) textBox = TextBox.INVALID_TILE;
             else {textBox = TextBox.SELECT_TILE;}
+            
+            if (endButtonBounds.contains(mousePos.x, mousePos.y)) {
+                if (tiledMap.getAtoms().getGuessAtomsCount() == 6) gameFinished = true;
+                else textBox = TextBox.GUESS_INCOMPLETE;
+            }
         }
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
@@ -150,7 +151,9 @@ public class GameScreen extends SignIn implements Screen {
             case RAY_DEFLECT -> game.font.draw(game.batch, "Ray has deflected an Atom.", FONT_X, FONT_Y);
             case RAY_MISS -> game.font.draw(game.batch, "Ray has missed an Atom.", FONT_X, FONT_Y);
             case ATOM_GUESS ->
-                    game.font.draw(game.batch, "Guess atom #" + tiledMap.getAtoms().getGuessAtomsCount() + " placed.", FONT_X, FONT_Y);
+                    game.font.draw(game.batch, "Guess atom #" + tiledMap.getAtoms().getGuessAtomsCount() + ".", FONT_X, FONT_Y);
+            case GUESS_INCOMPLETE ->
+                    game.font.draw(game.batch, "You must place six guess atoms to end the game.", FONT_X, FONT_Y);
         }
         
         tiledMap.getRenderer().render();
