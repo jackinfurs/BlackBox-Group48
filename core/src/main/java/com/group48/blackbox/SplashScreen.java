@@ -1,6 +1,7 @@
 package com.group48.blackbox;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,24 +11,29 @@ import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
-public class MainMenuScreen implements Screen {
+public class SplashScreen extends InputAdapter implements Screen {
+    
     final BlackBox game;
     private Stage stage;
     
-    private Image background;
-    private Texture backgroundTexture;
+    private Image splash;
+    private Texture splashTexture;
+    private float time;
     
-    public MainMenuScreen(final BlackBox game)
+    public SplashScreen(final BlackBox game)
     {
         this.game = game;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
         Gdx.input.setInputProcessor(stage);
         
-        backgroundTexture = new Texture(Gdx.files.internal("MainMenuScreen/vaporBackground.png"));
-        background = new Image(backgroundTexture);
-        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        time = 0;
+        splashTexture = new Texture(Gdx.files.internal("splash.png"));
+        splash = new Image(splashTexture);
+
+        //        splashTexture = new Texture(Gdx.files.internal("splash2.png"));
+        //        splash = new Image(splashTexture);
         
-        stage.addActor(background);
+        stage.addActor(splash);
     }
     
     @Override
@@ -42,15 +48,22 @@ public class MainMenuScreen implements Screen {
         
         stage.draw();
         
+        // wish i knew a better way to do this.
+        time += Gdx.graphics.getDeltaTime();
+        if (time > 3) game.setScreen(new MainMenuScreen(game));
+        
         game.batch.end();
     }
     
     @Override
     public void show()
     {
-        // sequence; one after the other. parallel; both at the same time.
-        // forever is always called and will keep being called
-        stage.addAction(sequence(alpha(0f), fadeIn(0.5f)));
+        splash.setPosition(stage.getWidth() / 2 - 100, stage.getHeight() / 2f - 75);
+        //        splash.setPosition(stage.getWidth() / 2 - 200, stage.getHeight() / 2 - 150);
+        stage.addAction(sequence(
+                sequence(alpha(0f), fadeIn(0.5f),
+                        delay(2f),
+                        fadeOut(0.5f))));
     }
     
     public void update(float delta)
@@ -79,10 +92,12 @@ public class MainMenuScreen implements Screen {
     @Override
     public void pause()
     {
+    
     }
     
     @Override
     public void resume()
     {
+    
     }
 }

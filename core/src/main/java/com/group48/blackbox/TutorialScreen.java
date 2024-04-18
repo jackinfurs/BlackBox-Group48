@@ -133,7 +133,7 @@ public class TutorialScreen implements Screen {
     @Override
     public void hide()
     {
-    
+        dispose();
     }
     
     @Override

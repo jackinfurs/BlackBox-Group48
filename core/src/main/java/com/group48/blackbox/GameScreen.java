@@ -104,12 +104,6 @@ public class GameScreen extends SignIn implements Screen {
             game.setScreen(new MainMenuScreen(game));
         }
         
-        // TODO remove this before pushing; this is for debugging only
-        if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
-            System.out.println("SPACEBAR clicked!");
-            gameFinished = true;
-        }
-        
         // not my proudest work.
         if (gameFinished) {
             tiledMap.getAtoms().setGameFinished();

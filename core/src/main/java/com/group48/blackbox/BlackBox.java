@@ -6,16 +6,18 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class BlackBox extends Game {
+    
+    public OrthographicCamera camera;
     public SpriteBatch batch;
     public BitmapFont font;
-    public OrthographicCamera camera;
     
     public void create()
     {
+        camera = new OrthographicCamera();
+        camera.setToOrtho(false, +800, 600);
         batch = new SpriteBatch();
         font = new BitmapFont(); // use libGDX's default Arial font
-        camera = new OrthographicCamera(800, 600);
-        this.setScreen(new MainMenuScreen(this));
+        this.setScreen(new SplashScreen(this));
         //        this.setScreen(new TutorialScreen(this));
     }
     
@@ -23,6 +25,7 @@ public class BlackBox extends Game {
     {
         batch.dispose();
         font.dispose();
+        this.getScreen().dispose();
     }
     
     public void render()
