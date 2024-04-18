@@ -12,8 +12,6 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
-import java.util.Objects;
-
 public class SignInScreen implements Screen {
     
     final BlackBox game;
@@ -71,10 +69,21 @@ public class SignInScreen implements Screen {
         
         // Check for Enter key press to proceed to the game screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
-            SignIn.username = usernameField.getText();
-            System.out.println(SignIn.getUsername());
-            if (SignIn.getUsername().equals("iamlame")) game.setScreen(new GameScreen(this.game, true));
-            else game.setScreen(new GameScreen(this.game, false));
+            if (!usernameField.getText().isEmpty()) {
+                SignIn.setUsername(usernameField.getText());
+                dispose();
+                System.out.println("\nusername: " + SignIn.getUsername());
+                if (SignIn.getUsername().equals("iamlame")) {
+                    game.setScreen(new GameScreen(this.game, true));
+                    System.out.println("cheats enabled");
+                } else game.setScreen(new GameScreen(this.game, false));
+            } else System.out.println("\nusername field empty");
+        }
+        
+        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
+            System.out.println("ESC button clicked!\nexiting to main menu...");
+            dispose();
+            game.setScreen(new MainMenuScreen(game));
         }
     }
     
@@ -99,7 +108,7 @@ public class SignInScreen implements Screen {
     @Override
     public void hide()
     {
-    
+        dispose();
     }
     
     @Override

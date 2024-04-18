@@ -186,8 +186,10 @@ public class MainMenuScreen implements Screen {
         System.out.println("Play button clicked!");
         dispose();
         if (SignIn.getUsername() == null || SignIn.getUsername().equals("iamlame")) {
+            System.out.println("username not provided / is a cheat code");
             game.setScreen(new SignInScreen(game));
         } else {
+            System.out.println("username already entered");
             game.setScreen(new GameScreen(game, false));
         }
         dispose();

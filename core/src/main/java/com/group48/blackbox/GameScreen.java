@@ -104,6 +104,7 @@ public class GameScreen extends SignIn implements Screen {
             game.setScreen(new MainMenuScreen(game));
         }
         
+        // TODO remove this before pushing; this is for debugging only
         if (Gdx.input.isKeyJustPressed(Input.Keys.SPACE)) {
             System.out.println("SPACEBAR clicked!");
             gameFinished = true;
@@ -171,6 +172,7 @@ public class GameScreen extends SignIn implements Screen {
     public void dispose()
     {
         tiledMap.dispose();
+        cheater.dispose();
     }
     
     enum TextBox {
