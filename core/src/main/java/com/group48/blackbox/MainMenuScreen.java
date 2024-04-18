@@ -21,13 +21,6 @@ public class MainMenuScreen implements Screen {
     {
         this.game = game;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
-        Gdx.input.setInputProcessor(stage);
-        
-        backgroundTexture = new Texture(Gdx.files.internal("MainMenuScreen/vaporBackground.png"));
-        background = new Image(backgroundTexture);
-        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        
-        stage.addActor(background);
     }
     
     @Override
@@ -48,9 +41,15 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show()
     {
+        Gdx.input.setInputProcessor(stage);
+        
+        backgroundTexture = game.assets.get("MainMenuScreen/vaporBackground.png");
+        background = new Image(backgroundTexture);
+        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         // sequence; one after the other. parallel; both at the same time.
         // forever is always called and will keep being called
         stage.addAction(sequence(alpha(0f), fadeIn(0.5f)));
+        stage.addActor(background);
     }
     
     public void update(float delta)

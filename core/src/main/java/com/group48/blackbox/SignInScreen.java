@@ -72,12 +72,9 @@ public class SignInScreen implements Screen {
             if (!usernameField.getText().isEmpty()) {
                 SignIn.setUsername(usernameField.getText());
                 dispose();
-                System.out.println("\nusername: " + SignIn.getUsername());
-                if (SignIn.getUsername().equals("iamlame")) {
-                    game.setScreen(new GameScreen(this.game, true));
-                    System.out.println("cheats enabled");
-                } else game.setScreen(new GameScreen(this.game, false));
-            } else System.out.println("\nusername field empty");
+                System.out.printf("username: %s\n", SignIn.getUsername());
+                game.setScreen(new GameScreen(this.game));
+            } else System.out.println("username field empty");
         }
         
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {

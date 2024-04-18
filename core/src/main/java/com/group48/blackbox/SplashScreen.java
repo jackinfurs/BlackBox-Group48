@@ -24,16 +24,7 @@ public class SplashScreen extends InputAdapter implements Screen {
     {
         this.game = game;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
-        Gdx.input.setInputProcessor(stage);
         
-        time = 0;
-        splashTexture = new Texture(Gdx.files.internal("splash.png"));
-        splash = new Image(splashTexture);
-
-        //        splashTexture = new Texture(Gdx.files.internal("splash2.png"));
-        //        splash = new Image(splashTexture);
-        
-        stage.addActor(splash);
     }
     
     @Override
@@ -58,8 +49,17 @@ public class SplashScreen extends InputAdapter implements Screen {
     @Override
     public void show()
     {
+        System.out.println("--- SPLASH SCREEN ---");
+        Gdx.input.setInputProcessor(stage);
+        time = 0;
+        
+        System.out.println("displaying splash screen...");
+        splashTexture = game.assets.get("splash.png");
+        //        splashTexture = game.assets.get("splash2.png");
+        splash = new Image(splashTexture);
         splash.setPosition(stage.getWidth() / 2 - 100, stage.getHeight() / 2f - 75);
-        //        splash.setPosition(stage.getWidth() / 2 - 200, stage.getHeight() / 2 - 150);
+        //                splash.setPosition(stage.getWidth() / 2 - 200, stage.getHeight() / 2 - 150);
+        stage.addActor(splash);
         stage.addAction(sequence(
                 sequence(alpha(0f), fadeIn(0.5f),
                         delay(2f),

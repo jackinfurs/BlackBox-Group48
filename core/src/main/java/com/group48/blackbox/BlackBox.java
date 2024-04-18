@@ -1,31 +1,58 @@
 package com.group48.blackbox;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class BlackBox extends Game {
     
-    public OrthographicCamera camera;
+    public AssetManager assets;
     public SpriteBatch batch;
+    public OrthographicCamera camera;
     public BitmapFont font;
+    
+    public LoadingScreen loadingScreen;
+    public SplashScreen splashScreen;
+    public MainMenuScreen mainMenuScreen;
+    public GameScreen gameScreen;
+    public TutorialScreen tutorialScreen;
+    public LeaderboardScreen leaderboardScreen;
+    public SignInScreen signInScreen;
     
     public void create()
     {
+        assets = new AssetManager();
+        batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, +800, 600);
-        batch = new SpriteBatch();
         font = new BitmapFont(); // use libGDX's default Arial font
-        this.setScreen(new SplashScreen(this));
-        //        this.setScreen(new TutorialScreen(this));
+        
+        loadingScreen = new LoadingScreen(this);
+        splashScreen = new SplashScreen(this);
+        mainMenuScreen = new MainMenuScreen(this);
+//        gameScreen = new GameScreen(this);
+//        tutorialScreen = new TutorialScreen(this);
+//        leaderboardScreen = new LeaderboardScreen(this);
+//        signInScreen = new SignInScreen(this);
+        
+        this.setScreen(loadingScreen);
+//                this.setScreen(signInScreen);
     }
     
     public void dispose()
     {
+        assets.dispose();
         batch.dispose();
         font.dispose();
-        this.getScreen().dispose();
+        loadingScreen.dispose();
+        splashScreen.dispose();
+        mainMenuScreen.dispose();
+        gameScreen.dispose();
+        tutorialScreen.dispose();
+        leaderboardScreen.dispose();
+        signInScreen.dispose();
     }
     
     public void render()

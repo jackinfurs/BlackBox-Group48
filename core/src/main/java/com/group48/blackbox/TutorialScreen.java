@@ -77,7 +77,7 @@ public class TutorialScreen implements Screen {
             
             // Check for button presses
             Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            System.out.println(mousePos.x + "," + mousePos.y);
+            System.out.printf("%f,%f\n", mousePos.x, mousePos.y);
             
             if (exitButtonBounds.contains(mousePos.x, mousePos.y)) {
                 dispose();
@@ -145,31 +145,43 @@ public class TutorialScreen implements Screen {
     private String[] initDialogue()
     {
         String[] dialogue = new String[13];
-        dialogue[0] = "Welcome to BlackBox+, a match between the Setter and the Experimenter.\n\n" +
-                "Click to continue.";
-        dialogue[1] = "The goal of the Experimenter is to deduce the locations of six hidden, randomly placed Atoms\n" +
-                "by sending Rays into the Black Box and observing how they are affected.\n" +
-                "Click to continue.";
-        dialogue[2] = "In BlackBox+, you play the role of the Experimenter. \n" +
-                "However, for now, you will play as the Setter.\n" +
-                "Click to continue.";
+        dialogue[0] = """
+                Welcome to BlackBox+, a match between the Setter and the Experimenter.
+                
+                Click to continue.""";
+        dialogue[1] = """
+                The goal of the Experimenter is to deduce the locations of six hidden, randomly placed Atoms
+                by sending Rays into the Black Box and observing how they are affected.
+                Click to continue.""";
+        dialogue[2] = """
+                In BlackBox+, you play the role of the Experimenter.\s
+                However, for now, you will play as the Setter.
+                Click to continue.""";
         dialogue[3] = "Right click on the center of the board to place an Atom.";
-        dialogue[4] = "You have placed an Atom that Rays can react with.\n" +
-                "Upon direct hit, the Ray is destroyed.\n" +
-                "Click to continue.";
-        dialogue[5] = "When approached indirectly, the Ray is deflected \n" +
-                "at an angle relative to the position of the Atom.\n" +
-                "Click to continue.";
-        dialogue[6] = "If the Atom is placed at the edge of the Black Box,\n" +
-                "the Ray is reflected, and never enters the Black Box.\n" +
-                "Click to continue.";
-        dialogue[7] = "If the Ray exits the board, the exit point is marked.\n\n" +
-                "Click to continue.";
-        dialogue[8] = "Taking a Ray's travel into account, a Guess Atom can be placed.\n\n" +
-                "Click to continue.";
-        dialogue[9] = "You will now play the role of the Experimenter.\n" +
-                "One Atom has been hidden in the Black Box.\n" +
-                "Click to continue.";
+        dialogue[4] = """
+                You have placed an Atom that Rays can react with.
+                Upon direct hit, the Ray is destroyed.
+                Click to continue.""";
+        dialogue[5] = """
+                When approached indirectly, the Ray is deflected\s
+                at an angle relative to the position of the Atom.
+                Click to continue.""";
+        dialogue[6] = """
+                If the Atom is placed at the edge of the Black Box,
+                the Ray is reflected, and never enters the Black Box.
+                Click to continue.""";
+        dialogue[7] = """
+                If the Ray exits the board, the exit point is marked.
+                
+                Click to continue.""";
+        dialogue[8] = """
+                Taking a Ray's travel into account, a Guess Atom can be placed.
+                
+                Click to continue.""";
+        dialogue[9] = """
+                You will now play the role of the Experimenter.
+                One Atom has been hidden in the Black Box.
+                Click to continue.""";
         dialogue[10] = "Click on an edge to start sending in Rays.\n" +
                 "Once you have deduced the location, Right Click to place a Guess Atom.";
         dialogue[11] = "Well done! You are ready to play Black Box+.\n\n" + // correct guess

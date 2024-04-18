@@ -11,6 +11,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.util.Objects;
+
 // TODO get atoms.excludedCoords() in here
 
 public class GameScreen extends SignIn implements Screen {
@@ -22,10 +24,11 @@ public class GameScreen extends SignIn implements Screen {
     private Sound cheater;
     private TextBox textBox = TextBox.EMPTY;
     
-    public GameScreen(BlackBox game, boolean cheats)
+    public GameScreen(BlackBox game)
     {
         this.game = game;
-        this.cheats = cheats;
+        //
+        if (Objects.equals(SignIn.getUsername(),"sv_cheats 1")) this.cheats = true;
         cheater = Gdx.audio.newSound(Gdx.files.internal("Sound/yousuck.wav"));
     }
     
