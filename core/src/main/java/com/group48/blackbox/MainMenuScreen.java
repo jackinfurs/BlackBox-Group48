@@ -162,6 +162,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void hide()
     {
+        dispose();
     }
     
     @Override
@@ -195,7 +196,6 @@ public class MainMenuScreen implements Screen {
     private void tutorialButtonClicked()
     {
         System.out.println("Tutorial button clicked!");
-        game.setScreen(new TutorialScreen(game));
         dispose();
         game.setScreen(new TutorialScreen(game));
     }
@@ -203,7 +203,8 @@ public class MainMenuScreen implements Screen {
     private void leaderboardButtonClicked()
     {
         System.out.println("Leaderboard button clicked!");
-        SignIn.readScores();
+        dispose();
+        game.setScreen(new LeaderboardScreen(game));
     }
     
     private void exitButtonClicked()
