@@ -3,6 +3,7 @@ package com.group48.blackbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -17,12 +18,15 @@ public class GameScreen extends SignIn implements Screen {
     private final int CAMERAOFFSET_X = 360, CAMERAOFFSET_Y = 110;
     private final int FONT_X = 20, FONT_Y = -80;
     private GameBoard tiledMap;
-    private boolean gameFinished;
+    private boolean gameFinished, cheats;
+    private Sound cheater;
     private TextBox textBox = TextBox.EMPTY;
     
-    public GameScreen(BlackBox game)
+    public GameScreen(BlackBox game, boolean cheats)
     {
         this.game = game;
+        this.cheats = cheats;
+        cheater = Gdx.audio.newSound(Gdx.files.internal("Sound/yousuck.wav"));
     }
     
     @Override
@@ -30,6 +34,11 @@ public class GameScreen extends SignIn implements Screen {
     {
         tiledMap = new GameBoard();
         tiledMap.placeAtoms();
+        if (cheats) {
+            tiledMap.getAtoms().revealAtoms();
+            textBox = TextBox.CHEATER;
+            cheater.play();
+        }
     }
     
     // TODO implement direction + proper tile selection
@@ -127,6 +136,7 @@ public class GameScreen extends SignIn implements Screen {
                     game.font.draw(game.batch, "Guess atom #" + tiledMap.getAtoms().getGuessAtomsCount() + ".", FONT_X, FONT_Y);
             case GUESS_INCOMPLETE ->
                     game.font.draw(game.batch, "You must place six guess atoms to end the game.", FONT_X, FONT_Y);
+            case CHEATER -> game.font.draw(game.batch, "Cheats enabled.", FONT_X, FONT_Y);
         }
         
         tiledMap.getRenderer().render();
@@ -173,18 +183,14 @@ public class GameScreen extends SignIn implements Screen {
         RAY_DEFLECT(6),
         RAY_MISS(7),
         ATOM_GUESS(8),
-        GUESS_INCOMPLETE(9);
+        GUESS_INCOMPLETE(9),
+        CHEATER(10);
         
         private final int value;
         
         TextBox(int value)
         {
             this.value = value;
-        }
-        
-        public int getValue()
-        {
-            return value;
         }
     }
 }

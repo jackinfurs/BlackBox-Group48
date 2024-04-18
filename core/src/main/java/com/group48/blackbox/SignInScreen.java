@@ -12,6 +12,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
+import java.util.Objects;
+
 public class SignInScreen implements Screen {
     
     final BlackBox game;
@@ -70,7 +72,9 @@ public class SignInScreen implements Screen {
         // Check for Enter key press to proceed to the game screen
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             SignIn.username = usernameField.getText();
-            game.setScreen(new GameScreen(this.game));
+            System.out.println(SignIn.getUsername());
+            if (SignIn.getUsername().equals("iamlame")) game.setScreen(new GameScreen(this.game, true));
+            else game.setScreen(new GameScreen(this.game, false));
         }
     }
     
