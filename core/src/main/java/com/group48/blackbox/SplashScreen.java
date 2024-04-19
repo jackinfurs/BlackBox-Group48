@@ -28,7 +28,7 @@ public class SplashScreen extends InputAdapter implements Screen {
     @Override
     public void show()
     {
-        System.out.println("--- SPLASH SCREEN ---");
+        System.out.println("\n--- SPLASH SCREEN ---");
         Gdx.input.setInputProcessor(stage);
         
         System.out.println("displaying splash screen...");

@@ -39,6 +39,7 @@ public class TutorialScreen implements Screen {
     @Override
     public void show()
     {
+        System.out.println("\n--- TUTORIAL SCREEN ---");
         Gdx.input.setInputProcessor(stage);
         
         Dialogue = initDialogue();
@@ -94,10 +95,13 @@ public class TutorialScreen implements Screen {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             switch (dialogueN) {
                 case 3: // wait for right click on centre of atom
+                    game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
                     break;
                 case 10: // wait for ray to be sent in
+                    game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
                     break;
                 default:
+                    game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     text.setText(Dialogue[++dialogueN]);
             }
             
@@ -108,15 +112,19 @@ public class TutorialScreen implements Screen {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             switch (dialogueN) {
                 case 3: // wait for right click on centre of atom
+                    game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     tiledMap.addTutorialAtom();
                     text.setText(Dialogue[++dialogueN]);
                     break;
                 case 10: // wait for ray to be sent in
+                    game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     // if correct guess, dialogueN = 11
                     tiledMap.addTutorialGuessAtom();
                     // if incorrect, dialogueN = 12
                     text.setText(Dialogue[++dialogueN]);
                     break;
+                default:
+                    game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {

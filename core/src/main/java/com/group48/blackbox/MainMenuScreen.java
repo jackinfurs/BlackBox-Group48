@@ -32,7 +32,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show()
     {
-        System.out.println("--- MAIN MENU ---");
+        System.out.println("\n--- MAIN MENU ---");
         Gdx.input.setInputProcessor(stage);
         
         Texture backgroundTex = game.assets.get("MainMenuScreen/vaporBackground.png");

@@ -15,30 +15,32 @@ public class LoadingScreen extends InputAdapter implements Screen {
     
     private final BlackBox game;
     
-    private final ShapeRenderer shapeRenderer;
+    // loading bar
     private float progress;
+    private final ShapeRenderer loadingBar;
     
     public LoadingScreen(final BlackBox game)
     {
         this.game = game;
-        this.shapeRenderer = new ShapeRenderer();
+        this.loadingBar = new ShapeRenderer();
     }
     
+    // saves memory to queue all assets into one global (NON-STATIC) AssetManager
+    // called using game.assets.get("insert/file/path");
     private void queueAssets()
     {
-        System.out.println("queueing assets...");
-        
         game.assets.load("splash2.png", Texture.class);
         
         game.assets.load("MainMenuScreen/vaporBackground.png", Texture.class);
-        game.assets.load("MainMenuScreen/exit.png", Texture.class);
-        game.assets.load("MainMenuScreen/leaderboard.png", Texture.class);
+        game.assets.load("signinBackground.png", Texture.class);
         game.assets.load("MainMenuScreen/play.png", Texture.class);
         game.assets.load("MainMenuScreen/tutorial.png", Texture.class);
-        
-        game.assets.load("signinBackground.png", Texture.class);
+        game.assets.load("MainMenuScreen/leaderboard.png", Texture.class);
+        game.assets.load("MainMenuScreen/exit.png", Texture.class);
         
         game.assets.load("GameScreen/circle.png", Texture.class);
+        
+        game.assets.load("uiskin.json", Skin.class);
         
         game.assets.load("Sound/clickBack.wav", Sound.class);
         game.assets.load("Sound/clickConfirm.wav", Sound.class);
@@ -48,38 +50,64 @@ public class LoadingScreen extends InputAdapter implements Screen {
         game.assets.load("Sound/gameStart.wav", Sound.class);
         game.assets.load("Sound/youSuck.wav", Sound.class);
         
-        game.assets.load("uiskin.json", Skin.class);
-        
         System.out.printf("successfully loaded %d assets\n", game.assets.getQueuedAssets());
-        game.assets.finishLoading();
+        game.assets.finishLoading(); // synchronous
     }
     
+    // show() methods are usually used for initialisation; called when screen comes into focus
     @Override
     public void show()
     {
-        System.out.println("--- LOADING SCREEN ---");
+        System.out.println("\n--- LOADING SCREEN ---");
         this.progress = 0f;
+        
+        System.out.println("queueing assets...");
         queueAssets();
-        shapeRenderer.setProjectionMatrix(game.camera.combined);
+        
+        loadingBar.setProjectionMatrix(game.camera.combined);
     }
     
+    // render() methods are called every frame
     @Override
     public void render(float delta)
     {
+        // clear screen boilerplate
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         
+        // update (in this case the progress bar) per item loaded per frame
         update(delta);
         
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
-        shapeRenderer.setColor(Color.DARK_GRAY);
-        shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, game.camera.viewportWidth - 64, 16);
+        // loading bar background
+        loadingBar.begin(ShapeRenderer.ShapeType.Filled);
+        loadingBar.setColor(Color.DARK_GRAY);
+        loadingBar.rect(32, game.camera.viewportHeight / 2 - 8, game.camera.viewportWidth - 64, 16);
         
-        shapeRenderer.setColor(Color.WHITE);
-        shapeRenderer.rect(32, game.camera.viewportHeight / 2 - 8, progress * (game.camera.viewportWidth - 64), 16);
-        shapeRenderer.end();
+        // loading bar foreground
+        loadingBar.setColor(Color.WHITE);
+        loadingBar.rect(32, game.camera.viewportHeight / 2 - 8, progress * (game.camera.viewportWidth - 64), 16);
+        loadingBar.end();
     }
     
+    private void update(float delta)
+    {
+        progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
+        if (game.assets.update() && progress >= game.assets.getProgress() - .001f) {
+            // once loading is done, load a screen (default splashScreen)
+            // change start screen for debugging here
+            //            game.setScreen(game.splashScreen);
+            game.setScreen(game.tutorialScreen);
+        }
+    }
+    
+    // used when exiting; marks for garbage collection
+    @Override
+    public void dispose()
+    {
+        loadingBar.dispose();
+    }
+    
+    // below methods are fairly useless in this context
     @Override
     public void resize(int width, int height)
     {
@@ -102,20 +130,5 @@ public class LoadingScreen extends InputAdapter implements Screen {
     public void hide()
     {
     
-    }
-    
-    @Override
-    public void dispose()
-    {
-        shapeRenderer.dispose();
-    }
-    
-    private void update(float delta)
-    {
-        progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
-        if (game.assets.update() && progress >= game.assets.getProgress() - .001f) {
-//            game.setScreen(game.splashScreen);
-            game.setScreen(game.tutorialScreen); // change start screen for debugging here
-        }
     }
 }

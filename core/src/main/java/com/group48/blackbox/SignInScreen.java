@@ -29,6 +29,7 @@ public class SignInScreen implements Screen {
     @Override
     public void show()
     {
+        System.out.println("\n--- SIGN IN SCREEN ---");
         Gdx.input.setInputProcessor(stage);
         
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));

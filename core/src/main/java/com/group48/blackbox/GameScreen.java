@@ -31,6 +31,7 @@ public class GameScreen extends SignIn implements Screen {
     @Override
     public void show()
     {
+        System.out.println("\n--- GAME SCREEN ---");
         if (Objects.equals(SignIn.getUsername(), "sv_cheats 1")) this.cheats = true;
         
         tiledMap = new GameBoard(game);

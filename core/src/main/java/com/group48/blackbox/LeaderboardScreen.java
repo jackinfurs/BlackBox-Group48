@@ -27,6 +27,7 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
     @Override
     public void show()
     {
+        System.out.println("\n--- LEADERBOARD SCREEN ---");
         Gdx.input.setInputProcessor(stage);
         
         Texture backgroundTex = game.assets.get("signinBackground.png");

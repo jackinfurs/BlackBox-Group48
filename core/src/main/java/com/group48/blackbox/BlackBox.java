@@ -21,11 +21,13 @@ public class BlackBox extends Game {
     
     public void create()
     {
-        assets = new AssetManager();
+        assets = new AssetManager(); // see LoadingScreen.java
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
         camera.setToOrtho(false, 800, 600);
         
+        // init screens for later calling
+        // this saves on memory and makes setting screens more concise
         loadingScreen = new LoadingScreen(this);
         splashScreen = new SplashScreen(this);
         mainMenuScreen = new MainMenuScreen(this);
@@ -64,6 +66,7 @@ public class BlackBox extends Game {
     
     public void render()
     {
+        // very important! nothing renders without this being called
         super.render();
     }
 }
