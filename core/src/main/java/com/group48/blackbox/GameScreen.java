@@ -166,7 +166,7 @@ public class GameScreen extends SignIn implements Screen {
     @Override
     public void dispose()
     {
-        tiledMap.dispose();
+        if (!Objects.isNull(tiledMap)) tiledMap.dispose();
     }
     
     enum TextBox {

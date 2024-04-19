@@ -35,7 +35,7 @@ public class BlackBox extends Game {
         signInScreen = new SignInScreen(this);
         gameScreen = new GameScreen(this);
         tutorialScreen = new TutorialScreen(this);
-        //        leaderboardScreen = new LeaderboardScreen(this);
+        leaderboardScreen = new LeaderboardScreen(this);
         
         this.setScreen(loadingScreen);
     }
@@ -48,20 +48,23 @@ public class BlackBox extends Game {
         batch.dispose();
         System.out.println("font");
         font.dispose();
-        System.out.println("loadingScreen");
+        
+        System.out.println("\ndisposing screens...\nLoadingScreen");
         loadingScreen.dispose();
-        System.out.println("splashScreen");
+        System.out.println("SplashScreen");
         splashScreen.dispose();
-        System.out.println("mainmenu");
+        
+        System.out.println("MainMenuScreen");
         mainMenuScreen.dispose();
-//        System.out.println("game");
-//        gameScreen.dispose();
-        System.out.println("tutorial");
+        System.out.println("SignInScreen");
+        signInScreen.dispose();
+        
+        System.out.println("GameScreen");
+        gameScreen.dispose();
+        System.out.println("TutorialScreen");
         tutorialScreen.dispose();
-        //        System.out.println("leaderboard");
-        //        leaderboardScreen.dispose();
-        //        System.out.println("signin");
-        //        signInScreen.dispose();
+        System.out.println("LeaderboardScreen");
+        leaderboardScreen.dispose();
     }
     
     public void render()

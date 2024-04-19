@@ -43,7 +43,7 @@ public class TutorialScreen implements Screen {
         Dialogue = initDialogue();
         skin = game.assets.get("uiskin.json");
         
-        Texture backgroundTex = game.assets.get("MainMenuScreen/vaporBackground.png");
+        Texture backgroundTex = game.assets.get("signinBackground.png");
         Image background = new Image(backgroundTex);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
@@ -64,8 +64,8 @@ public class TutorialScreen implements Screen {
         });
         
         text = new Label(Dialogue[dialogueN], skin);
-        text.setPosition(30, 70);
-        text.setFontScaleX(0.70f);
+        text.setPosition(35, 70);
+        text.setFontScaleX(0.75f);
         
         stage.addActor(background);
         stage.addActor(exitButton);
@@ -170,8 +170,8 @@ public class TutorialScreen implements Screen {
                 
                 Click to continue.""";
         dialogue[1] = """
-                The goal of the Experimenter is to deduce the locations of six hidden, randomly placed Atoms
-                by sending Rays into the Black Box and observing how they are affected.
+                The goal of the Experimenter is to deduce the locations of six hidden, randomly
+                placed Atoms by sending Rays into the Black Box and observing how they are affected.
                 Click to continue.""";
         dialogue[2] = """
                 In BlackBox+, you play the role of the Experimenter.\s
