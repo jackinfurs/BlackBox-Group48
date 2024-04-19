@@ -66,7 +66,12 @@ public class Atoms {
         atomsLayer.setCell(x, y, atomCell);
     }
     
-    public void addGuessAtom(int x, int y)
+    public void removeAtom(int x, int y)
+    {
+        atomsLayer.setCell(x, y, null);
+    }
+    
+    public int addGuessAtom(int x, int y)
     {
         if (guessAtomsCount != 6 &&
                 guessAtomsLayer.getCell(x, y) == null &&
@@ -75,10 +80,13 @@ public class Atoms {
             guessAtomCell.setTile(guessTileset.getTile(2));
             guessAtomsLayer.setCell(x, y, guessAtomCell);
             guessAtomsCount++;
+            return 0;
         } else if (guessAtomsLayer.getCell(x, y) != null) {
             guessAtomsLayer.setCell(x, y, null);
             guessAtomsCount--;
+            return 0;
         }
+        return -1;
     }
     
     public int getGuessAtomsCount() {return guessAtomsCount;}
@@ -98,21 +106,22 @@ public class Atoms {
         }
     }
     
-    public void placeRandomAtoms()
+    public int placeRandomAtom()
     {
         Random random = new Random();
-        int totalAtoms = 6;
-        int gridWidth = atomsLayer.getWidth();
-        int gridHeight = atomsLayer.getHeight();
-        
-        for (int i = 0 ; i < totalAtoms ; ) {
-            int x, y;
-            x = random.nextInt(gridWidth);
-            y = random.nextInt(gridHeight);
-            if (!isExcluded(x, y) && !cellIsOccupied(x, y)) {
-                atomCoordinates.add(x + "," + y);
-                i++;
-            }
+        int x = random.nextInt(atomsLayer.getWidth());
+        int y = random.nextInt(atomsLayer.getHeight());
+        if (!isExcluded(x, y) && !cellIsOccupied(x, y)) {
+            System.out.printf("placed random atom at %d,%d", x, y);
+            atomCoordinates.add(x + "," + y);
+            return 0;
+        } else return -1;
+    }
+    
+    public void placeRandomAtoms()
+    {
+        for (int i = 0 ; i < 6 ; ) {
+            if (placeRandomAtom() == 0) i++;
         }
     }
     

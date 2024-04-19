@@ -181,12 +181,12 @@ public class GameBoard {
         return 0;
     }
     
-    private int getTileXCoord(Vector3 Mouse)
+    public int getTileXCoord(Vector3 Mouse)
     {
         return (int) Mouse.x / 32;
     }
     
-    private int getTileYCoord(Vector3 Mouse)
+    public int getTileYCoord(Vector3 Mouse)
     {
         return (int) Mouse.y / 26;
     }
@@ -220,19 +220,13 @@ public class GameBoard {
         }
     }
     
-    public void addGuessAtom(Vector3 Mouse)
+    public int addGuessAtom(Vector3 Mouse)
     {
-        atoms.addGuessAtom(getTileXCoord(Mouse), getTileYCoord(Mouse));
+        return atoms.addGuessAtom(getTileXCoord(Mouse), getTileYCoord(Mouse));
     }
     
-    public void addTutorialGuessAtom()
-    {
-        atoms.addGuessAtom(3, 4);
-    }
-    
-    public void addTutorialAtom()
-    {
-        atoms.addAtom(4, 4);
+    public void removeTutorialAtom() {
+        atoms.removeAtom(4,4);
     }
     
     public Atoms getAtoms()

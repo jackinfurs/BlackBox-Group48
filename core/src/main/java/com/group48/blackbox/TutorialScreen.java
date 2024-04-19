@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
@@ -26,9 +27,11 @@ public class TutorialScreen implements Screen {
     private final Stage stage;
     private String[] Dialogue;
     private GameBoard tiledMap;
+    private OrthographicCamera fake;
     private Skin skin;
     private Label text;
     private int dialogueN;
+    private Vector3 mousePos;
     
     public TutorialScreen(final BlackBox game)
     {
@@ -50,8 +53,8 @@ public class TutorialScreen implements Screen {
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
         tiledMap = new GameBoard(game);
-        OrthographicCamera fake = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        fake.position.set(120,100,0);
+        fake = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        fake.position.set(120, 100, 0);
         fake.update();
         
         tiledMap.getRenderer().setView(fake);
@@ -94,11 +97,21 @@ public class TutorialScreen implements Screen {
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             switch (dialogueN) {
-                case 3: // wait for right click on center of board
+                case 3: // wait for right click on center of board (disable left click)
                     game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
                     break;
+                case 8: // user becomes experimenter; remove guess atom and hide new atom
+                    game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                    tiledMap.removeTutorialAtom();
+                    tiledMap.getAtoms().placeRandomAtom();
+                    text.setText(Dialogue[++dialogueN]);
+                    break;
                 case 10: // wait for ray to be sent in
-                    game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                    mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                    fake.unproject(mousePos);
+                    if (tiledMap.selectTile(mousePos) == -1)
+                        game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                    else game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     break;
                 default:
                     game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
@@ -112,16 +125,27 @@ public class TutorialScreen implements Screen {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             switch (dialogueN) {
                 case 3: // wait for right click on centre of atom
-                    game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-                    tiledMap.addTutorialAtom();
-                    text.setText(Dialogue[++dialogueN]);
+                    mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                    fake.unproject(mousePos);
+                    if (tiledMap.getTileXCoord(mousePos) == 4 && tiledMap.getTileYCoord(mousePos) == 4) {
+                        tiledMap.getAtoms().addAtom(4, 4);
+                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                        text.setText(Dialogue[++dialogueN]);
+                    } else game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
                     break;
                 case 10: // wait for ray to be sent in
-                    game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                    mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+                    fake.unproject(mousePos);
+                    if (tiledMap.addGuessAtom(mousePos) == -1) {
+                        game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                    } else {
+                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                        tiledMap.getAtoms().setGameFinished();
+                        text.setText(Dialogue[++dialogueN]);
+                    }
                     // if correct guess, dialogueN = 11
-                    tiledMap.addTutorialGuessAtom();
+                    
                     // if incorrect, dialogueN = 12
-                    text.setText(Dialogue[++dialogueN]);
                     break;
                 default:
                     game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
@@ -146,18 +170,6 @@ public class TutorialScreen implements Screen {
     public void resize(int width, int height)
     {
         stage.getViewport().update(width, height, false);
-    }
-    
-    @Override
-    public void pause()
-    {
-    
-    }
-    
-    @Override
-    public void resume()
-    {
-    
     }
     
     @Override
@@ -220,5 +232,17 @@ public class TutorialScreen implements Screen {
         dialogue[12] = "Not quite! You'll get it with enough practice.\n\n" + // incorrect guess
                 "Click to exit to the Main Menu.";
         return dialogue;
+    }
+    
+    @Override
+    public void pause()
+    {
+    
+    }
+    
+    @Override
+    public void resume()
+    {
+    
     }
 }
