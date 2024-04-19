@@ -3,12 +3,14 @@ package com.group48.blackbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 
+import java.io.File;
 
 public class LoadingScreen extends InputAdapter implements Screen {
     
@@ -26,9 +28,30 @@ public class LoadingScreen extends InputAdapter implements Screen {
     private void queueAssets()
     {
         System.out.println("queueing assets...");
+        
         game.assets.load("splash.png", Texture.class);
         game.assets.load("splash2.png", Texture.class);
+        
         game.assets.load("MainMenuScreen/vaporBackground.png", Texture.class);
+        game.assets.load("MainMenuScreen/exit.png",Texture.class);
+        game.assets.load("MainMenuScreen/exit-red.png", Texture.class);
+        game.assets.load("MainMenuScreen/leaderboard.png", Texture.class);
+        game.assets.load("MainMenuScreen/leaderboard-red.png", Texture.class);
+        game.assets.load("MainMenuScreen/play.png", Texture.class);
+        game.assets.load("MainMenuScreen/play-red.png", Texture.class);
+        game.assets.load("MainMenuScreen/tutorial.png", Texture.class);
+        game.assets.load("MainMenuScreen/tutorial-red.png", Texture.class);
+        
+        game.assets.load("signinBackground.png", Texture.class);
+        
+        game.assets.load("Sound/clickBack.wav", Sound.class);
+        game.assets.load("Sound/clickConfirm.wav", Sound.class);
+        game.assets.load("Sound/clickHover.wav", Sound.class);
+        game.assets.load("Sound/clickInvalid.wav", Sound.class);
+        game.assets.load("Sound/gameEnd.wav", Sound.class);
+        game.assets.load("Sound/gameStart.wav", Sound.class);
+        game.assets.load("Sound/youSuck.wav", Sound.class);
+        
         System.out.printf("successfully loaded %d assets\n", game.assets.getQueuedAssets());
     }
     

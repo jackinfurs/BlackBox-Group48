@@ -18,13 +18,11 @@ public class SplashScreen extends InputAdapter implements Screen {
     
     private Image splash;
     private Texture splashTexture;
-    private float time;
     
     public SplashScreen(final BlackBox game)
     {
         this.game = game;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
-        
     }
     
     @Override
@@ -36,13 +34,7 @@ public class SplashScreen extends InputAdapter implements Screen {
         update(delta);
         
         game.batch.begin();
-        
         stage.draw();
-        
-        // wish i knew a better way to do this.
-        time += Gdx.graphics.getDeltaTime();
-        if (time > 3) game.setScreen(new MainMenuScreen(game));
-        
         game.batch.end();
     }
     
@@ -51,7 +43,6 @@ public class SplashScreen extends InputAdapter implements Screen {
     {
         System.out.println("--- SPLASH SCREEN ---");
         Gdx.input.setInputProcessor(stage);
-        time = 0;
         
         System.out.println("displaying splash screen...");
         splashTexture = game.assets.get("splash.png");
@@ -60,10 +51,14 @@ public class SplashScreen extends InputAdapter implements Screen {
         splash.setPosition(stage.getWidth() / 2 - 100, stage.getHeight() / 2f - 75);
         //                splash.setPosition(stage.getWidth() / 2 - 200, stage.getHeight() / 2 - 150);
         stage.addActor(splash);
+        
+        Runnable fade = () -> game.setScreen(game.mainMenuScreen);
+        
         stage.addAction(sequence(
                 sequence(alpha(0f), fadeIn(0.5f),
                         delay(2f),
-                        fadeOut(0.5f))));
+                        fadeOut(0.5f),
+                        run(fade))));
     }
     
     public void update(float delta)
@@ -80,7 +75,6 @@ public class SplashScreen extends InputAdapter implements Screen {
     @Override
     public void hide()
     {
-        dispose();
     }
     
     @Override
