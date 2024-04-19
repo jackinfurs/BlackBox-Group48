@@ -5,6 +5,7 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -48,7 +49,11 @@ public class TutorialScreen implements Screen {
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
         tiledMap = new GameBoard(game);
-        tiledMap.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
+        OrthographicCamera fake = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        fake.position.set(120,100,0);
+        fake.update();
+        
+        tiledMap.getRenderer().setView(fake);
         dialogueN = 0;
         
         TextButton exitButton = new TextButton("Exit to main menu", skin);
@@ -119,8 +124,6 @@ public class TutorialScreen implements Screen {
             game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }
-        
-        game.font.draw(game.batch, Dialogue[dialogueN], 0, 0);
         
         tiledMap.getRenderer().render();
         game.batch.end();

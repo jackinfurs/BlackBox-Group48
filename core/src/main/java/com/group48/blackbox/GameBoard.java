@@ -89,7 +89,7 @@ class TileCoordinates {
     }
 }
 
-public class GameBoard extends Actor {
+public class GameBoard {
     
     final BlackBox game;
     
@@ -263,12 +263,6 @@ public class GameBoard extends Actor {
                 }
             }
         }
-    }
-    
-    @Override
-    public void draw(Batch batch, float parentAlpha)
-    {
-        renderer.render();
     }
     
     public void dispose()

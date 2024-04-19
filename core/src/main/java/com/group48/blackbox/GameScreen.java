@@ -68,7 +68,7 @@ public class GameScreen extends SignIn implements Screen {
         game.batch.begin();
         endButton.draw(game.batch, 1f);
         exitButton.draw(game.batch, 1f);
-        game.font.getData().setScale(1.2f, 1.2f);
+//        game.font.getData().setScale(1.2f, 1.2f);
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             textBox = TextBox.EMPTY;
@@ -119,21 +119,21 @@ public class GameScreen extends SignIn implements Screen {
             }
         }
         
-        switch (textBox) {
-            case EMPTY -> game.font.draw(game.batch, "", FONT_X, FONT_Y);
-            case INVALID_TILE -> game.font.draw(game.batch, "Invalid tile selection.", FONT_X, FONT_Y);
-            case END_GAME -> game.font.draw(game.batch, "Game over.", FONT_X, FONT_Y);
-            case SELECT_TILE -> game.font.draw(game.batch, "Tile selected.", FONT_X, FONT_Y);
-            case RAY_HIT -> game.font.draw(game.batch, "Ray has hit an Atom.", FONT_X, FONT_Y);
-            case RAY_REFLECT -> game.font.draw(game.batch, "Ray has reflected from an Atom.", FONT_X, FONT_Y);
-            case RAY_DEFLECT -> game.font.draw(game.batch, "Ray has deflected an Atom.", FONT_X, FONT_Y);
-            case RAY_MISS -> game.font.draw(game.batch, "Ray has missed an Atom.", FONT_X, FONT_Y);
-            case ATOM_GUESS ->
-                    game.font.draw(game.batch, "Guess atom #" + tiledMap.getAtoms().getGuessAtomsCount() + ".", FONT_X, FONT_Y);
-            case GUESS_INCOMPLETE ->
-                    game.font.draw(game.batch, "You must place six guess atoms to end the game.", FONT_X, FONT_Y);
-            case CHEATER -> game.font.draw(game.batch, "Cheats enabled.", FONT_X, FONT_Y);
-        }
+//        switch (textBox) {
+//            case EMPTY -> game.font.draw(game.batch, "", FONT_X, FONT_Y);
+//            case INVALID_TILE -> game.font.draw(game.batch, "Invalid tile selection.", FONT_X, FONT_Y);
+//            case END_GAME -> game.font.draw(game.batch, "Game over.", FONT_X, FONT_Y);
+//            case SELECT_TILE -> game.font.draw(game.batch, "Tile selected.", FONT_X, FONT_Y);
+//            case RAY_HIT -> game.font.draw(game.batch, "Ray has hit an Atom.", FONT_X, FONT_Y);
+//            case RAY_REFLECT -> game.font.draw(game.batch, "Ray has reflected from an Atom.", FONT_X, FONT_Y);
+//            case RAY_DEFLECT -> game.font.draw(game.batch, "Ray has deflected an Atom.", FONT_X, FONT_Y);
+//            case RAY_MISS -> game.font.draw(game.batch, "Ray has missed an Atom.", FONT_X, FONT_Y);
+//            case ATOM_GUESS ->
+//                    game.font.draw(game.batch, "Guess atom #" + tiledMap.getAtoms().getGuessAtomsCount() + ".", FONT_X, FONT_Y);
+//            case GUESS_INCOMPLETE ->
+//                    game.font.draw(game.batch, "You must place six guess atoms to end the game.", FONT_X, FONT_Y);
+//            case CHEATER -> game.font.draw(game.batch, "Cheats enabled.", FONT_X, FONT_Y);
+//        }
         
         tiledMap.getRenderer().render();
         game.batch.end();

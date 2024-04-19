@@ -3,7 +3,6 @@ package com.group48.blackbox;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class BlackBox extends Game {
@@ -11,7 +10,6 @@ public class BlackBox extends Game {
     public AssetManager assets;
     public SpriteBatch batch;
     public OrthographicCamera camera;
-    public BitmapFont font;
     
     public LoadingScreen loadingScreen;
     public SplashScreen splashScreen;
@@ -26,8 +24,7 @@ public class BlackBox extends Game {
         assets = new AssetManager();
         batch = new SpriteBatch();
         camera = new OrthographicCamera();
-        camera.setToOrtho(false, +800, 600);
-        font = new BitmapFont(); // use libGDX's default Arial font
+        camera.setToOrtho(false, 800, 600);
         
         loadingScreen = new LoadingScreen(this);
         splashScreen = new SplashScreen(this);
@@ -46,8 +43,6 @@ public class BlackBox extends Game {
         assets.dispose();
         System.out.println("batch");
         batch.dispose();
-        System.out.println("font");
-        font.dispose();
         
         System.out.println("\ndisposing screens...\nLoadingScreen");
         loadingScreen.dispose();
