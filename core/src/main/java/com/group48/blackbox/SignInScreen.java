@@ -6,88 +6,83 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
-import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextField;
-import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class SignInScreen implements Screen {
     
     final BlackBox game;
     private final Stage stage;
-    private final TextField usernameField;
-    private final Texture backgroundTexture;
+    private TextField usernameField;
     
     public SignInScreen(final BlackBox game)
     {
         this.game = game;
-        
-        stage = new Stage(new ScreenViewport(), game.batch);
-        Gdx.input.setInputProcessor(stage);
-        
-        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
-        
-        usernameField = new TextField("", skin);
-        usernameField.setMessageText("Enter username...");
-        
-        Table table = new Table();
-        table.setFillParent(true);
-        table.add(usernameField).width(200).height(30);
-        
-        stage.addActor(table);
-        
-        // Load background texture from assets folder
-        backgroundTexture = new Texture("signinBackground.png");
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
     }
     
     @Override
     public void show()
     {
-    
+        Gdx.input.setInputProcessor(stage);
+        
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
+        
+        Texture backgroundTex = game.assets.get("signinBackground.png");
+        Image background = new Image(backgroundTex);
+        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        
+        usernameField = new TextField("", skin);
+        usernameField.setMessageText("Enter username...");
+        usernameField.setPosition(stage.getWidth() / 2f + 25, stage.getHeight() / 2f);
+        usernameField.setSize(300, 40);
+        
+        stage.addActor(background);
+        stage.addActor(usernameField);
+        stage.addAction(sequence(alpha(0f), fadeIn(0.5f)));
     }
     
     @Override
     public void render(float delta)
     {
         
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
-        game.camera.update();
-        game.batch.setProjectionMatrix(game.camera.combined);
+        
+        update(delta);
         
         game.batch.begin();
-        
-        // Draw background
-        game.batch.draw(backgroundTexture, 0, 0, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-        
-        game.batch.end();
-        
-        stage.act();
         stage.draw();
         
-        // Check for Enter key press to proceed to the game screen
+        // not sure there's a better way to do this.
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (!usernameField.getText().isEmpty()) {
+                System.out.printf("username %s, loading gameScreen\n", usernameField.getText());
                 SignIn.setUsername(usernameField.getText());
-                dispose();
-                System.out.printf("username: %s\n", SignIn.getUsername());
-                game.setScreen(new GameScreen(this.game));
-            } else System.out.println("username field empty");
+                game.setScreen(game.gameScreen);
+            } else System.out.println("username not provided");
+        }
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
+            System.out.println("back to the main menu");
+            game.setScreen(game.mainMenuScreen);
         }
         
-        if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            System.out.println("ESC button clicked!\nexiting to main menu...");
-            dispose();
-            game.setScreen(new MainMenuScreen(game));
-        }
+        game.batch.end();
+    }
+    
+    public void update(float delta)
+    {
+        stage.act(delta);
     }
     
     @Override
     public void resize(int width, int height)
     {
-    
+        stage.getViewport().update(width, height, false);
     }
     
     @Override
@@ -105,13 +100,12 @@ public class SignInScreen implements Screen {
     @Override
     public void hide()
     {
-        dispose();
+        stage.clear();
     }
     
     @Override
     public void dispose()
     {
         stage.dispose();
-        backgroundTexture.dispose();
     }
 }

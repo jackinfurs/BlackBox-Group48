@@ -15,7 +15,8 @@ public class SignIn {
         return username;
     }
     
-    public static String setUsername(String u) {
+    public static String setUsername(String u)
+    {
         String old = username;
         username = u;
         return old;

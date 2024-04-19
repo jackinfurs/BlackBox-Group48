@@ -2,13 +2,10 @@ package com.group48.blackbox;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
-import com.badlogic.gdx.assets.loaders.SoundLoader;
-import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -22,7 +19,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class MainMenuScreen implements Screen {
     final BlackBox game;
-    private Stage stage;
+    private final Stage stage;
     
     private Image play, tutorial, exit, leaderboard;
     
@@ -57,21 +54,24 @@ public class MainMenuScreen implements Screen {
         update(delta);
         
         game.batch.begin();
-        
         stage.draw();
-        
         game.batch.end();
-    }
-    
-    public void update(float delta)
-    {
-        stage.act(delta);
     }
     
     @Override
     public void resize(int width, int height)
     {
         stage.getViewport().update(width, height, false);
+    }
+    
+    @Override
+    public void pause()
+    {
+    }
+    
+    @Override
+    public void resume()
+    {
     }
     
     @Override
@@ -86,14 +86,9 @@ public class MainMenuScreen implements Screen {
         stage.dispose();
     }
     
-    @Override
-    public void pause()
+    public void update(float delta)
     {
-    }
-    
-    @Override
-    public void resume()
-    {
+        stage.act(delta);
     }
     
     private void initButtons()

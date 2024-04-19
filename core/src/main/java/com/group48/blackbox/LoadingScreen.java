@@ -10,13 +10,11 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 
-import java.io.File;
-
 public class LoadingScreen extends InputAdapter implements Screen {
     
     private final BlackBox game;
     
-    private ShapeRenderer shapeRenderer;
+    private final ShapeRenderer shapeRenderer;
     private float progress;
     
     public LoadingScreen(final BlackBox game)
@@ -33,7 +31,7 @@ public class LoadingScreen extends InputAdapter implements Screen {
         game.assets.load("splash2.png", Texture.class);
         
         game.assets.load("MainMenuScreen/vaporBackground.png", Texture.class);
-        game.assets.load("MainMenuScreen/exit.png",Texture.class);
+        game.assets.load("MainMenuScreen/exit.png", Texture.class);
         game.assets.load("MainMenuScreen/exit-red.png", Texture.class);
         game.assets.load("MainMenuScreen/leaderboard.png", Texture.class);
         game.assets.load("MainMenuScreen/leaderboard-red.png", Texture.class);
@@ -63,13 +61,6 @@ public class LoadingScreen extends InputAdapter implements Screen {
         this.progress = 0f;
         queueAssets();
         shapeRenderer.setProjectionMatrix(game.camera.combined);
-    }
-    
-    private void update(float delta)
-    {
-        progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
-        if (game.assets.update() && progress >= game.assets.getProgress() - .001f)
-            game.setScreen(game.splashScreen);
     }
     
     @Override
@@ -117,5 +108,12 @@ public class LoadingScreen extends InputAdapter implements Screen {
     public void dispose()
     {
         shapeRenderer.dispose();
+    }
+    
+    private void update(float delta)
+    {
+        progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
+        if (game.assets.update() && progress >= game.assets.getProgress() - .001f)
+            game.setScreen(game.splashScreen);
     }
 }

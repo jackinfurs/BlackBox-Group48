@@ -14,7 +14,7 @@ import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 public class SplashScreen extends InputAdapter implements Screen {
     
     final BlackBox game;
-    private Stage stage;
+    private final Stage stage;
     
     private Image splash;
     private Texture splashTexture;
@@ -23,19 +23,6 @@ public class SplashScreen extends InputAdapter implements Screen {
     {
         this.game = game;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
-    }
-    
-    @Override
-    public void render(float delta)
-    {
-        Gdx.gl.glClearColor(0, 0, 0, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        
-        update(delta);
-        
-        game.batch.begin();
-        stage.draw();
-        game.batch.end();
     }
     
     @Override
@@ -61,15 +48,35 @@ public class SplashScreen extends InputAdapter implements Screen {
                         run(fade))));
     }
     
-    public void update(float delta)
+    @Override
+    public void render(float delta)
     {
-        stage.act(delta);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        
+        update(delta);
+        
+        game.batch.begin();
+        stage.draw();
+        game.batch.end();
     }
     
     @Override
     public void resize(int width, int height)
     {
         stage.getViewport().update(width, height, false);
+    }
+    
+    @Override
+    public void pause()
+    {
+    
+    }
+    
+    @Override
+    public void resume()
+    {
+    
     }
     
     @Override
@@ -83,15 +90,8 @@ public class SplashScreen extends InputAdapter implements Screen {
         stage.dispose();
     }
     
-    @Override
-    public void pause()
+    public void update(float delta)
     {
-    
-    }
-    
-    @Override
-    public void resume()
-    {
-    
+        stage.act(delta);
     }
 }

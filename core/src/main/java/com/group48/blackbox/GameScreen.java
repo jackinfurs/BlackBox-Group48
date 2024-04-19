@@ -27,14 +27,14 @@ public class GameScreen extends SignIn implements Screen {
     public GameScreen(BlackBox game)
     {
         this.game = game;
-        //
-        if (Objects.equals(SignIn.getUsername(),"sv_cheats 1")) this.cheats = true;
-        cheater = Gdx.audio.newSound(Gdx.files.internal("Sound/yousuck.wav"));
     }
     
     @Override
     public void show()
     {
+        if (Objects.equals(SignIn.getUsername(), "sv_cheats 1")) this.cheats = true;
+        cheater = Gdx.audio.newSound(Gdx.files.internal("Sound/yousuck.wav"));
+        
         tiledMap = new GameBoard();
         tiledMap.placeAtoms();
         if (cheats) {

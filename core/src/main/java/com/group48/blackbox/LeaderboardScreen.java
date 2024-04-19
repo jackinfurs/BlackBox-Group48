@@ -48,7 +48,6 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
             dispose();
             game.setScreen(new MainMenuScreen(game));
         }
-        
     }
     
     @Override

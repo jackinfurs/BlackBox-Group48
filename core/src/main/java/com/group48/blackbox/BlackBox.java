@@ -32,13 +32,12 @@ public class BlackBox extends Game {
         loadingScreen = new LoadingScreen(this);
         splashScreen = new SplashScreen(this);
         mainMenuScreen = new MainMenuScreen(this);
-//        gameScreen = new GameScreen(this);
-//        tutorialScreen = new TutorialScreen(this);
-//        leaderboardScreen = new LeaderboardScreen(this);
-//        signInScreen = new SignInScreen(this);
+        signInScreen = new SignInScreen(this);
+        gameScreen = new GameScreen(this);
+        //        tutorialScreen = new TutorialScreen(this);
+        //        leaderboardScreen = new LeaderboardScreen(this);
         
         this.setScreen(loadingScreen);
-//                this.setScreen(signInScreen);
     }
     
     public void dispose()
@@ -55,14 +54,14 @@ public class BlackBox extends Game {
         splashScreen.dispose();
         System.out.println("mainmenu");
         mainMenuScreen.dispose();
-//        System.out.println("game");
-//        gameScreen.dispose();
-//        System.out.println("tutorial");
-//        tutorialScreen.dispose();
-//        System.out.println("leaderboard");
-//        leaderboardScreen.dispose();
-//        System.out.println("signin");
-//        signInScreen.dispose();
+        //        System.out.println("game");
+        //        gameScreen.dispose();
+        //        System.out.println("tutorial");
+        //        tutorialScreen.dispose();
+        //        System.out.println("leaderboard");
+        //        leaderboardScreen.dispose();
+        //        System.out.println("signin");
+        //        signInScreen.dispose();
     }
     
     public void render()
