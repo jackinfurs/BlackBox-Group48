@@ -95,6 +95,7 @@ public class GameBoard {
     private final TileCoordinates specialCoords;
     private final Atoms atoms;
     private final Rays rays;
+    private Score score;
     private CoordCell startTile;
     private boolean finished;
 
@@ -106,6 +107,7 @@ public class GameBoard {
         rays = new Rays(tiledMap);
         renderer = new HexagonalTiledMapRenderer(tiledMap);
         specialCoords = new TileCoordinates();
+        this.score = new Score(atoms);
     }
 
     public void placeAtoms()
@@ -196,6 +198,9 @@ public class GameBoard {
     {
         this.finished = finished;
         atoms.revealAtoms();
+        int scoreTotal;
+        scoreTotal = score.calculateScore();
+        System.out.println("Score for this round: " + scoreTotal);
     }
 
     // this method changes a tile from black to green to signify that it has been selected
