@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 
 public class LoadingScreen extends InputAdapter implements Screen {
     
@@ -27,7 +28,6 @@ public class LoadingScreen extends InputAdapter implements Screen {
     {
         System.out.println("queueing assets...");
         
-        game.assets.load("splash.png", Texture.class);
         game.assets.load("splash2.png", Texture.class);
         
         game.assets.load("MainMenuScreen/vaporBackground.png", Texture.class);
@@ -38,6 +38,8 @@ public class LoadingScreen extends InputAdapter implements Screen {
         
         game.assets.load("signinBackground.png", Texture.class);
         
+        game.assets.load("GameScreen/circle.png", Texture.class);
+        
         game.assets.load("Sound/clickBack.wav", Sound.class);
         game.assets.load("Sound/clickConfirm.wav", Sound.class);
         game.assets.load("Sound/clickHover.wav", Sound.class);
@@ -45,6 +47,8 @@ public class LoadingScreen extends InputAdapter implements Screen {
         game.assets.load("Sound/gameEnd.wav", Sound.class);
         game.assets.load("Sound/gameStart.wav", Sound.class);
         game.assets.load("Sound/youSuck.wav", Sound.class);
+        
+        game.assets.load("uiskin.json", Skin.class);
         
         System.out.printf("successfully loaded %d assets\n", game.assets.getQueuedAssets());
         game.assets.finishLoading();
@@ -110,7 +114,8 @@ public class LoadingScreen extends InputAdapter implements Screen {
     {
         progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
         if (game.assets.update() && progress >= game.assets.getProgress() - .001f) {
-            game.setScreen(game.splashScreen); // change start screen for debugging here
+//            game.setScreen(game.splashScreen);
+            game.setScreen(game.tutorialScreen); // change start screen for debugging here
         }
     }
 }

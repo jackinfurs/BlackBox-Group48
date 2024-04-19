@@ -32,11 +32,9 @@ public class SplashScreen extends InputAdapter implements Screen {
         Gdx.input.setInputProcessor(stage);
         
         System.out.println("displaying splash screen...");
-        splashTexture = game.assets.get("splash.png");
-        //        splashTexture = game.assets.get("splash2.png");
+        splashTexture = game.assets.get("splash2.png");
         splash = new Image(splashTexture);
-        splash.setPosition(stage.getWidth() / 2 - 100, stage.getHeight() / 2f - 75);
-        //                splash.setPosition(stage.getWidth() / 2 - 200, stage.getHeight() / 2 - 150);
+        splash.setPosition(stage.getWidth() / 2 - 200, stage.getHeight() / 2 - 150);
         stage.addActor(splash);
         
         Runnable fade = () -> game.setScreen(game.mainMenuScreen);

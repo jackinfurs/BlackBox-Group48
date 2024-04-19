@@ -1,10 +1,13 @@
 package com.group48.blackbox;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -86,23 +89,27 @@ class TileCoordinates {
     }
 }
 
-public class GameBoard {
-    private final TileCoordinates specialCoords;
-    private final Texture coiTexture;
+public class GameBoard extends Actor {
+    
+    final BlackBox game;
+    
     private final TiledMap tiledMap;
     private final TiledMapRenderer renderer;
+    private final TileCoordinates specialCoords;
+    private final Texture coiTexture;
     private final Atoms atoms;
     private final Rays rays;
     private CoordCell startTile;
     
-    public GameBoard()
+    public GameBoard(final BlackBox game)
     {
+        this.game = game;
         this.tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
         atoms = new Atoms(tiledMap);
         rays = new Rays(tiledMap);
         renderer = new HexagonalTiledMapRenderer(tiledMap);
         specialCoords = new TileCoordinates();
-        coiTexture = new Texture("GameScreen/circle.png");
+        coiTexture = game.assets.get("GameScreen/circle.png");
     }
     
     public void placeAtoms()
@@ -256,6 +263,12 @@ public class GameBoard {
                 }
             }
         }
+    }
+    
+    @Override
+    public void draw(Batch batch, float parentAlpha)
+    {
+        renderer.render();
     }
     
     public void dispose()

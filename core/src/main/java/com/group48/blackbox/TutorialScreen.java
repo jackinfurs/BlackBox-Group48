@@ -3,62 +3,88 @@ package com.group48.blackbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
+
+import java.util.Objects;
+
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class TutorialScreen implements Screen {
     
     final BlackBox game;
-    private final String[] Dialogue = initDialogue();
-    private final int CAMERAOFFSET_X = 150, CAMERAOFFSET_Y = 60;
+    private final Stage stage;
+    private String[] Dialogue;
     private GameBoard tiledMap;
+    private Skin skin;
+    private Label text;
     private int dialogueN;
     
     public TutorialScreen(final BlackBox game)
     {
         this.game = game;
-        //        Gdx.input.setInputProcessor(new InputHandler());
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
     }
     
     @Override
     public void show()
     {
-        tiledMap = new GameBoard();
+        Gdx.input.setInputProcessor(stage);
+        
+        Dialogue = initDialogue();
+        skin = game.assets.get("uiskin.json");
+        
+        Texture backgroundTex = game.assets.get("MainMenuScreen/vaporBackground.png");
+        Image background = new Image(backgroundTex);
+        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        
+        tiledMap = new GameBoard(game);
+        tiledMap.setPosition(stage.getWidth() / 2, stage.getHeight() / 2);
         dialogueN = 0;
+        
+        TextButton exitButton = new TextButton("Exit to main menu", skin);
+        exitButton.setPosition(stage.getWidth() - 280, stage.getHeight() - 100);
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                System.out.println("back to the main menu");
+                game.assets.get("Sound/clickBack.wav", Sound.class).play();
+                game.setScreen(game.mainMenuScreen);
+            }
+        });
+        
+        text = new Label(Dialogue[dialogueN], skin);
+        text.setPosition(30, 70);
+        text.setFontScaleX(0.70f);
+        
+        stage.addActor(background);
+        stage.addActor(exitButton);
+        stage.addActor(text);
+        background.addAction(alpha(0.3f));
+        stage.addAction(sequence(alpha(0f), fadeIn(0.5f)));
     }
     
     @Override
     public void render(float delta)
     {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
         
-        // draw tutorial title at 17,69
-        
-        // draw textbox at 11,582
-        
-        game.camera.position.set(CAMERAOFFSET_X, CAMERAOFFSET_Y, 0);
-        game.camera.update();
-        tiledMap.getRenderer().setView(game.camera);
-        game.batch.setProjectionMatrix(game.camera.combined);
-        
-        // draw exit to main menu button
-        TextButton exitButton = new TextButton("Exit to main menu", new Skin(Gdx.files.internal("uiskin.json")));
-        exitButton.setPosition(300, 280);
-        Rectangle exitButtonBounds = new Rectangle(exitButton.getX(), exitButton.getY(), exitButton.getWidth(), exitButton.getHeight());
+        update(delta);
         
         game.batch.begin();
-        exitButton.draw(game.batch, 1f);
-        game.font.getData().setScale(1.2f, 1.2f);
-        tiledMap.getRenderer().render();
         
-        // if guess correct, dialogue 11
-        // else dialogue 12
+        stage.draw();
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             switch (dialogueN) {
@@ -67,55 +93,48 @@ public class TutorialScreen implements Screen {
                 case 10: // wait for ray to be sent in
                     break;
                 default:
-                    dialogueN++;
+                    text.setText(Dialogue[++dialogueN]);
             }
             
             if (dialogueN >= 12) {
-                dispose();
-                game.setScreen(new MainMenuScreen(this.game));
-            }
-            
-            // Check for button presses
-            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            System.out.printf("%f,%f\n", mousePos.x, mousePos.y);
-            
-            if (exitButtonBounds.contains(mousePos.x, mousePos.y)) {
-                dispose();
-                game.setScreen(new MainMenuScreen(game));
+                game.setScreen(game.mainMenuScreen);
             }
         }
-        
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             switch (dialogueN) {
                 case 3: // wait for right click on centre of atom
                     tiledMap.addTutorialAtom();
-                    dialogueN++;
+                    text.setText(Dialogue[++dialogueN]);
                     break;
                 case 10: // wait for ray to be sent in
                     // if correct guess, dialogueN = 11
                     tiledMap.addTutorialGuessAtom();
                     // if incorrect, dialogueN = 12
-                    dialogueN++;
+                    text.setText(Dialogue[++dialogueN]);
                     break;
             }
         }
-        
-        // if ESC pressed, exit to main menu
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            System.out.println("ESC button clicked!");
-            dispose();
-            game.setScreen(new MainMenuScreen(game));
+            System.out.println("back to the main menu");
+            game.assets.get("Sound/clickBack.wav", Sound.class).play();
+            game.setScreen(game.mainMenuScreen);
         }
         
-        game.font.draw(game.batch, Dialogue[dialogueN], -200, -100);
+        game.font.draw(game.batch, Dialogue[dialogueN], 0, 0);
+        
         tiledMap.getRenderer().render();
         game.batch.end();
     }
     
-    @Override
-    public void resize(int i, int i1)
+    public void update(float delta)
     {
+        stage.act(delta);
+    }
     
+    @Override
+    public void resize(int width, int height)
+    {
+        stage.getViewport().update(width, height, false);
     }
     
     @Override
@@ -133,13 +152,14 @@ public class TutorialScreen implements Screen {
     @Override
     public void hide()
     {
-        dispose();
+        stage.clear();
     }
     
     @Override
     public void dispose()
     {
-        tiledMap.dispose();
+        stage.dispose();
+        if (!Objects.isNull(tiledMap)) tiledMap.dispose();
     }
     
     private String[] initDialogue()

@@ -34,7 +34,7 @@ public class BlackBox extends Game {
         mainMenuScreen = new MainMenuScreen(this);
         signInScreen = new SignInScreen(this);
         gameScreen = new GameScreen(this);
-                tutorialScreen = new TutorialScreen(this);
+        tutorialScreen = new TutorialScreen(this);
         //        leaderboardScreen = new LeaderboardScreen(this);
         
         this.setScreen(loadingScreen);
@@ -54,10 +54,10 @@ public class BlackBox extends Game {
         splashScreen.dispose();
         System.out.println("mainmenu");
         mainMenuScreen.dispose();
-        //        System.out.println("game");
-        //        gameScreen.dispose();
-        //        System.out.println("tutorial");
-        //        tutorialScreen.dispose();
+//        System.out.println("game");
+//        gameScreen.dispose();
+        System.out.println("tutorial");
+        tutorialScreen.dispose();
         //        System.out.println("leaderboard");
         //        leaderboardScreen.dispose();
         //        System.out.println("signin");

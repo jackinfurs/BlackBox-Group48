@@ -33,7 +33,7 @@ public class GameScreen extends SignIn implements Screen {
     {
         if (Objects.equals(SignIn.getUsername(), "sv_cheats 1")) this.cheats = true;
         
-        tiledMap = new GameBoard();
+        tiledMap = new GameBoard(game);
         tiledMap.placeAtoms();
         if (cheats) {
             tiledMap.getAtoms().revealAtoms();
