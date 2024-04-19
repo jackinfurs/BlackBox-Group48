@@ -11,6 +11,7 @@ buildscript {
     if(enableGraalNative == 'true') {
       classpath "org.graalvm.buildtools.native:org.graalvm.buildtools.native.gradle.plugin:0.9.28"
     }
+
   }
 }
 
@@ -32,10 +33,14 @@ dependencies {
   implementation "com.badlogicgames.gdx:gdx-backend-lwjgl3:$gdxVersion"
   implementation "com.badlogicgames.gdx:gdx-platform:$gdxVersion:natives-desktop"
   implementation project(':core')
-  testImplementation 'org.mockito:mockito-core:3.12.4'
-
+  testImplementation 'org.mockito:mockito-core:4.0.0'
+  testImplementation 'junit:junit:4.13.1'
 }
+apply plugin: 'java'
 
+test {
+  useJUnitPlatform()
+}
 def jarName = "${appName}-${version}.jar"
 def os = System.properties['os.name'].toLowerCase()
 
@@ -113,4 +118,10 @@ tasks.register('dist') {
 
 if(enableGraalNative == 'true') {
   apply from: file("nativeimage.gradle")
+}
+sourceSets {
+  test {
+    java.srcDirs = ['src/main/Test'] // Pointing to the test directory
+    resources.srcDirs = ['assets [main]']
+  }
 }
