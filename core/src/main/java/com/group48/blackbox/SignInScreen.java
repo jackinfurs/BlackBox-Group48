@@ -3,6 +3,7 @@ package com.group48.blackbox;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -38,8 +39,8 @@ public class SignInScreen implements Screen {
         
         usernameField = new TextField("", skin);
         usernameField.setMessageText("Enter username...");
-        usernameField.setPosition(stage.getWidth() / 2f + 25, stage.getHeight() / 2f);
-        usernameField.setSize(300, 40);
+        usernameField.setPosition(stage.getWidth() / 2f + 40, stage.getHeight() / 2f);
+        usernameField.setSize(300, 35);
         
         stage.addActor(background);
         stage.addActor(usernameField);
@@ -68,6 +69,7 @@ public class SignInScreen implements Screen {
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             System.out.println("back to the main menu");
+            game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }
         

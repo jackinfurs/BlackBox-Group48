@@ -34,7 +34,7 @@ public class BlackBox extends Game {
         mainMenuScreen = new MainMenuScreen(this);
         signInScreen = new SignInScreen(this);
         gameScreen = new GameScreen(this);
-        //        tutorialScreen = new TutorialScreen(this);
+                tutorialScreen = new TutorialScreen(this);
         //        leaderboardScreen = new LeaderboardScreen(this);
         
         this.setScreen(loadingScreen);

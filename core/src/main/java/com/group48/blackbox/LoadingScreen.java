@@ -32,13 +32,9 @@ public class LoadingScreen extends InputAdapter implements Screen {
         
         game.assets.load("MainMenuScreen/vaporBackground.png", Texture.class);
         game.assets.load("MainMenuScreen/exit.png", Texture.class);
-        game.assets.load("MainMenuScreen/exit-red.png", Texture.class);
         game.assets.load("MainMenuScreen/leaderboard.png", Texture.class);
-        game.assets.load("MainMenuScreen/leaderboard-red.png", Texture.class);
         game.assets.load("MainMenuScreen/play.png", Texture.class);
-        game.assets.load("MainMenuScreen/play-red.png", Texture.class);
         game.assets.load("MainMenuScreen/tutorial.png", Texture.class);
-        game.assets.load("MainMenuScreen/tutorial-red.png", Texture.class);
         
         game.assets.load("signinBackground.png", Texture.class);
         
@@ -113,7 +109,8 @@ public class LoadingScreen extends InputAdapter implements Screen {
     private void update(float delta)
     {
         progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
-        if (game.assets.update() && progress >= game.assets.getProgress() - .001f)
-            game.setScreen(game.splashScreen);
+        if (game.assets.update() && progress >= game.assets.getProgress() - .001f) {
+            game.setScreen(game.splashScreen); // change start screen for debugging here
+        }
     }
 }

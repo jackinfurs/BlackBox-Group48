@@ -32,6 +32,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show()
     {
+        System.out.println("--- MAIN MENU ---");
         Gdx.input.setInputProcessor(stage);
         
         Texture backgroundTex = game.assets.get("MainMenuScreen/vaporBackground.png");
@@ -96,7 +97,7 @@ public class MainMenuScreen implements Screen {
         System.out.println("creating play button...");
         Texture playTex = game.assets.get("MainMenuScreen/play.png");
         play = new Image(playTex);
-        play.setPosition(Gdx.graphics.getWidth() / 2f, 410);
+        play.setPosition(Gdx.graphics.getWidth() / 2f + 60, 410);
         play.setSize(280, 60);
         play.addListener(new ClickListener() {
             
@@ -132,7 +133,7 @@ public class MainMenuScreen implements Screen {
         System.out.println("creating tutorial button...");
         Texture tutorialTex = game.assets.get("MainMenuScreen/tutorial.png");
         tutorial = new Image(tutorialTex);
-        tutorial.setPosition(Gdx.graphics.getWidth() / 2f, 310);
+        tutorial.setPosition(Gdx.graphics.getWidth() / 2f + 60, 310);
         tutorial.setSize(280, 60);
         tutorial.addListener(new ClickListener() {
             
@@ -163,7 +164,7 @@ public class MainMenuScreen implements Screen {
         System.out.println("creating leaderboard button...");
         Texture leaderboardTex = game.assets.get("MainMenuScreen/leaderboard.png");
         leaderboard = new Image(leaderboardTex);
-        leaderboard.setPosition(Gdx.graphics.getWidth() / 2f, 210);
+        leaderboard.setPosition(Gdx.graphics.getWidth() / 2f + 60, 210);
         leaderboard.setSize(280, 60);
         leaderboard.addListener(new ClickListener() {
             
@@ -194,7 +195,7 @@ public class MainMenuScreen implements Screen {
         System.out.println("creating exit button...");
         Texture exitTex = game.assets.get("MainMenuScreen/exit.png");
         exit = new Image(exitTex);
-        exit.setPosition(Gdx.graphics.getWidth() / 2f, 110);
+        exit.setPosition(Gdx.graphics.getWidth() / 2f + 60, 110);
         exit.setSize(280, 60);
         exit.addListener(new ClickListener() {
             

@@ -28,7 +28,7 @@ public class TutorialScreen implements Screen {
     public void show()
     {
         tiledMap = new GameBoard();
-        dialogueN = -1;
+        dialogueN = 0;
     }
     
     @Override

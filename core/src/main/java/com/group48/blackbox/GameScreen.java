@@ -21,7 +21,6 @@ public class GameScreen extends SignIn implements Screen {
     private final int FONT_X = 20, FONT_Y = -80;
     private GameBoard tiledMap;
     private boolean gameFinished, cheats;
-    private Sound cheater;
     private TextBox textBox = TextBox.EMPTY;
     
     public GameScreen(BlackBox game)
@@ -33,15 +32,14 @@ public class GameScreen extends SignIn implements Screen {
     public void show()
     {
         if (Objects.equals(SignIn.getUsername(), "sv_cheats 1")) this.cheats = true;
-        cheater = Gdx.audio.newSound(Gdx.files.internal("Sound/yousuck.wav"));
         
         tiledMap = new GameBoard();
         tiledMap.placeAtoms();
         if (cheats) {
             tiledMap.getAtoms().revealAtoms();
             textBox = TextBox.CHEATER;
-            cheater.play();
-        }
+            game.assets.get("Sound/yousuck.wav", Sound.class).play();
+        } else game.assets.get("Sound/gameStart.wav", Sound.class).play();
     }
     
     // TODO implement direction + proper tile selection
@@ -169,7 +167,6 @@ public class GameScreen extends SignIn implements Screen {
     public void dispose()
     {
         tiledMap.dispose();
-        cheater.dispose();
     }
     
     enum TextBox {
