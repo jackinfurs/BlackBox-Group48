@@ -91,11 +91,6 @@ public class Atoms {
     
     public int getGuessAtomsCount() {return guessAtomsCount;}
     
-    public void setGameFinished()
-    {
-        revealAtoms();
-    }
-    
     public void revealAtoms()
     {
         for (String coordinate : atomCoordinates) {
@@ -112,7 +107,7 @@ public class Atoms {
         int x = random.nextInt(atomsLayer.getWidth());
         int y = random.nextInt(atomsLayer.getHeight());
         if (!isExcluded(x, y) && !cellIsOccupied(x, y)) {
-            System.out.printf("placed random atom at %d,%d", x, y);
+            System.out.printf("placed random atom at %d,%d\n", x, y);
             atomCoordinates.add(x + "," + y);
             return 0;
         } else return -1;

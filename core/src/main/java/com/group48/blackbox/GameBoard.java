@@ -1,13 +1,10 @@
 package com.group48.blackbox;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -96,10 +93,10 @@ public class GameBoard {
     private final TiledMap tiledMap;
     private final TiledMapRenderer renderer;
     private final TileCoordinates specialCoords;
-    private final Texture coiTexture;
     private final Atoms atoms;
     private final Rays rays;
     private CoordCell startTile;
+    private boolean finished;
     
     public GameBoard(final BlackBox game)
     {
@@ -109,7 +106,6 @@ public class GameBoard {
         rays = new Rays(tiledMap);
         renderer = new HexagonalTiledMapRenderer(tiledMap);
         specialCoords = new TileCoordinates();
-        coiTexture = game.assets.get("GameScreen/circle.png");
     }
     
     public void placeAtoms()
@@ -191,6 +187,17 @@ public class GameBoard {
         return (int) Mouse.y / 26;
     }
     
+    public boolean isFinished()
+    {
+        return finished;
+    }
+    
+    public void setFinished(boolean finished)
+    {
+        this.finished = finished;
+        atoms.revealAtoms();
+    }
+    
     // this method changes a tile from black to green to signify that it has been selected
     TiledMapTileLayer.Cell selectTile(TiledMap tiledMap, int x, int y)
     {
@@ -225,18 +232,9 @@ public class GameBoard {
         return atoms.addGuessAtom(getTileXCoord(Mouse), getTileYCoord(Mouse));
     }
     
-    public void removeTutorialAtom() {
-        atoms.removeAtom(4,4);
-    }
-    
     public Atoms getAtoms()
     {
         return atoms;
-    }
-    
-    public Texture getCoiTexture()
-    {
-        return coiTexture;
     }
     
     public TiledMapRenderer getRenderer()
@@ -267,13 +265,11 @@ public class GameBoard {
 }
 
 class CoordCell {
-    private final TiledMapTileLayer.Cell selectedTile;
     private final int x;
     private final int y;
     
     public CoordCell(TiledMapTileLayer.Cell selectedTile, int x, int y)
     {
-        this.selectedTile = selectedTile;
         this.x = x;
         this.y = y;
     }

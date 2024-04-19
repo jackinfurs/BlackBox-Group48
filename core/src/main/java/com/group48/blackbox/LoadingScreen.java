@@ -14,10 +14,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 public class LoadingScreen extends InputAdapter implements Screen {
     
     private final BlackBox game;
-    
+    private final ShapeRenderer loadingBar;
     // loading bar
     private float progress;
-    private final ShapeRenderer loadingBar;
     
     public LoadingScreen(final BlackBox game)
     {
@@ -89,24 +88,6 @@ public class LoadingScreen extends InputAdapter implements Screen {
         loadingBar.end();
     }
     
-    private void update(float delta)
-    {
-        progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
-        if (game.assets.update() && progress >= game.assets.getProgress() - .001f) {
-            // once loading is done, load a screen (default splashScreen)
-            // change start screen for debugging here
-            //            game.setScreen(game.splashScreen);
-            game.setScreen(game.tutorialScreen);
-        }
-    }
-    
-    // used when exiting; marks for garbage collection
-    @Override
-    public void dispose()
-    {
-        loadingBar.dispose();
-    }
-    
     // below methods are fairly useless in this context
     @Override
     public void resize(int width, int height)
@@ -130,5 +111,23 @@ public class LoadingScreen extends InputAdapter implements Screen {
     public void hide()
     {
     
+    }
+    
+    // used when exiting; marks for garbage collection
+    @Override
+    public void dispose()
+    {
+        loadingBar.dispose();
+    }
+    
+    private void update(float delta)
+    {
+        progress = MathUtils.lerp(progress, game.assets.getProgress(), .1f);
+        if (game.assets.update() && progress >= game.assets.getProgress() - .001f) {
+            // once loading is done, load a screen (default splashScreen)
+            // change start screen for debugging here
+                        game.setScreen(game.splashScreen);
+//            game.setScreen(game.gameScreen);
+        }
     }
 }

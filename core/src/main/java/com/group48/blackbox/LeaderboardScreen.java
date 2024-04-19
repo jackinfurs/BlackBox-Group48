@@ -58,11 +58,6 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
         }
     }
     
-    public void update(float delta)
-    {
-        stage.act(delta);
-    }
-    
     @Override
     public void resize(int width, int height)
     {
@@ -93,5 +88,10 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
     public void dispose()
     {
         stage.dispose();
+    }
+    
+    public void update(float delta)
+    {
+        stage.act(delta);
     }
 }

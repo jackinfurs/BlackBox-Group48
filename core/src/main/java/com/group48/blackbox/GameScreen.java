@@ -5,144 +5,197 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.math.Vector3;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
-import com.badlogic.gdx.utils.ScreenUtils;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.Objects;
 
-// TODO get atoms.excludedCoords() in here
+import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
-    private final int CAMERAOFFSET_X = 360, CAMERAOFFSET_Y = 110;
+    private final Stage stage;
+    private OrthographicCamera tiledMapCamera;
     private GameBoard tiledMap;
-    private boolean gameFinished, cheats;
-    private TextBox textBox = TextBox.EMPTY;
+    private Label text;
+    private TextBox textBox;
     
     public GameScreen(BlackBox game)
     {
         this.game = game;
+        stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
     }
     
     @Override
     public void show()
     {
+        boolean cheats = false;
+        textBox = TextBox.EMPTY;
         System.out.println("\n--- GAME SCREEN ---");
-        if (Objects.equals(SignIn.getUsername(), "sv_cheats 1")) this.cheats = true;
+        Gdx.input.setInputProcessor(stage);
+        if (Objects.equals(SignIn.getUsername(), "sv_cheats 1")) cheats = true;
+        
+        Skin skin = game.assets.get("uiskin.json");
+        
+        Texture backgroundTex = game.assets.get("MainMenuScreen/vaporBackground.png");
+        Image background = new Image(backgroundTex);
+        background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        
+        Texture coiTex = game.assets.get("GameScreen/circle.png");
+        Image[] circles = new Image[6];
         
         tiledMap = new GameBoard(game);
+        tiledMapCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
+        tiledMapCamera.position.set(280, 120, 0);
+        tiledMapCamera.update();
+        
+        tiledMap.getRenderer().setView(tiledMapCamera);
         tiledMap.placeAtoms();
+        
+        TextButton endButton = new TextButton("End game", skin);
+        endButton.setPosition(stage.getWidth() - 280, stage.getHeight() - 240);
+        final boolean[] isClicked = { false };
+        endButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                if (!isClicked[0]) {
+                    // end game
+                    if (tiledMap.getAtoms().getGuessAtomsCount() == 6) {
+                        textBox = TextBox.END_GAME;
+                        tiledMap.setFinished(true);
+                        game.assets.get("Sound/gameEnd.wav", Sound.class).play();
+                        int i = 0;
+                        for (String s : tiledMap.getAtoms().getAtomCoordinates()) {
+                            String[] temp = s.split(",");
+                            circles[i] = new Image(coiTex);
+                            if (Integer.parseInt(temp[1]) % 2 == 1) {
+                                circles[i].setPosition((Integer.parseInt(temp[0]) * 32) + 8, (Integer.parseInt(temp[1]) * 25) - 7);
+                            } else {
+                                circles[i].setPosition((Integer.parseInt(temp[0]) * 32) - 8, (Integer.parseInt(temp[1]) * 25) - 7);
+                            }
+                            circles[i].moveBy(120, 179);
+                            stage.addActor(circles[i]);
+                            i++;
+                        }
+                        tiledMap.getRenderer().render();
+                        isClicked[0] = true;
+                    } else textBox = TextBox.GUESS_INCOMPLETE;
+                }
+            }
+        });
+        
+        TextButton exitButton = new TextButton("Exit to main menu", skin);
+        exitButton.setPosition(stage.getWidth() - 280, stage.getHeight() - 360);
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                System.out.println("back to the main menu");
+                game.assets.get("Sound/clickBack.wav", Sound.class).play();
+                game.setScreen(game.mainMenuScreen);
+            }
+        });
+        
         if (cheats) {
             tiledMap.getAtoms().revealAtoms();
             textBox = TextBox.CHEATER;
             game.assets.get("Sound/yousuck.wav", Sound.class).play();
         } else game.assets.get("Sound/gameStart.wav", Sound.class).play();
+        
+        text = new Label("", skin);
+        text.setPosition(50, 70);
+        text.setFontScaleX(0.85f);
+        
+        stage.addActor(background);
+        stage.addActor(endButton);
+        stage.addActor(exitButton);
+        stage.addActor(text);
+        background.addAction(alpha(0.5f));
+        stage.addAction(sequence(alpha(0f), fadeIn(0.5f)));
     }
     
-    // TODO implement direction + proper tile selection
     @Override
     public void render(float delta)
     {
-        Gdx.gl.glClearColor(1, 0, 0, 1);
+        Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-        ScreenUtils.clear(0.2f, 0.2f, 0.2f, 1);
+        
+        update(delta);
+        
         game.camera.update();
+        
+        stage.draw();
         tiledMap.getRenderer().render();
         
-        // TODO redo this please
-        TextButton endButton = new TextButton("End game", new Skin(Gdx.files.internal("uiskin.json")));
-        endButton.setPosition(500, 150);
-        Rectangle endButtonBounds = new Rectangle(endButton.getX(), endButton.getY(), endButton.getWidth(), endButton.getHeight());
-        TextButton exitButton = new TextButton("Exit to main menu", new Skin(Gdx.files.internal("uiskin.json")));
-        exitButton.setPosition(500, 50);
-        Rectangle exitButtonBounds = new Rectangle(exitButton.getX(), exitButton.getY(), exitButton.getWidth(), exitButton.getHeight());
-        
-        game.camera.position.set(CAMERAOFFSET_X, CAMERAOFFSET_Y, 0);
-        game.camera.update();
-        tiledMap.getRenderer().setView(game.camera);
-        game.batch.setProjectionMatrix(game.camera.combined);
-        
         game.batch.begin();
-        endButton.draw(game.batch, 1f);
-        exitButton.draw(game.batch, 1f);
-//        game.font.getData().setScale(1.2f, 1.2f);
         
+        Vector3 mousePos;
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             textBox = TextBox.EMPTY;
-            // Check for button presses
-            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(mousePos);
             
-            if (exitButtonBounds.contains(mousePos.x, mousePos.y)) {
-                dispose();
-                game.setScreen(new MainMenuScreen(game));
-            }
+            mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            tiledMapCamera.unproject(mousePos);
             
-            if (tiledMap.selectTile(mousePos) == -1) textBox = TextBox.INVALID_TILE;
-            else {textBox = TextBox.SELECT_TILE;}
-            
-            if (endButtonBounds.contains(mousePos.x, mousePos.y)) {
-                if (tiledMap.getAtoms().getGuessAtomsCount() == 6) gameFinished = true;
-                else textBox = TextBox.GUESS_INCOMPLETE;
+            if (tiledMap.selectTile(mousePos) == -1) {
+                game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                textBox = TextBox.INVALID_TILE;
+            } else {
+                game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                textBox = TextBox.SELECT_TILE;
             }
         }
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             // Check for button presses
-            Vector3 mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            game.camera.unproject(mousePos);
+            mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
+            tiledMapCamera.unproject(mousePos);
             
             tiledMap.addGuessAtom(mousePos);
+            if (tiledMap.getAtoms().getGuessAtomsCount() < 6)
+                game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+            else
+                game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
             textBox = TextBox.ATOM_GUESS;
         }
         
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            System.out.println("ESC button clicked!");
-            dispose();
-            game.setScreen(new MainMenuScreen(game));
+            System.out.println("back to the main menu");
+            game.assets.get("Sound/clickBack.wav", Sound.class).play();
+            game.setScreen(game.mainMenuScreen);
         }
-        
-        // not my proudest work.
-        if (gameFinished) {
-            tiledMap.getAtoms().setGameFinished();
-            textBox = TextBox.END_GAME;
-            for (String s : tiledMap.getAtoms().getAtomCoordinates()) {
-                String[] temp = s.split(",");
-                if (Integer.parseInt(temp[1]) % 2 == 1)
-                    game.batch.draw(tiledMap.getCoiTexture(), (Integer.parseInt(temp[0]) * 32) + 8, (Integer.parseInt(temp[1]) * 25) - 7);
-                else
-                    game.batch.draw(tiledMap.getCoiTexture(), (Integer.parseInt(temp[0]) * 32) - 8, (Integer.parseInt(temp[1]) * 25) - 7);
-                tiledMap.getRenderer().render();
-            }
-        }
-        
-//        switch (textBox) {
-//            case EMPTY -> game.font.draw(game.batch, "", FONT_X, FONT_Y);
-//            case INVALID_TILE -> game.font.draw(game.batch, "Invalid tile selection.", FONT_X, FONT_Y);
-//            case END_GAME -> game.font.draw(game.batch, "Game over.", FONT_X, FONT_Y);
-//            case SELECT_TILE -> game.font.draw(game.batch, "Tile selected.", FONT_X, FONT_Y);
-//            case RAY_HIT -> game.font.draw(game.batch, "Ray has hit an Atom.", FONT_X, FONT_Y);
-//            case RAY_REFLECT -> game.font.draw(game.batch, "Ray has reflected from an Atom.", FONT_X, FONT_Y);
-//            case RAY_DEFLECT -> game.font.draw(game.batch, "Ray has deflected an Atom.", FONT_X, FONT_Y);
-//            case RAY_MISS -> game.font.draw(game.batch, "Ray has missed an Atom.", FONT_X, FONT_Y);
-//            case ATOM_GUESS ->
-//                    game.font.draw(game.batch, "Guess atom #" + tiledMap.getAtoms().getGuessAtomsCount() + ".", FONT_X, FONT_Y);
-//            case GUESS_INCOMPLETE ->
-//                    game.font.draw(game.batch, "You must place six guess atoms to end the game.", FONT_X, FONT_Y);
-//            case CHEATER -> game.font.draw(game.batch, "Cheats enabled.", FONT_X, FONT_Y);
-//        }
         
         tiledMap.getRenderer().render();
         game.batch.end();
+        
+        switch (textBox) {
+            case EMPTY -> text.setText("");
+            case INVALID_TILE -> text.setText("Invalid tile selection.");
+            case END_GAME -> text.setText("Game over.");
+            case SELECT_TILE -> text.setText("Tile selected.");
+            case RAY_HIT -> text.setText("Ray has hit an Atom.");
+            case RAY_REFLECT -> text.setText("Ray has reflected from an Atom.");
+            case RAY_DEFLECT -> text.setText("Ray has deflected an Atom.");
+            case RAY_MISS -> text.setText("Ray has missed an Atom.");
+            case ATOM_GUESS -> text.setText("Guess atom #" + tiledMap.getAtoms().getGuessAtomsCount() + ".");
+            case GUESS_INCOMPLETE -> text.setText("You must place six guess atoms to end the game.");
+            case CHEATER -> text.setText("Cheats enabled.");
+        }
     }
     
     @Override
     public void resize(int width, int height)
     {
-    
+        stage.getViewport().update(width, height, false);
     }
     
     @Override
@@ -160,13 +213,19 @@ public class GameScreen extends SignIn implements Screen {
     @Override
     public void hide()
     {
-    
+        stage.clear();
     }
     
     @Override
     public void dispose()
     {
+        stage.dispose();
         if (!Objects.isNull(tiledMap)) tiledMap.dispose();
+    }
+    
+    public void update(float delta)
+    {
+        stage.act(delta);
     }
     
     enum TextBox {
@@ -182,11 +241,8 @@ public class GameScreen extends SignIn implements Screen {
         GUESS_INCOMPLETE(9),
         CHEATER(10);
         
-        private final int value;
-        
         TextBox(int value)
         {
-            this.value = value;
         }
     }
 }

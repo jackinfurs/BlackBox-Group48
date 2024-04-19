@@ -16,9 +16,6 @@ public class SplashScreen extends InputAdapter implements Screen {
     final BlackBox game;
     private final Stage stage;
     
-    private Image splash;
-    private Texture splashTexture;
-    
     public SplashScreen(final BlackBox game)
     {
         this.game = game;
@@ -32,8 +29,8 @@ public class SplashScreen extends InputAdapter implements Screen {
         Gdx.input.setInputProcessor(stage);
         
         System.out.println("displaying splash screen...");
-        splashTexture = game.assets.get("splash2.png");
-        splash = new Image(splashTexture);
+        Texture splashTexture = game.assets.get("splash2.png");
+        Image splash = new Image(splashTexture);
         splash.setPosition(stage.getWidth() / 2 - 200, stage.getHeight() / 2 - 150);
         stage.addActor(splash);
         

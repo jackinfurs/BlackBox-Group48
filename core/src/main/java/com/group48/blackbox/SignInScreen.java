@@ -66,7 +66,10 @@ public class SignInScreen implements Screen {
                 System.out.printf("username %s, loading gameScreen\n", usernameField.getText());
                 SignIn.setUsername(usernameField.getText());
                 game.setScreen(game.gameScreen);
-            } else System.out.println("username not provided");
+            } else {
+                game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                System.out.println("username not provided");
+            }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             System.out.println("back to the main menu");
@@ -75,11 +78,6 @@ public class SignInScreen implements Screen {
         }
         
         game.batch.end();
-    }
-    
-    public void update(float delta)
-    {
-        stage.act(delta);
     }
     
     @Override
@@ -110,5 +108,10 @@ public class SignInScreen implements Screen {
     public void dispose()
     {
         stage.dispose();
+    }
+    
+    public void update(float delta)
+    {
+        stage.act(delta);
     }
 }
