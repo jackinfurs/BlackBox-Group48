@@ -12,12 +12,12 @@ import java.util.Set;
 enum Tile {
     BLACK(1), GREEN(2);
     private final int value;
-    
+
     Tile(int value)
     {
         this.value = value;
     }
-    
+
     public int getValue()
     {
         return value;
@@ -25,15 +25,15 @@ enum Tile {
 }
 
 class TileCoordinates {
-    
+
     private Set<String> edgeCoords, cornerCoords;
-    
+
     public TileCoordinates()
     {
         this.edgeCoords = getEdgeCoords();
         this.cornerCoords = getCornerCoords();
     }
-    
+
     public Set<String> getEdgeCoords()
     {
         if (edgeCoords == null) {
@@ -65,12 +65,12 @@ class TileCoordinates {
         }
         return edgeCoords;
     }
-    
+
     public boolean isEdge(int x, int y)
     {
         return edgeCoords.contains(x + "," + y);
     }
-    
+
     public Set<String> getCornerCoords()
     {
         if (cornerCoords == null) {
@@ -87,17 +87,18 @@ class TileCoordinates {
 }
 
 public class GameBoard {
-    
+
     final BlackBox game;
-    
+
     private final TiledMap tiledMap;
     private final TiledMapRenderer renderer;
     private final TileCoordinates specialCoords;
     private final Atoms atoms;
     private final Rays rays;
+    private Score score;
     private CoordCell startTile;
     private boolean finished;
-    
+
     public GameBoard(final BlackBox game)
     {
         this.game = game;
@@ -106,18 +107,19 @@ public class GameBoard {
         rays = new Rays(tiledMap);
         renderer = new HexagonalTiledMapRenderer(tiledMap);
         specialCoords = new TileCoordinates();
+        this.score = new Score(atoms);
     }
-    
+
     public void placeAtoms()
     {
         atoms.placeRandomAtoms();
     }
-    
+
     public int selectTile(Vector3 Mouse)
     {
         int tileX = getTileXCoord(Mouse);
         int tileY = getTileYCoord(Mouse);
-        
+
         if (atoms.isExcluded(tileX, tileY)) {
             System.out.println("selected tile invalid");
             deselectTiles(tiledMap);
@@ -132,7 +134,7 @@ public class GameBoard {
         // if a tile has been selected before
         else if (startTile != null) {
             System.out.println("starting tile defined");
-            
+
             // if same tile is selected, then deselect tiles
             if (tileX == startTile.getX() && tileY == startTile.getY()) {
                 System.out.println("selected the same cell, deselecting...");
@@ -176,33 +178,36 @@ public class GameBoard {
         System.out.println();
         return 0;
     }
-    
+
     public int getTileXCoord(Vector3 Mouse)
     {
         return (int) Mouse.x / 32;
     }
-    
+
     public int getTileYCoord(Vector3 Mouse)
     {
         return (int) Mouse.y / 26;
     }
-    
+
     public boolean isFinished()
     {
         return finished;
     }
-    
+
     public void setFinished(boolean finished)
     {
         this.finished = finished;
         atoms.revealAtoms();
+        int scoreTotal;
+        scoreTotal = score.calculateScore();
+        System.out.println("Score for this round: " + scoreTotal);
     }
-    
+
     // this method changes a tile from black to green to signify that it has been selected
     TiledMapTileLayer.Cell selectTile(TiledMap tiledMap, int x, int y)
     {
         TiledMapTileLayer.Cell cell;
-        
+
         // error checking; not in tilemap region
         MapProperties map = tiledMap.getProperties();
         if (x > map.get("width", Integer.class) - 1 ||
@@ -220,33 +225,33 @@ public class GameBoard {
             // y: 0 = lowest, 8 = highest on board
             cell = tileLayer.getCell(x, y);
             // change cell to green tile (selectedTile above)
-            
+
             // finally render (please make sure to call this anytime you change the board)
             renderer.render();
             return cell.setTile(selectedTile);
         }
     }
-    
+
     public int addGuessAtom(Vector3 Mouse)
     {
         return atoms.addGuessAtom(getTileXCoord(Mouse), getTileYCoord(Mouse));
     }
-    
+
     public Atoms getAtoms()
     {
         return atoms;
     }
-    
+
     public TiledMapRenderer getRenderer()
     {
         return renderer;
     }
-    
+
     void deselectTiles(TiledMap tiledMap)
     {
         TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
         TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.BLACK.getValue());
-        
+
         for (int y = 0 ; y < tileLayer.getHeight() ; y++) {
             for (int x = 0 ; x < tileLayer.getWidth() ; x++) {
                 TiledMapTileLayer.Cell cell = tileLayer.getCell(x, y);
@@ -256,7 +261,7 @@ public class GameBoard {
             }
         }
     }
-    
+
     public void dispose()
     {
         tiledMap.dispose();
@@ -267,18 +272,18 @@ public class GameBoard {
 class CoordCell {
     private final int x;
     private final int y;
-    
+
     public CoordCell(TiledMapTileLayer.Cell selectedTile, int x, int y)
     {
         this.x = x;
         this.y = y;
     }
-    
+
     public int getX()
     {
         return x;
     }
-    
+
     public int getY()
     {
         return y;
