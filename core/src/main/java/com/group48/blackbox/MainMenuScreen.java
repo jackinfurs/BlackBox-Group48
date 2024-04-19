@@ -2,9 +2,13 @@ package com.group48.blackbox;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.assets.loaders.SoundLoader;
+import com.badlogic.gdx.assets.loaders.resolvers.InternalFileHandleResolver;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -105,6 +109,7 @@ public class MainMenuScreen implements Screen {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
             {
                 System.out.println("mouseover play");
+                game.assets.get("Sound/clickHover.wav", Sound.class).play();
                 play.addAction(color(Color.CORAL));
             }
             
@@ -118,6 +123,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                 if (Objects.isNull(SignIn.getUsername()) || Objects.equals(SignIn.getUsername(), "sv_cheats 1")) {
                     System.out.println("username not specified or cheats used\nlaunching SignInScreen");
                     game.setScreen(game.signInScreen);
@@ -138,6 +144,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
             {
+                game.assets.get("Sound/clickHover.wav", Sound.class).play();
                 System.out.println("mouseover tutorial");
                 tutorial.addAction(color(Color.CORAL));
             }
@@ -152,6 +159,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                 System.out.println("loading tutorial screen...");
                 game.setScreen(game.tutorialScreen);
             }
@@ -167,6 +175,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
             {
+                game.assets.get("Sound/clickHover.wav", Sound.class).play();
                 System.out.println("mouseover leaderboard");
                 leaderboard.addAction(color(Color.CORAL));
             }
@@ -181,6 +190,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                 System.out.println("loading leaderboard screen...");
                 game.setScreen(game.leaderboardScreen);
             }
@@ -196,6 +206,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
             {
+                game.assets.get("Sound/clickHover.wav", Sound.class).play();
                 System.out.println("mouseover exit");
                 exit.addAction(color(Color.CORAL));
             }
@@ -210,6 +221,7 @@ public class MainMenuScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
+                game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                 System.out.println("exiting...");
                 Gdx.app.exit();
             }

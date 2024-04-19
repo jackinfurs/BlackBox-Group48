@@ -43,7 +43,7 @@ public class BlackBox extends Game {
     
     public void dispose()
     {
-        System.out.println("disposing...\nassets");
+        System.out.println("\ndisposing...\nassets");
         assets.dispose();
         System.out.println("batch");
         batch.dispose();

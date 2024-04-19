@@ -53,6 +53,7 @@ public class LoadingScreen extends InputAdapter implements Screen {
         game.assets.load("Sound/youSuck.wav", Sound.class);
         
         System.out.printf("successfully loaded %d assets\n", game.assets.getQueuedAssets());
+        game.assets.finishLoading();
     }
     
     @Override
@@ -115,7 +116,6 @@ public class LoadingScreen extends InputAdapter implements Screen {
     @Override
     public void dispose()
     {
-        System.out.println("disposing LoadingScreen");
         shapeRenderer.dispose();
     }
 }
