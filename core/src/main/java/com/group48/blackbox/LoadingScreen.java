@@ -48,7 +48,7 @@ public class LoadingScreen extends InputAdapter implements Screen {
         game.assets.load("Sound/clickInvalid.wav", Sound.class);
         game.assets.load("Sound/gameEnd.wav", Sound.class);
         game.assets.load("Sound/gameStart.wav", Sound.class);
-        game.assets.load("Sound/youSuck.wav", Sound.class);
+        game.assets.load("Sound/yousuck.wav", Sound.class);
         
         System.out.printf("successfully loaded %d assets\n", game.assets.getQueuedAssets());
         game.assets.finishLoading(); // synchronous

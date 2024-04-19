@@ -94,7 +94,7 @@ public class TutorialScreen implements Screen {
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             switch (dialogueN) {
-                case 3: // wait for right click on centre of atom
+                case 3: // wait for right click on center of board
                     game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
                     break;
                 case 10: // wait for ray to be sent in
@@ -185,7 +185,7 @@ public class TutorialScreen implements Screen {
                 placed Atoms by sending Rays into the Black Box and observing how they are affected.
                 Click to continue.""";
         dialogue[2] = """
-                In BlackBox+, you play the role of the Experimenter.\s
+                In BlackBox+, you usually play the role of the Experimenter.\s
                 However, for now, you will play as the Setter.
                 Click to continue.""";
         dialogue[3] = "Right click on the center of the board to place an Atom.";

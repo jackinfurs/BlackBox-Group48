@@ -18,7 +18,6 @@ import java.util.Objects;
 public class GameScreen extends SignIn implements Screen {
     final BlackBox game;
     private final int CAMERAOFFSET_X = 360, CAMERAOFFSET_Y = 110;
-    private final int FONT_X = 20, FONT_Y = -80;
     private GameBoard tiledMap;
     private boolean gameFinished, cheats;
     private TextBox textBox = TextBox.EMPTY;
