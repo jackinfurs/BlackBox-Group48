@@ -121,23 +121,21 @@ public class GameBoard {
         int tileY = getTileYCoord(Mouse);
 
         if (atoms.isExcluded(tileX, tileY)) {
-            System.out.println("selected tile invalid");
+            System.out.println("Selected tile is invalid\n");
             deselectTiles(tiledMap);
             return -1;
         }
         // if it's an edge, select the first tile
         else if (specialCoords.isEdge(tileX, tileY) && startTile == null) {
-            System.out.println("first tile is an edge, selecting...");
+            System.out.println("Selected an edge tile\nSelect a valid adjacent tile");
             deselectTiles(tiledMap);
             startTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
         }
         // if a tile has been selected before
         else if (startTile != null) {
-            System.out.println("starting tile defined");
-
             // if same tile is selected, then deselect tiles
             if (tileX == startTile.getX() && tileY == startTile.getY()) {
-                System.out.println("selected the same cell, deselecting...");
+                System.out.println("Selected the same cell, deselecting...\n");
                 deselectTiles(tiledMap);
                 return -1;
             } else {
@@ -148,24 +146,24 @@ public class GameBoard {
                     if (Math.abs(tileDiffY) == 0 || Math.abs(tileDiffY) == 1) {
                         // if it's not an edge tile, cast a ray
                         if (!specialCoords.isEdge(tileX, tileY)) {
-                            System.out.println("selection is not an edge tile, casting ray...");
+                            System.out.println("Casting ray...\n");
                             //                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
                             rays.newRay(startTile, new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY));
                             return 0;
                         }
                         // if the starter tile is a corner tile, cast a ray
                         else if (specialCoords.getCornerCoords().contains(startTile.getX() + "," + startTile.getY())) {
-                            System.out.println("first selection was a corner tile, casting ray...");
+                            System.out.println("Casting ray...\n");
                             //                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
                             rays.newRay(startTile, new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY));
                         } else deselectTiles(tiledMap);
                     } else {
-                        System.out.println("invalid selection");
+                        System.out.println("Invalid selection\n");
                         deselectTiles(tiledMap);
                         return -1;
                     }
                 } else {
-                    System.out.println("invalid selection");
+                    System.out.println("Invalid selection\n");
                     deselectTiles(tiledMap);
                     return -1;
                 }
@@ -175,7 +173,6 @@ public class GameBoard {
             deselectTiles(tiledMap);
             return -1;
         }
-        System.out.println();
         return 0;
     }
 

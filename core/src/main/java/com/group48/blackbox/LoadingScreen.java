@@ -127,8 +127,8 @@ public class LoadingScreen extends InputAdapter implements Screen {
         if (game.assets.update() && progress >= game.assets.getProgress() - .001f) {
             // once loading is done, load a screen (default splashScreen)
             // change start screen for debugging here
-                        game.setScreen(game.splashScreen);
-//            game.setScreen(game.gameScreen);
+//                        game.setScreen(game.splashScreen);
+            game.setScreen(game.gameScreen);
         }
     }
 }

@@ -38,8 +38,7 @@ public class BlackBox extends Game {
         
         System.out.println("Welcome to Black Box+!");
         
-        this.setScreen(loadingScreen);
-//        this.setScreen(gameScreen); // DEBUG
+        this.setScreen(loadingScreen); // don't change the starting screen here.
     }
     
     public void dispose()

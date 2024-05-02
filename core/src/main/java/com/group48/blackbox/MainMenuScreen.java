@@ -43,6 +43,8 @@ public class MainMenuScreen implements Screen {
         stage.addAction(sequence(alpha(0f), fadeIn(0.5f)));
         stage.addActor(background);
         
+        game.assets.get("Sound/gameEnd.wav", Sound.class).play();
+        
         initButtons();
     }
     

@@ -42,7 +42,7 @@ public class GameScreen extends SignIn implements Screen {
     {
         boolean cheats = false;
         textBox = TextBox.EMPTY;
-        System.out.println("\n--- GAME SCREEN ---\n");
+        System.out.println("\n--- GAME SCREEN ---\nCast your first ray by selecting an edge tile and a valid adjacent tile.\n");
         Gdx.input.setInputProcessor(stage);
         if (Objects.equals(SignIn.getUsername(), "sv_cheats 1")) cheats = true;
 
@@ -93,6 +93,7 @@ public class GameScreen extends SignIn implements Screen {
                         tiledMap.getRenderer().render();
                         isClicked[0] = true;
                     } else textBox = TextBox.GUESS_INCOMPLETE;
+                    System.out.println(text.getText());
                 }
             }
         });
@@ -112,6 +113,7 @@ public class GameScreen extends SignIn implements Screen {
         if (cheats) {
             tiledMap.getAtoms().revealAtoms();
             textBox = TextBox.CHEATER;
+            System.out.println(text.getText());
             game.assets.get("Sound/yousuck.wav", Sound.class).play();
         } else game.assets.get("Sound/gameStart.wav", Sound.class).play();
 
@@ -163,6 +165,7 @@ public class GameScreen extends SignIn implements Screen {
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                 textBox = TextBox.SELECT_TILE;
             }
+            System.out.println(text.getText());
         }
         int currentScore = score.calculateScore();
         scoreText.setText("Score: " + currentScore);
@@ -178,6 +181,7 @@ public class GameScreen extends SignIn implements Screen {
             else
                 game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
             textBox = TextBox.ATOM_GUESS;
+            System.out.println(text.getText());
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
