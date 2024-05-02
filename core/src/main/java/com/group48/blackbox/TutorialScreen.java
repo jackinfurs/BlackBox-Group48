@@ -64,7 +64,6 @@ public class TutorialScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                //                System.out.println("back to the main menu"); // DEBUG
                 game.assets.get("Sound/clickBack.wav", Sound.class).play();
                 game.setScreen(game.mainMenuScreen);
             }
@@ -188,7 +187,6 @@ public class TutorialScreen implements Screen {
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            //            System.out.println("back to the main menu"); // DEBUG
             game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }

@@ -30,13 +30,13 @@ public class GameScreen extends SignIn implements Screen {
     private Label scoreText;
     private TextBox textBox;
     private Score score;
-
+    
     public GameScreen(BlackBox game)
     {
         this.game = game;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
     }
-
+    
     @Override
     public void show()
     {
@@ -45,24 +45,24 @@ public class GameScreen extends SignIn implements Screen {
         System.out.println("\n--- GAME SCREEN ---\nCast your first ray by selecting an edge tile and a valid adjacent tile.\n");
         Gdx.input.setInputProcessor(stage);
         if (Objects.equals(SignIn.getUsername(), "sv_cheats 1")) cheats = true;
-
+        
         Skin skin = game.assets.get("uiskin.json");
-
+        
         Texture backgroundTex = game.assets.get("MainMenuScreen/vaporBackground.png");
         Image background = new Image(backgroundTex);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
-
+        
         Texture coiTex = game.assets.get("GameScreen/circle.png");
         Image[] circles = new Image[6];
-
+        
         tiledMap = new GameBoard(game);
         tiledMapCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         tiledMapCamera.position.set(280, 120, 0);
         tiledMapCamera.update();
-
+        
         tiledMap.getRenderer().setView(tiledMapCamera);
         tiledMap.placeAtoms();
-
+        
         TextButton endButton = new TextButton("End game", skin);
         endButton.setPosition(stage.getWidth() - 280, stage.getHeight() - 240);
         final boolean[] isClicked = { false };
@@ -81,11 +81,10 @@ public class GameScreen extends SignIn implements Screen {
                         for (String s : tiledMap.getAtoms().getAtomCoordinates()) {
                             String[] temp = s.split(",");
                             circles[i] = new Image(coiTex);
-                            if (Integer.parseInt(temp[1]) % 2 == 1) {
+                            if (Integer.parseInt(temp[1]) % 2 == 1)
                                 circles[i].setPosition((Integer.parseInt(temp[0]) * 32) + 8, (Integer.parseInt(temp[1]) * 25) - 7);
-                            } else {
+                            else
                                 circles[i].setPosition((Integer.parseInt(temp[0]) * 32) - 8, (Integer.parseInt(temp[1]) * 25) - 7);
-                            }
                             circles[i].moveBy(120, 179);
                             stage.addActor(circles[i]);
                             i++;
@@ -97,34 +96,33 @@ public class GameScreen extends SignIn implements Screen {
                 }
             }
         });
-
+        
         TextButton exitButton = new TextButton("Exit to main menu", skin);
         exitButton.setPosition(stage.getWidth() - 280, stage.getHeight() - 360);
         exitButton.addListener(new ClickListener() {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-//                System.out.println("back to the main menu"); // DEBUG
                 game.assets.get("Sound/clickBack.wav", Sound.class).play();
                 game.setScreen(game.mainMenuScreen);
             }
         });
-
+        
         if (cheats) {
             tiledMap.getAtoms().revealAtoms();
             textBox = TextBox.CHEATER;
             System.out.println(text.getText());
             game.assets.get("Sound/yousuck.wav", Sound.class).play();
         } else game.assets.get("Sound/gameStart.wav", Sound.class).play();
-
+        
         text = new Label("", skin);
         text.setPosition(50, 70);
         text.setFontScaleX(0.85f);
-
+        
         scoreText = new Label("Score: 0", skin);
         scoreText.setPosition(50, 30);
         scoreText.setFontScaleX(0.85f);
-
+        
         stage.addActor(background);
         stage.addActor(endButton);
         stage.addActor(exitButton);
@@ -132,32 +130,32 @@ public class GameScreen extends SignIn implements Screen {
         stage.addActor(scoreText);
         background.addAction(alpha(0.5f));
         stage.addAction(sequence(alpha(0f), fadeIn(0.5f)));
-
+        
         score = new Score(tiledMap.getAtoms());
     }
-
+    
     @Override
     public void render(float delta)
     {
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
-
+        
         update(delta);
-
+        
         game.camera.update();
-
+        
         stage.draw();
         tiledMap.getRenderer().render();
-
+        
         game.batch.begin();
-
+        
         Vector3 mousePos;
         if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
             textBox = TextBox.EMPTY;
-
+            
             mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             tiledMapCamera.unproject(mousePos);
-
+            
             if (tiledMap.selectTile(mousePos) == -1) {
                 game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
                 textBox = TextBox.INVALID_TILE;
@@ -169,12 +167,12 @@ public class GameScreen extends SignIn implements Screen {
         }
         int currentScore = score.calculateScore();
         scoreText.setText("Score: " + currentScore);
-
+        
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             // Check for button presses
             mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             tiledMapCamera.unproject(mousePos);
-
+            
             tiledMap.addGuessAtom(mousePos);
             if (tiledMap.getAtoms().getGuessAtomsCount() < 6)
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
@@ -183,16 +181,15 @@ public class GameScreen extends SignIn implements Screen {
             textBox = TextBox.ATOM_GUESS;
             System.out.println(text.getText());
         }
-
+        
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-//            System.out.println("back to the main menu"); // DEBUG
             game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }
-
+        
         tiledMap.getRenderer().render();
         game.batch.end();
-
+        
         switch (textBox) {
             case EMPTY -> text.setText("");
             case INVALID_TILE -> text.setText("Invalid tile selection.");
@@ -207,43 +204,43 @@ public class GameScreen extends SignIn implements Screen {
             case CHEATER -> text.setText("Cheats enabled.");
         }
     }
-
+    
     @Override
     public void resize(int width, int height)
     {
         stage.getViewport().update(width, height, false);
     }
-
+    
     @Override
     public void pause()
     {
-
+    
     }
-
+    
     @Override
     public void resume()
     {
-
+    
     }
-
+    
     @Override
     public void hide()
     {
         stage.clear();
     }
-
+    
     @Override
     public void dispose()
     {
         stage.dispose();
         if (!Objects.isNull(tiledMap)) tiledMap.dispose();
     }
-
+    
     public void update(float delta)
     {
         stage.act(delta);
     }
-
+    
     enum TextBox {
         EMPTY(0),
         INVALID_TILE(1),
@@ -256,7 +253,7 @@ public class GameScreen extends SignIn implements Screen {
         ATOM_GUESS(8),
         GUESS_INCOMPLETE(9),
         CHEATER(10);
-
+        
         TextBox(int value)
         {
         }

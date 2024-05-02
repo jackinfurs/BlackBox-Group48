@@ -52,7 +52,6 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
         game.batch.end();
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-//            System.out.println("back to the main menu"); // DEBUG
             game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }

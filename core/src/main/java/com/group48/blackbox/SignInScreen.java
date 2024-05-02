@@ -63,7 +63,6 @@ public class SignInScreen implements Screen {
         // not sure there's a better way to do this.
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (!usernameField.getText().isEmpty()) {
-//                System.out.printf("username %s, loading gameScreen\n", usernameField.getText()); // DEBUG
                 SignIn.setUsername(usernameField.getText());
                 game.setScreen(game.gameScreen);
             } else {
@@ -72,7 +71,6 @@ public class SignInScreen implements Screen {
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-//            System.out.println("back to the main menu"); // DEBUG
             game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }

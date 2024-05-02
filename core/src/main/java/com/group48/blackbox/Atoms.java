@@ -40,7 +40,7 @@ public class Atoms {
         tiledMap.getLayers().add(atomsLayer);
 
         tileset = new TiledMapTileSet();
-        TextureRegion tile1 = new TextureRegion(new Texture("GameScreen/redAtom.png"));
+        TextureRegion tile1 = new TextureRegion(new Texture("GameScreen/redAtom.png")); // FIXME
         TiledMapTile tile1Data = new StaticTiledMapTile(tile1);
         tile1Data.setId(1);
         tileset.putTile(1, tile1Data);
@@ -53,7 +53,7 @@ public class Atoms {
         tiledMap.getLayers().add(guessAtomsLayer);
 
         guessTileset = new TiledMapTileSet();
-        TextureRegion guessTile = new TextureRegion(new Texture("GameScreen/guessAtom.png"));
+        TextureRegion guessTile = new TextureRegion(new Texture("GameScreen/guessAtom.png")); // FIXME
         TiledMapTile guessTileData = new StaticTiledMapTile(guessTile);
         guessTileData.setId(2);
         guessTileset.putTile(2, guessTileData);
@@ -107,7 +107,6 @@ public class Atoms {
         int x = random.nextInt(atomsLayer.getWidth());
         int y = random.nextInt(atomsLayer.getHeight());
         if (!isExcluded(x, y) && !cellIsOccupied(x, y)) {
-//            System.out.printf("placed random atom at %d,%d\n", x, y); // DEBUG
             atomCoordinates.add(x + "," + y);
             return 0;
         } else return -1;

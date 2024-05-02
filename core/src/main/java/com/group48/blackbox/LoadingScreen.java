@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -38,6 +39,8 @@ public class LoadingScreen extends InputAdapter implements Screen {
         game.assets.load("MainMenuScreen/exit.png", Texture.class);
         
         game.assets.load("GameScreen/circle.png", Texture.class);
+        game.assets.load("GameScreen/redAtom.png", Texture.class);
+        game.assets.load("GameScreen/guessAtom.png", Texture.class);
         
         game.assets.load("uiskin.json", Skin.class);
         
@@ -49,7 +52,6 @@ public class LoadingScreen extends InputAdapter implements Screen {
         game.assets.load("Sound/gameStart.wav", Sound.class);
         game.assets.load("Sound/yousuck.wav", Sound.class);
         
-//        System.out.printf("successfully loaded %d assets\n", game.assets.getQueuedAssets()); // DEBUG
         game.assets.finishLoading(); // synchronous
     }
     

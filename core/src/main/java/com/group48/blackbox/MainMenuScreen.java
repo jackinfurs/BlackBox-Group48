@@ -96,7 +96,6 @@ public class MainMenuScreen implements Screen {
     
     private void initButtons()
     {
-//        System.out.println("creating play button..."); // DEBUG
         Texture playTex = game.assets.get("MainMenuScreen/play.png");
         play = new Image(playTex);
         play.setPosition(Gdx.graphics.getWidth() / 2f + 60, 410);
@@ -121,17 +120,15 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y)
             {
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-                if (Objects.isNull(SignIn.getUsername()) || Objects.equals(SignIn.getUsername(), "sv_cheats 1")) {
-//                    System.out.println("username not specified or cheats used\nlaunching SignInScreen"); // DEBUG
+                if (Objects.isNull(SignIn.getUsername()) || Objects.equals(SignIn.getUsername(), "sv_cheats 1"))
+//
                     game.setScreen(game.signInScreen);
-                } else {
-//                    System.out.println("username already specified\nlaunching GameScreen"); // DEBUG
+                 else
                     game.setScreen(game.gameScreen);
-                }
+                
             }
         });
         
-//        System.out.println("creating tutorial button..."); // DEBUG
         Texture tutorialTex = game.assets.get("MainMenuScreen/tutorial.png");
         tutorial = new Image(tutorialTex);
         tutorial.setPosition(Gdx.graphics.getWidth() / 2f + 60, 310);
@@ -149,7 +146,6 @@ public class MainMenuScreen implements Screen {
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor)
             {
-//                System.out.println("notsomouseover tutorial\n"); // DEBUG
                 tutorial.addAction(color(Color.WHITE));
             }
             
@@ -157,12 +153,10 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y)
             {
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-//                System.out.println("loading tutorial screen..."); // DEBUG
                 game.setScreen(game.tutorialScreen);
             }
         });
         
-//        System.out.println("creating leaderboard button..."); // DEBUG
         Texture leaderboardTex = game.assets.get("MainMenuScreen/leaderboard.png");
         leaderboard = new Image(leaderboardTex);
         leaderboard.setPosition(Gdx.graphics.getWidth() / 2f + 60, 210);
@@ -180,7 +174,6 @@ public class MainMenuScreen implements Screen {
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor)
             {
-//                System.out.println("notsomouseover leaderboard\n"); // DEBUG
                 leaderboard.addAction(color(Color.WHITE));
             }
             
@@ -188,12 +181,10 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y)
             {
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-//                System.out.println("loading leaderboard screen..."); // DEBUG
                 game.setScreen(game.leaderboardScreen);
             }
         });
         
-//        System.out.println("creating exit button..."); // DEBUG
         Texture exitTex = game.assets.get("MainMenuScreen/exit.png");
         exit = new Image(exitTex);
         exit.setPosition(Gdx.graphics.getWidth() / 2f + 60, 110);
@@ -211,7 +202,6 @@ public class MainMenuScreen implements Screen {
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor)
             {
-//                System.out.println("notsomouseover exit\n"); // DEBUG
                 exit.addAction(color(Color.WHITE));
             }
             
@@ -219,12 +209,10 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y)
             {
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-//                System.out.println("exiting..."); // DEBUG
                 Gdx.app.exit();
             }
         });
         
-//        System.out.println("adding actors for all buttons..."); // DEBUG
         stage.addActor(play);
         stage.addActor(tutorial);
         stage.addActor(leaderboard);

@@ -43,26 +43,15 @@ public class BlackBox extends Game {
     
     public void dispose()
     {
-//        System.out.println("\ndisposing...\nassets"); // DEBUG
         assets.dispose();
-//        System.out.println("batch"); // DEBUG
         batch.dispose();
         
-//        System.out.println("\ndisposing screens...\nLoadingScreen"); // DEBUG
         loadingScreen.dispose();
-//        System.out.println("SplashScreen"); // DEBUG
         splashScreen.dispose();
-        
-//        System.out.println("MainMenuScreen"); // DEBUG
         mainMenuScreen.dispose();
-//        System.out.println("SignInScreen"); // DEBUG
         signInScreen.dispose();
-        
-//        System.out.println("GameScreen"); // DEBUG
         gameScreen.dispose();
-//        System.out.println("TutorialScreen"); // DEBUG
         tutorialScreen.dispose();
-//        System.out.println("LeaderboardScreen"); // DEBUG
         leaderboardScreen.dispose();
     }
     
