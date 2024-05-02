@@ -3,7 +3,7 @@ package com.group48.blackbox;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Score{
-    private Atoms atoms;
+    private final Atoms atoms;
 
     // Constructor takes an instance of Atoms to access its data
     public Score(Atoms atoms) {

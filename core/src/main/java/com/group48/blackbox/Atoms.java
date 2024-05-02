@@ -107,7 +107,7 @@ public class Atoms {
         int x = random.nextInt(atomsLayer.getWidth());
         int y = random.nextInt(atomsLayer.getHeight());
         if (!isExcluded(x, y) && !cellIsOccupied(x, y)) {
-            System.out.printf("placed random atom at %d,%d\n", x, y);
+//            System.out.printf("placed random atom at %d,%d\n", x, y); // DEBUG
             atomCoordinates.add(x + "," + y);
             return 0;
         } else return -1;

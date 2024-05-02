@@ -41,7 +41,7 @@ public class SignIn {
         try (BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(FILE_NAME, true))) {
             bufferedWriter.write(username + "," + score);
             bufferedWriter.newLine();
-            System.out.println("Score saved successfully " + username);
+//            System.out.println("Score saved successfully " + username); // DEBUG
         } catch (IOException e) {
             System.err.println("Error saving score: " + e.getMessage());
         }
@@ -61,7 +61,7 @@ public class SignIn {
             Collections.sort(scores);
             int count = 0;
             for (Score score : scores) {
-                System.out.println("Username: " + score.getUsername() + ", Score: " + score.getScore());
+//                System.out.println("Username: " + score.getUsername() + ", Score: " + score.getScore()); // DEBUG
                 count++;
                 if (count >= 5) {
                     break;

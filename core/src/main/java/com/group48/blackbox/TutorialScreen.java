@@ -40,7 +40,7 @@ public class TutorialScreen implements Screen {
     @Override
     public void show()
     {
-        System.out.println("\n--- TUTORIAL SCREEN ---");
+        System.out.println("\n--- TUTORIAL SCREEN ---\n");
         Gdx.input.setInputProcessor(stage);
         
         Dialogue = initDialogue();
@@ -64,11 +64,13 @@ public class TutorialScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                System.out.println("back to the main menu");
+                //                System.out.println("back to the main menu"); // DEBUG
                 game.assets.get("Sound/clickBack.wav", Sound.class).play();
                 game.setScreen(game.mainMenuScreen);
             }
         });
+        
+        System.out.printf("\n%s\n", Dialogue[dialogueN]);
         
         text = new Label(Dialogue[dialogueN], skin);
         text.setPosition(35, 70);
@@ -104,6 +106,7 @@ public class TutorialScreen implements Screen {
                     // TODO deflect cast ray
                     game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     text.setText(Dialogue[++dialogueN]);
+                    System.out.printf("\n%s\n", Dialogue[dialogueN]);
                     break;
                 case 5:
                     // TODO reflect cast ray
@@ -111,6 +114,7 @@ public class TutorialScreen implements Screen {
                     tiledMap.getAtoms().addAtom(1, 1);
                     game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     text.setText(Dialogue[++dialogueN]);
+                    System.out.printf("\n%s\n", Dialogue[dialogueN]);
                     break;
                 case 6:
                     // TODO exit board cast ray
@@ -118,54 +122,62 @@ public class TutorialScreen implements Screen {
                     tiledMap.getAtoms().addAtom(4, 4);
                     game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     text.setText(Dialogue[++dialogueN]);
+                    System.out.printf("\n%s\n", Dialogue[dialogueN]);
                     break;
                 case 7:
                     // "a Guess Atom can be placed"
-                    tiledMap.getAtoms().addGuessAtom(4,4);
+                    tiledMap.getAtoms().addGuessAtom(4, 4);
                     game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     text.setText(Dialogue[++dialogueN]);
+                    System.out.printf("\n%s\n", Dialogue[dialogueN]);
                     break;
                 case 8: // user becomes experimenter; remove guess atom and hide new atom
                     game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     tiledMap.getAtoms().removeAtom(4, 4);
-                    tiledMap.getAtoms().addGuessAtom(4,4); // this actually removes the atom.
+                    tiledMap.getAtoms().addGuessAtom(4, 4); // this actually removes the atom.
                     tiledMap.getAtoms().placeRandomAtom();
                     text.setText(Dialogue[++dialogueN]);
+                    System.out.printf("\n%s\n", Dialogue[dialogueN]);
                     break;
                 case 10: // wait for ray to be sent in
                     mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                     tiledMapCamera.unproject(mousePos);
                     if (tiledMap.selectTile(mousePos) == -1)
                         game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
-                    else game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                    else
+                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     break;
                 case 11:
                     game.setScreen(game.mainMenuScreen);
                 default:
                     game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     text.setText(Dialogue[++dialogueN]);
+                    System.out.printf("\n%s\n", Dialogue[dialogueN]);
             }
         }
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             switch (dialogueN) {
-                case 3: // wait for right click on centre of atom
+                case 3: // wait for right click on centre of board
                     mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                     tiledMapCamera.unproject(mousePos);
                     if (tiledMap.getTileXCoord(mousePos) == 4 && tiledMap.getTileYCoord(mousePos) == 4) {
                         tiledMap.getAtoms().addAtom(4, 4);
                         game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                         text.setText(Dialogue[++dialogueN]);
-                    } else game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                        System.out.printf("%s\n\n", Dialogue[dialogueN]);
+                    } else
+                        game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
                     break;
                 case 10: // wait for ray to be sent in
                     mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
                     tiledMapCamera.unproject(mousePos);
-                    if (tiledMap.addGuessAtom(mousePos) == -1) {
+                    if (tiledMap.addGuessAtom(mousePos) == -1)
                         game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
-                    } else {
+                    else {
                         game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                         tiledMap.setFinished(true);
                         text.setText(Dialogue[++dialogueN]);
+                        System.out.printf("%s\n\n", Dialogue[dialogueN]);
                     }
                     // if correct guess, dialogueN = 11
                     
@@ -176,7 +188,7 @@ public class TutorialScreen implements Screen {
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            System.out.println("back to the main menu");
+            //            System.out.println("back to the main menu"); // DEBUG
             game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }
@@ -213,7 +225,8 @@ public class TutorialScreen implements Screen {
     public void dispose()
     {
         stage.dispose();
-        if (!Objects.isNull(tiledMap)) tiledMap.dispose();
+        if (!Objects.isNull(tiledMap))
+            tiledMap.dispose();
     }
     
     public void update(float delta)
@@ -236,7 +249,7 @@ public class TutorialScreen implements Screen {
                 In BlackBox+, you usually play the role of the Experimenter.\s
                 However, for now, you will play as the Setter.
                 Click to continue.""";
-        dialogue[3] = "Right click on the center of the board to place an Atom.";
+        dialogue[3] = "Right click on the center of the board to place an Atom.\n";
         dialogue[4] = """
                 You have placed an Atom that Rays can react with.
                 Upon direct hit, the Ray is destroyed.
@@ -262,7 +275,7 @@ public class TutorialScreen implements Screen {
                 One Atom has been hidden in the Black Box.
                 Click to continue.""";
         dialogue[10] = "Click on an edge to start sending in Rays.\n" +
-                "Once you have deduced the location, Right Click to place a Guess Atom.";
+                "Once you have deduced the location, right click to place a Guess Atom.";
         dialogue[11] = "You are ready to play Black Box+.\n\n" + // correct guess
                 "Click to exit to the Main Menu.";
         dialogue[12] = "Not quite! You'll get it with enough practice.\n\n" + // incorrect guess

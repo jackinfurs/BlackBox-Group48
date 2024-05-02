@@ -32,7 +32,7 @@ public class MainMenuScreen implements Screen {
     @Override
     public void show()
     {
-        System.out.println("\n--- MAIN MENU ---");
+        System.out.println("\n--- MAIN MENU ---\n");
         Gdx.input.setInputProcessor(stage);
         
         Texture backgroundTex = game.assets.get("MainMenuScreen/vaporBackground.png");
@@ -94,7 +94,7 @@ public class MainMenuScreen implements Screen {
     
     private void initButtons()
     {
-        System.out.println("creating play button...");
+//        System.out.println("creating play button..."); // DEBUG
         Texture playTex = game.assets.get("MainMenuScreen/play.png");
         play = new Image(playTex);
         play.setPosition(Gdx.graphics.getWidth() / 2f + 60, 410);
@@ -104,15 +104,14 @@ public class MainMenuScreen implements Screen {
             @Override
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
             {
-                System.out.println("mouseover play");
                 game.assets.get("Sound/clickHover.wav", Sound.class).play();
+                System.out.println("PLAY:\n\t- Set your username (if you haven't already)\n\t- Play Black Box+\n");
                 play.addAction(color(Color.CORAL));
             }
             
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor)
             {
-                System.out.println("notsomouseover play\n");
                 play.addAction(color(Color.WHITE));
             }
             
@@ -121,16 +120,16 @@ public class MainMenuScreen implements Screen {
             {
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                 if (Objects.isNull(SignIn.getUsername()) || Objects.equals(SignIn.getUsername(), "sv_cheats 1")) {
-                    System.out.println("username not specified or cheats used\nlaunching SignInScreen");
+//                    System.out.println("username not specified or cheats used\nlaunching SignInScreen"); // DEBUG
                     game.setScreen(game.signInScreen);
                 } else {
-                    System.out.println("username already specified\nlaunching GameScreen");
+//                    System.out.println("username already specified\nlaunching GameScreen"); // DEBUG
                     game.setScreen(game.gameScreen);
                 }
             }
         });
         
-        System.out.println("creating tutorial button...");
+//        System.out.println("creating tutorial button..."); // DEBUG
         Texture tutorialTex = game.assets.get("MainMenuScreen/tutorial.png");
         tutorial = new Image(tutorialTex);
         tutorial.setPosition(Gdx.graphics.getWidth() / 2f + 60, 310);
@@ -141,14 +140,14 @@ public class MainMenuScreen implements Screen {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
             {
                 game.assets.get("Sound/clickHover.wav", Sound.class).play();
-                System.out.println("mouseover tutorial");
+                System.out.println("TUTORIAL:\n\t- Learn how to play Black Box+ with an interactive tutorial\n");
                 tutorial.addAction(color(Color.CORAL));
             }
             
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor)
             {
-                System.out.println("notsomouseover tutorial\n");
+//                System.out.println("notsomouseover tutorial\n"); // DEBUG
                 tutorial.addAction(color(Color.WHITE));
             }
             
@@ -156,12 +155,12 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y)
             {
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-                System.out.println("loading tutorial screen...");
+//                System.out.println("loading tutorial screen..."); // DEBUG
                 game.setScreen(game.tutorialScreen);
             }
         });
         
-        System.out.println("creating leaderboard button...");
+//        System.out.println("creating leaderboard button..."); // DEBUG
         Texture leaderboardTex = game.assets.get("MainMenuScreen/leaderboard.png");
         leaderboard = new Image(leaderboardTex);
         leaderboard.setPosition(Gdx.graphics.getWidth() / 2f + 60, 210);
@@ -172,14 +171,14 @@ public class MainMenuScreen implements Screen {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
             {
                 game.assets.get("Sound/clickHover.wav", Sound.class).play();
-                System.out.println("mouseover leaderboard");
+                System.out.println("LEADERBOARD:\n\t- View your score\n\t- View other players' scores\n");
                 leaderboard.addAction(color(Color.CORAL));
             }
             
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor)
             {
-                System.out.println("notsomouseover leaderboard\n");
+//                System.out.println("notsomouseover leaderboard\n"); // DEBUG
                 leaderboard.addAction(color(Color.WHITE));
             }
             
@@ -187,12 +186,12 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y)
             {
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-                System.out.println("loading leaderboard screen...");
+//                System.out.println("loading leaderboard screen..."); // DEBUG
                 game.setScreen(game.leaderboardScreen);
             }
         });
         
-        System.out.println("creating exit button...");
+//        System.out.println("creating exit button..."); // DEBUG
         Texture exitTex = game.assets.get("MainMenuScreen/exit.png");
         exit = new Image(exitTex);
         exit.setPosition(Gdx.graphics.getWidth() / 2f + 60, 110);
@@ -203,14 +202,14 @@ public class MainMenuScreen implements Screen {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
             {
                 game.assets.get("Sound/clickHover.wav", Sound.class).play();
-                System.out.println("mouseover exit");
+                System.out.println("EXIT:\n\t- Exit the game\n");
                 exit.addAction(color(Color.CORAL));
             }
             
             @Override
             public void exit(InputEvent event, float x, float y, int pointer, Actor toActor)
             {
-                System.out.println("notsomouseover exit\n");
+//                System.out.println("notsomouseover exit\n"); // DEBUG
                 exit.addAction(color(Color.WHITE));
             }
             
@@ -218,12 +217,12 @@ public class MainMenuScreen implements Screen {
             public void clicked(InputEvent event, float x, float y)
             {
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-                System.out.println("exiting...");
+//                System.out.println("exiting..."); // DEBUG
                 Gdx.app.exit();
             }
         });
         
-        System.out.println("adding actors for all buttons...");
+//        System.out.println("adding actors for all buttons..."); // DEBUG
         stage.addActor(play);
         stage.addActor(tutorial);
         stage.addActor(leaderboard);

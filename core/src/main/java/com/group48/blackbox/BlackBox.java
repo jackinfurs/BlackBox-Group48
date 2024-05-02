@@ -36,31 +36,34 @@ public class BlackBox extends Game {
         tutorialScreen = new TutorialScreen(this);
         leaderboardScreen = new LeaderboardScreen(this);
         
+        System.out.println("Welcome to Black Box+!");
+        
         this.setScreen(loadingScreen);
+//        this.setScreen(gameScreen); // DEBUG
     }
     
     public void dispose()
     {
-        System.out.println("\ndisposing...\nassets");
+//        System.out.println("\ndisposing...\nassets"); // DEBUG
         assets.dispose();
-        System.out.println("batch");
+//        System.out.println("batch"); // DEBUG
         batch.dispose();
         
-        System.out.println("\ndisposing screens...\nLoadingScreen");
+//        System.out.println("\ndisposing screens...\nLoadingScreen"); // DEBUG
         loadingScreen.dispose();
-        System.out.println("SplashScreen");
+//        System.out.println("SplashScreen"); // DEBUG
         splashScreen.dispose();
         
-        System.out.println("MainMenuScreen");
+//        System.out.println("MainMenuScreen"); // DEBUG
         mainMenuScreen.dispose();
-        System.out.println("SignInScreen");
+//        System.out.println("SignInScreen"); // DEBUG
         signInScreen.dispose();
         
-        System.out.println("GameScreen");
+//        System.out.println("GameScreen"); // DEBUG
         gameScreen.dispose();
-        System.out.println("TutorialScreen");
+//        System.out.println("TutorialScreen"); // DEBUG
         tutorialScreen.dispose();
-        System.out.println("LeaderboardScreen");
+//        System.out.println("LeaderboardScreen"); // DEBUG
         leaderboardScreen.dispose();
     }
     

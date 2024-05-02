@@ -49,7 +49,7 @@ public class LoadingScreen extends InputAdapter implements Screen {
         game.assets.load("Sound/gameStart.wav", Sound.class);
         game.assets.load("Sound/yousuck.wav", Sound.class);
         
-        System.out.printf("successfully loaded %d assets\n", game.assets.getQueuedAssets());
+//        System.out.printf("successfully loaded %d assets\n", game.assets.getQueuedAssets()); // DEBUG
         game.assets.finishLoading(); // synchronous
     }
     
@@ -57,11 +57,12 @@ public class LoadingScreen extends InputAdapter implements Screen {
     @Override
     public void show()
     {
-        System.out.println("\n--- LOADING SCREEN ---");
+        System.out.println("\n--- LOADING SCREEN ---\n");
         this.progress = 0f;
         
-        System.out.println("queueing assets...");
+        System.out.println("Loading...");
         queueAssets();
+        System.out.println("Finished loading");
         
         loadingBar.setProjectionMatrix(game.camera.combined);
     }

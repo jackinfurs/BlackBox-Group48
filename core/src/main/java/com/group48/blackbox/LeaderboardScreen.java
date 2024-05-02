@@ -27,7 +27,7 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
     @Override
     public void show()
     {
-        System.out.println("\n--- LEADERBOARD SCREEN ---");
+        System.out.println("\n--- LEADERBOARD SCREEN ---\n");
         Gdx.input.setInputProcessor(stage);
         
         Texture backgroundTex = game.assets.get("signinBackground.png");
@@ -52,7 +52,7 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
         game.batch.end();
         
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            System.out.println("back to the main menu");
+//            System.out.println("back to the main menu"); // DEBUG
             game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }

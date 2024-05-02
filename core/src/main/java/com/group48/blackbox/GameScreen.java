@@ -42,7 +42,7 @@ public class GameScreen extends SignIn implements Screen {
     {
         boolean cheats = false;
         textBox = TextBox.EMPTY;
-        System.out.println("\n--- GAME SCREEN ---");
+        System.out.println("\n--- GAME SCREEN ---\n");
         Gdx.input.setInputProcessor(stage);
         if (Objects.equals(SignIn.getUsername(), "sv_cheats 1")) cheats = true;
 
@@ -103,7 +103,7 @@ public class GameScreen extends SignIn implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                System.out.println("back to the main menu");
+//                System.out.println("back to the main menu"); // DEBUG
                 game.assets.get("Sound/clickBack.wav", Sound.class).play();
                 game.setScreen(game.mainMenuScreen);
             }
@@ -181,7 +181,7 @@ public class GameScreen extends SignIn implements Screen {
         }
 
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {
-            System.out.println("back to the main menu");
+//            System.out.println("back to the main menu"); // DEBUG
             game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }

@@ -29,7 +29,7 @@ public class SignInScreen implements Screen {
     @Override
     public void show()
     {
-        System.out.println("\n--- SIGN IN SCREEN ---");
+        System.out.println("\n--- SIGN IN SCREEN ---\nEnter your username and hit ENTER to begin playing Black Box+\n");
         Gdx.input.setInputProcessor(stage);
         
         Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
@@ -63,16 +63,16 @@ public class SignInScreen implements Screen {
         // not sure there's a better way to do this.
         if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
             if (!usernameField.getText().isEmpty()) {
-                System.out.printf("username %s, loading gameScreen\n", usernameField.getText());
+//                System.out.printf("username %s, loading gameScreen\n", usernameField.getText()); // DEBUG
                 SignIn.setUsername(usernameField.getText());
                 game.setScreen(game.gameScreen);
             } else {
                 game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
-                System.out.println("username not provided");
+                System.out.println("Username not provided. Please provide a username.");
             }
         }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
-            System.out.println("back to the main menu");
+//            System.out.println("back to the main menu"); // DEBUG
             game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }
