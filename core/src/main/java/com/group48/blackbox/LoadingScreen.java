@@ -39,8 +39,6 @@ public class LoadingScreen extends InputAdapter implements Screen {
         game.assets.load("MainMenuScreen/exit.png", Texture.class);
         
         game.assets.load("GameScreen/circle.png", Texture.class);
-        game.assets.load("GameScreen/redAtom.png", Texture.class);
-        game.assets.load("GameScreen/guessAtom.png", Texture.class);
         
         game.assets.load("uiskin.json", Skin.class);
         

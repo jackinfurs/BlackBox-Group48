@@ -53,10 +53,16 @@ public class Atoms {
         tiledMap.getLayers().add(guessAtomsLayer);
 
         guessTileset = new TiledMapTileSet();
+        
         TextureRegion guessTile = new TextureRegion(new Texture("GameScreen/guessAtom.png")); // FIXME
         TiledMapTile guessTileData = new StaticTiledMapTile(guessTile);
         guessTileData.setId(2);
         guessTileset.putTile(2, guessTileData);
+        
+        TextureRegion correctTile = new TextureRegion(new Texture("GameScreen/correctAtom.png"));
+        TiledMapTile correctTileData = new StaticTiledMapTile(correctTile);
+        correctTileData.setId(3);
+        guessTileset.putTile(3, correctTileData);
     }
 
     public void addAtom(int x, int y)
@@ -88,6 +94,13 @@ public class Atoms {
         }
         return -1;
     }
+    
+    public void addCorrectAtom(int x, int y)
+    {
+        TiledMapTileLayer.Cell correctAtomCell = new TiledMapTileLayer.Cell();
+        correctAtomCell.setTile(guessTileset.getTile(3));
+        guessAtomsLayer.setCell(x, y, correctAtomCell);
+    }
 
     public int getGuessAtomsCount() {return guessAtomsCount;}
 
@@ -97,7 +110,10 @@ public class Atoms {
             String[] parts = coordinate.split(",");
             int x = Integer.parseInt(parts[0]);
             int y = Integer.parseInt(parts[1]);
-            addAtom(x, y);
+            if (guessAtomsLayer.getCell(x, y) != null)
+                addCorrectAtom(x, y);
+            else
+                addAtom(x, y);
         }
     }
 
