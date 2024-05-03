@@ -83,6 +83,11 @@ class TileCoordinates {
         }
         return cornerCoords;
     }
+    
+    public boolean isCorner(int x, int y)
+    {
+        return cornerCoords.contains(x + "," + y);
+    }
 }
 
 public class GameBoard {
@@ -97,113 +102,49 @@ public class GameBoard {
     private final Score score;
     private CoordCell startTile;
     private CoordCell pointerTile;
-    private boolean finished;
     
     public GameBoard(final BlackBox game)
     {
         this.game = game;
-        this.tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
-        atoms = new Atoms(tiledMap);
-        rays = new Rays(tiledMap);
+        tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
+        
         renderer = new HexagonalTiledMapRenderer(tiledMap);
         specialCoords = new TileCoordinates();
-        this.score = new Score(atoms);
+        atoms = new Atoms(tiledMap);
+        rays = new Rays(tiledMap);
+        score = new Score(atoms);
     }
     
-    public void placeAtoms()
+    public int addGuessAtom(Vector3 Mouse)
     {
-        atoms.placeRandomAtoms();
+        return atoms.addGuessAtom(getTileXCoord(Mouse), getTileYCoord(Mouse));
     }
     
-    public int tileSelect(Vector3 mouse)
+    void deselectTiles()
     {
-        int tileX = getTileXCoord(mouse);
-        int tileY = getTileYCoord(mouse);
+        // get base tile layer to clear
+        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
+        // get "clear" texture (replacing green with black)
+        TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.BLACK.getValue());
         
-        // regardless error checking for outside board
-        if (atoms.isExcluded(tileX, tileY)) {
-            System.out.println("Selected tile invalid.\n");
-            deselectTiles();
+        if (startTile != null) { // if first tile has been chosen
+            tileLayer.getCell(startTile.getX(), startTile.getY()).setTile(defaultTile);
+            startTile = null;
         }
-        
-        // first selection
-        // must be an edge
-        if (specialCoords.isEdge(tileX, tileY) && startTile == null) {
-            System.out.println("Selected an edge tile\nSelect a valid adjacent tile");
-            startTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
-            return 0;
+        if (pointerTile != null) { // if second tile has been chosen
+            tileLayer.getCell(pointerTile.getX(), pointerTile.getY()).setTile(defaultTile);
+            pointerTile = null;
         }
-        
-        // second selection
-        pointerTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
-        // must be a neighbour
-        if (startTile.isNeighbour(pointerTile)) {
-            // if edge tile, it mustn't be another edge tile
-        }
-        
-        return -1; // if you have gotten to this point you have failed
     }
     
-    public int selectTile(Vector3 Mouse)
+    public Atoms getAtoms()
     {
-        int tileX = getTileXCoord(Mouse);
-        int tileY = getTileYCoord(Mouse);
-        
-        if (atoms.isExcluded(tileX, tileY)) {
-            System.out.println("Selected tile is invalid\n");
-            deselectTiles();
-            return -1;
-        }
-        // if it's an edge, select the first tile
-        else if (specialCoords.isEdge(tileX, tileY) && startTile == null) {
-            System.out.println("Selected an edge tile\nSelect a valid adjacent tile");
-            deselectTiles();
-            startTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
-        }
-        // if a tile has been selected before
-        else if (startTile != null) {
-            // if same tile is selected, then deselect tiles
-            if (tileX == startTile.getX() && tileY == startTile.getY()) {
-                System.out.println("Selected the same cell, deselecting...\n");
-                deselectTiles();
-                return -1;
-            } else {
-                // difference in X and Y
-                int tileDiffX = startTile.getX() - tileX, tileDiffY = startTile.getY() - tileY;
-                // TODO improve surrounding tile error checking
-                if (Math.abs(tileDiffX) == 0 || Math.abs(tileDiffX) == 1) {
-                    if (Math.abs(tileDiffY) == 0 || Math.abs(tileDiffY) == 1) {
-                        // if it's not an edge tile, cast a ray
-                        if (!specialCoords.isEdge(tileX, tileY)) {
-                            System.out.println("Casting ray...\n");
-                            //                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
-                            pointerTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
-                            rays.newRay(startTile, pointerTile);
-                            return 0;
-                        }
-                        // if the starter tile is a corner tile, cast a ray
-                        else if (specialCoords.getCornerCoords().contains(startTile.getX() + "," + startTile.getY())) {
-                            System.out.println("Casting ray...\n");
-                            //                                rays.newRay(selectedTile, selectTile(tiledMap, tileX, tileY));
-                            pointerTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
-                            rays.newRay(startTile, pointerTile);
-                        } else deselectTiles();
-                    } else {
-                        System.out.println("Invalid selection\n");
-                        deselectTiles();
-                        return -1;
-                    }
-                } else {
-                    System.out.println("Invalid selection\n");
-                    deselectTiles();
-                    return -1;
-                }
-            }
-        } else {
-            deselectTiles();
-            return -1;
-        }
-        return 0;
+        return atoms;
+    }
+    
+    public TiledMapRenderer getRenderer()
+    {
+        return renderer;
     }
     
     public int getTileXCoord(Vector3 Mouse)
@@ -216,14 +157,55 @@ public class GameBoard {
         return (int) Mouse.y / 26;
     }
     
-    public boolean isFinished()
+    public void placeAtoms()
     {
-        return finished;
+        atoms.placeRandomAtoms();
+    }
+    
+    public int selectTile(Vector3 mouse)
+    {
+        int tileX = getTileXCoord(mouse);
+        int tileY = getTileYCoord(mouse);
+        
+        // regardless error checking for outside board
+        if (atoms.isExcluded(tileX, tileY)) {
+            System.out.println("Selected tile invalid.\n");
+            deselectTiles();
+            return -1;
+        }
+        
+        // first selection
+        // must be an edge
+        if (specialCoords.isEdge(tileX, tileY) && startTile == null) {
+            System.out.println("Selected an edge tile\nSelect a valid adjacent tile");
+            startTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
+            return 0;
+        }
+        
+        // second selection (if it applies)
+        if (startTile != null) {
+            pointerTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
+            // must be a neighbour
+            if (startTile.isNeighbour(pointerTile)) {
+                // if starter tile is a corner tile (since a corner is still an edge)
+                if (specialCoords.isCorner(startTile.getX(), startTile.getY())) {
+                    rays.newRay(startTile, pointerTile);
+                    return 0;
+                }
+                // if second tile isn't an edge, cast a ray
+                else if (!specialCoords.isEdge(pointerTile.getX(), pointerTile.getY())) {
+                    rays.newRay(startTile, pointerTile);
+                    return 0;
+                }
+            }
+        }
+        // if you have gotten to this point you have failed
+        deselectTiles();
+        return -1;
     }
     
     public void setFinished(boolean finished)
     {
-        this.finished = finished;
         atoms.revealAtoms();
         // FIXME prevent this from being printed in TutorialScreen
         //        int scoreTotal;
@@ -260,39 +242,6 @@ public class GameBoard {
         }
     }
     
-    public int addGuessAtom(Vector3 Mouse)
-    {
-        return atoms.addGuessAtom(getTileXCoord(Mouse), getTileYCoord(Mouse));
-    }
-    
-    public Atoms getAtoms()
-    {
-        return atoms;
-    }
-    
-    public TiledMapRenderer getRenderer()
-    {
-        return renderer;
-    }
-    
-    void deselectTiles()
-    {
-        // to simplify below syntax
-        // get base tile layer to clear
-        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
-        // get "clear" texture (replacing green with black)
-        TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.BLACK.getValue());
-        
-        if (startTile != null) { // if first tile has been chosen
-            tileLayer.getCell(startTile.getX(), startTile.getY()).setTile(defaultTile);
-            startTile = null;
-        }
-        if (pointerTile != null) { // if second tile has been chosen
-            tileLayer.getCell(pointerTile.getX(), pointerTile.getY()).setTile(defaultTile);
-            pointerTile = null;
-        }
-    }
-    
     public void dispose()
     {
         tiledMap.dispose();
@@ -301,32 +250,35 @@ public class GameBoard {
 }
 
 class CoordCell {
-    private final TiledMapTileLayer.Cell selectedTile;
+    private final TiledMapTileLayer.Cell tile;
     private final int x;
     private final int y;
     
-    public CoordCell(TiledMapTileLayer.Cell selectedTile, int x, int y)
+    public CoordCell(TiledMapTileLayer.Cell tile, int x, int y)
     {
-        this.selectedTile = selectedTile;
+        this.tile = tile;
         this.x = x;
         this.y = y;
     }
     
     public boolean isNeighbour(CoordCell neighbour)
     {
-        boolean isOdd = neighbour.getY() % 2 == 1;
+        boolean isOdd = y % 2 == 1;
         // add all possible neighbours of this tile to a HashSet
         HashSet<CoordCell> neighbours = new HashSet<>();
         {
-            neighbours.add(isOdd ? new CoordCell(this.selectedTile, x, y - 1) : new CoordCell(this.selectedTile, x - 1, y - 1));
-            neighbours.add(new CoordCell(this.selectedTile, x - 1, y));
-            neighbours.add(isOdd ? new CoordCell(this.selectedTile, x, y + 1) : new CoordCell(this.selectedTile, x - 1, y + 1));
-            neighbours.add(isOdd ? new CoordCell(this.selectedTile, x + 1, y + 1) : new CoordCell(this.selectedTile, x, y + 1));
-            neighbours.add(new CoordCell(this.selectedTile, x + 1, y));
-            neighbours.add(isOdd ? new CoordCell(this.selectedTile, x + 1, y - 1) : new CoordCell(this.selectedTile, x, y - 1));
+            neighbours.add(isOdd ? new CoordCell(null, x, y - 1) : new CoordCell(null, x - 1, y - 1));
+            neighbours.add(isOdd ? new CoordCell(null, x + 1, y - 1) : new CoordCell(null, x, y - 1));
+            neighbours.add(new CoordCell(null, x + 1, y));
+            neighbours.add(isOdd ? new CoordCell(null, x + 1, y + 1) : new CoordCell(null, x, y + 1));
+            neighbours.add(isOdd ? new CoordCell(null, x, y + 1) : new CoordCell(null, x - 1, y + 1));
+            neighbours.add(new CoordCell(null, x - 1, y));
         }
         
-        return neighbours.contains(neighbour);
+        for (CoordCell c : neighbours)
+            if (c.getX() == neighbour.getX() && c.getY() == neighbour.getY())
+                return true;
+        return false;
     }
     
     public int getX()
@@ -339,4 +291,3 @@ class CoordCell {
         return y;
     }
 }
-
