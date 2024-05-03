@@ -159,7 +159,7 @@ public class GameScreen extends SignIn implements Screen {
         game.batch.begin();
         
         Vector3 mousePos;
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT)) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.LEFT) && !tiledMap.isFinished()) {
             textBox = TextBox.EMPTY;
             
             mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
@@ -178,7 +178,7 @@ public class GameScreen extends SignIn implements Screen {
         int currentScore = score.calculateScore();
         scoreText.setText("Score: " + currentScore);
         
-        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
+        if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT) && !tiledMap.isFinished()) {
             textBox = TextBox.EMPTY;
             mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             if (validateInput(mousePos)) {

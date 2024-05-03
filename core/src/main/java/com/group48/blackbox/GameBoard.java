@@ -100,12 +100,14 @@ public class GameBoard {
     private final Atoms atoms;
     private final Rays rays;
     private final Score score;
+    private boolean finished;
     private CoordCell startTile;
     private CoordCell pointerTile;
     
     public GameBoard(final BlackBox game)
     {
         this.game = game;
+        finished = false;
         tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
         
         renderer = new HexagonalTiledMapRenderer(tiledMap);
@@ -204,8 +206,14 @@ public class GameBoard {
         return -1;
     }
     
+    public boolean isFinished()
+    {
+        return finished;
+    }
+    
     public void setFinished(boolean finished)
     {
+        this.finished = finished;
         atoms.revealAtoms();
         // FIXME prevent this from being printed in TutorialScreen
         //        int scoreTotal;
