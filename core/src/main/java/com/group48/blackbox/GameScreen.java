@@ -134,6 +134,11 @@ public class GameScreen extends SignIn implements Screen {
         score = new Score(tiledMap.getAtoms());
     }
     
+    private boolean validateInput(Vector3 mouse)
+    {
+        return ((mouse.x > 118 && mouse.x < 405) && (mouse.y > 183 && mouse.y < 421));
+    }
+    
     @Override
     public void render(float delta)
     {
@@ -154,16 +159,17 @@ public class GameScreen extends SignIn implements Screen {
             textBox = TextBox.EMPTY;
             
             mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            tiledMapCamera.unproject(mousePos);
-            
-            if (tiledMap.selectTile(mousePos) == -1) {
-                game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
-                textBox = TextBox.INVALID_TILE;
-            } else {
-                game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-                textBox = TextBox.SELECT_TILE;
+            if (validateInput(mousePos)) {
+                tiledMapCamera.unproject(mousePos);
+                if (tiledMap.selectTile(mousePos) == -1) {
+                    game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                    textBox = TextBox.INVALID_TILE;
+                } else {
+                    game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                    textBox = TextBox.SELECT_TILE;
+                }
+                System.out.println(text.getText());
             }
-            System.out.println(text.getText());
         }
         int currentScore = score.calculateScore();
         scoreText.setText("Score: " + currentScore);
@@ -171,15 +177,16 @@ public class GameScreen extends SignIn implements Screen {
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
             // Check for button presses
             mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-            tiledMapCamera.unproject(mousePos);
-            
-            tiledMap.addGuessAtom(mousePos);
-            if (tiledMap.getAtoms().getGuessAtomsCount() < 6)
-                game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-            else
-                game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
-            textBox = TextBox.ATOM_GUESS;
-            System.out.println(text.getText());
+            if (validateInput(mousePos)) {
+                tiledMapCamera.unproject(mousePos);
+                tiledMap.addGuessAtom(mousePos);
+                if (tiledMap.getAtoms().getGuessAtomsCount() < 6)
+                    game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                else
+                    game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                textBox = TextBox.ATOM_GUESS;
+                System.out.println(text.getText());
+            }
         }
         
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {

@@ -21,7 +21,7 @@ public class Atoms {
     private TiledMapTileSet guessTileset; // Tileset for guess atoms
     private int guessAtomsCount;
     private Set<String> excludedCoords;
-
+    
     public Atoms(TiledMap tiledMap)
     {
         this.tiledMap = tiledMap;
@@ -31,27 +31,27 @@ public class Atoms {
         createGuessAtoms();
         guessAtomsCount = 0;
     }
-
+    
     private void createAtoms()
     {
         atomsLayer = new TiledMapTileLayer(9, 9, 32, 34);
         atomsLayer.setName("Atoms");
-
+        
         tiledMap.getLayers().add(atomsLayer);
-
+        
         tileset = new TiledMapTileSet();
         TextureRegion tile1 = new TextureRegion(new Texture("GameScreen/redAtom.png")); // FIXME
         TiledMapTile tile1Data = new StaticTiledMapTile(tile1);
         tile1Data.setId(1);
         tileset.putTile(1, tile1Data);
     }
-
+    
     private void createGuessAtoms()
     {
         guessAtomsLayer = new TiledMapTileLayer(9, 9, 32, 34);
         guessAtomsLayer.setName("GuessAtoms");
         tiledMap.getLayers().add(guessAtomsLayer);
-
+        
         guessTileset = new TiledMapTileSet();
         
         TextureRegion guessTile = new TextureRegion(new Texture("GameScreen/guessAtom.png")); // FIXME
@@ -64,33 +64,34 @@ public class Atoms {
         correctTileData.setId(3);
         guessTileset.putTile(3, correctTileData);
     }
-
+    
     public void addAtom(int x, int y)
     {
         TiledMapTileLayer.Cell atomCell = new TiledMapTileLayer.Cell();
         atomCell.setTile(tileset.getTile(1));
         atomsLayer.setCell(x, y, atomCell);
     }
-
+    
     public void removeAtom(int x, int y)
     {
         atomsLayer.setCell(x, y, null);
     }
-
+    
     public int addGuessAtom(int x, int y)
     {
-        if (guessAtomsCount != 6 &&
-                guessAtomsLayer.getCell(x, y) == null &&
-                !isExcluded(x, y)) {
-            TiledMapTileLayer.Cell guessAtomCell = new TiledMapTileLayer.Cell();
-            guessAtomCell.setTile(guessTileset.getTile(2));
-            guessAtomsLayer.setCell(x, y, guessAtomCell);
-            guessAtomsCount++;
-            return 0;
-        } else if (guessAtomsLayer.getCell(x, y) != null) {
-            guessAtomsLayer.setCell(x, y, null);
-            guessAtomsCount--;
-            return 0;
+        if (!isExcluded(x, y)) {
+            if (guessAtomsLayer.getCell(x, y) == null) {
+                if (guessAtomsCount != 6) {
+                    TiledMapTileLayer.Cell guessAtomCell = new TiledMapTileLayer.Cell();
+                    guessAtomCell.setTile(guessTileset.getTile(2));
+                    guessAtomsLayer.setCell(x, y, guessAtomCell);
+                    guessAtomsCount++;
+                }
+            } else {
+                guessAtomsLayer.setCell(x, y, null);
+                guessAtomsCount--;
+            }
+            return guessAtomsCount;
         }
         return -1;
     }
@@ -101,9 +102,9 @@ public class Atoms {
         correctAtomCell.setTile(guessTileset.getTile(3));
         guessAtomsLayer.setCell(x, y, correctAtomCell);
     }
-
+    
     public int getGuessAtomsCount() {return guessAtomsCount;}
-
+    
     public void revealAtoms()
     {
         for (String coordinate : atomCoordinates) {
@@ -116,7 +117,7 @@ public class Atoms {
                 addAtom(x, y);
         }
     }
-
+    
     public int placeRandomAtom()
     {
         Random random = new Random();
@@ -127,43 +128,44 @@ public class Atoms {
             return 0;
         } else return -1;
     }
-
+    
     public void placeRandomAtoms()
     {
         for (int i = 0 ; i < 6 ; ) {
             if (placeRandomAtom() == 0) i++;
         }
     }
-
-    public TiledMapTileLayer getGuessAtomsLayer() {
+    
+    public TiledMapTileLayer getGuessAtomsLayer()
+    {
         return guessAtomsLayer;
     }
-
+    
     private boolean cellIsOccupied(int x, int y)
     {
         return atomCoordinates.contains(x + "," + y);
     }
-
+    
     public boolean isExcluded(int x, int y)
     {
         return excludedCoords.contains(x + "," + y);
     }
-
+    
     public Set<String> getAtomCoordinates()
     {
         return atomCoordinates;
     }
-
+    
     public boolean isAtomAt(int x, int y)
     {
         return atomCoordinates.contains(x + "," + y);
     }
-
+    
     private void initializeExcludedCoords()
     {
-
+        
         excludedCoords = new HashSet<>();
-
+        
         excludedCoords.add("0,0");
         excludedCoords.add("1,0");
         excludedCoords.add("7,0");
