@@ -19,7 +19,7 @@ public class Score{
         if(gamefinished) {
             for (int x = 0; x < guessAtomsLayer.getWidth(); x++) {
                 for (int y = 0; y < guessAtomsLayer.getHeight(); y++) {
-                    if (guessAtomsLayer.getCell(x, y) != null && !atoms.isAtomAt(x, y)) {
+                    if (guessAtomsLayer.getCell(x, y) != null && !atoms.containsAtom(x, y)) {
                         score += 5;
                     }
                 }

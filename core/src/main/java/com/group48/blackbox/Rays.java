@@ -87,7 +87,7 @@ class Ray {
 
         if (nextCell != null) {
             // Check if the next cell contains an atom
-            if (atoms.isAtomAt(nextCell.getX(), nextCell.getY())) {
+            if (atoms.containsAtom(nextCell.getX(), nextCell.getY())) {
                 System.out.println("Direct hit!"); // Register direct hit in terminals
             }
         }

@@ -91,7 +91,10 @@ public class GameScreen extends SignIn implements Screen {
                         }
                         tiledMap.getRenderer().render();
                         isClicked[0] = true;
-                    } else textBox = TextBox.GUESS_INCOMPLETE;
+                    } else {
+                        textBox = TextBox.GUESS_INCOMPLETE;
+                        game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                    }
                     System.out.println(text.getText());
                 }
             }
@@ -136,7 +139,8 @@ public class GameScreen extends SignIn implements Screen {
     
     private boolean validateInput(Vector3 mouse)
     {
-        return ((mouse.x > 118 && mouse.x < 405) && (mouse.y > 183 && mouse.y < 421));
+        return ((mouse.x > 118 && mouse.x < 405) &&
+                (mouse.y > 183 && mouse.y < 421));
     }
     
     @Override
@@ -175,17 +179,17 @@ public class GameScreen extends SignIn implements Screen {
         scoreText.setText("Score: " + currentScore);
         
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
-            // Check for button presses
+            textBox = TextBox.EMPTY;
             mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             if (validateInput(mousePos)) {
                 tiledMapCamera.unproject(mousePos);
-                tiledMap.addGuessAtom(mousePos);
-                if (tiledMap.getAtoms().getGuessAtomsCount() < 6)
+                if (tiledMap.addGuessAtom(mousePos) != -1) {
+                    textBox = TextBox.ATOM_GUESS;
                     game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-                else
+                } else {
+                    textBox = TextBox.INVALID_TILE;
                     game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
-                textBox = TextBox.ATOM_GUESS;
-                System.out.println(text.getText());
+                }
             }
         }
         
@@ -206,7 +210,7 @@ public class GameScreen extends SignIn implements Screen {
             case RAY_REFLECT -> text.setText("Ray has reflected from an Atom.");
             case RAY_DEFLECT -> text.setText("Ray has deflected an Atom.");
             case RAY_MISS -> text.setText("Ray has missed an Atom.");
-            case ATOM_GUESS -> text.setText("Guess atom #" + tiledMap.getAtoms().getGuessAtomsCount() + ".");
+            case ATOM_GUESS -> text.setText("Guess atom #%d".formatted(tiledMap.getAtoms().getGuessAtomsCount()));
             case GUESS_INCOMPLETE -> text.setText("You must place six guess atoms to end the game.");
             case CHEATER -> text.setText("Cheats enabled.");
         }
