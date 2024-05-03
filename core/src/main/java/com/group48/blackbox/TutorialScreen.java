@@ -140,11 +140,13 @@ public class TutorialScreen implements Screen {
                     break;
                 case 10: // wait for ray to be sent in
                     mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                    tiledMapCamera.unproject(mousePos);
-                    if (tiledMap.selectTile(mousePos) == -1)
-                        game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
-                    else
-                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                    if (validateInput(mousePos)) {
+                        tiledMapCamera.unproject(mousePos);
+                        if (tiledMap.selectTile(mousePos) == -1)
+                            game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                        else
+                            game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                    }
                     break;
                 case 11:
                     game.setScreen(game.mainMenuScreen);
@@ -169,14 +171,16 @@ public class TutorialScreen implements Screen {
                     break;
                 case 10: // wait for ray to be sent in
                     mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
-                    tiledMapCamera.unproject(mousePos);
-                    if (tiledMap.addGuessAtom(mousePos) == -1)
-                        game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
-                    else {
-                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-                        tiledMap.setFinished(true);
-                        text.setText(Dialogue[++dialogueN]);
-                        System.out.printf("%s\n\n", Dialogue[dialogueN]);
+                    if (validateInput(mousePos)) {
+                        tiledMapCamera.unproject(mousePos);
+                        if (tiledMap.addGuessAtom(mousePos) == -1)
+                            game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                        else {
+                            game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                            tiledMap.setFinished(true);
+                            text.setText(Dialogue[++dialogueN]);
+                            System.out.printf("%s\n\n", Dialogue[dialogueN]);
+                        }
                     }
                     // if correct guess, dialogueN = 11
                     
@@ -193,6 +197,11 @@ public class TutorialScreen implements Screen {
         
         tiledMap.getRenderer().render();
         game.batch.end();
+    }
+    
+    private boolean validateInput(Vector3 mousePos)
+    {
+        return ((mousePos.x > 280 && mousePos.x < 568) && (mousePos.y > 165 && mousePos.y < 400));
     }
     
     @Override

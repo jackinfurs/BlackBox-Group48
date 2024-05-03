@@ -85,14 +85,16 @@ public class Atoms {
                     TiledMapTileLayer.Cell guessAtomCell = new TiledMapTileLayer.Cell();
                     guessAtomCell.setTile(guessTileset.getTile(AtomID.GUESS.ordinal()));
                     guessAtomsLayer.setCell(x, y, guessAtomCell);
-                    guessAtomsCount++;
+                    System.out.printf("Guess atom #%d\n", ++guessAtomsCount);
                 }
             } else {
+                System.out.printf("Deselected guess atom #%d.\n", guessAtomsCount);
                 guessAtomsLayer.setCell(x, y, null);
                 guessAtomsCount--;
             }
             return guessAtomsCount;
         }
+        System.out.println("Selected tile invalid.\n");
         return -1;
     }
     

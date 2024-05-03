@@ -183,9 +183,18 @@ public class GameScreen extends SignIn implements Screen {
             mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             if (validateInput(mousePos)) {
                 tiledMapCamera.unproject(mousePos);
+                int difference = tiledMap.getAtoms().getGuessAtomsCount();
                 if (tiledMap.addGuessAtom(mousePos) != -1) {
-                    textBox = TextBox.ATOM_GUESS;
-                    game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                    if (tiledMap.getAtoms().getGuessAtomsCount() == 6) {
+                        textBox = TextBox.ATOM_MAX;
+                        game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                    } else {
+                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                        if (tiledMap.getAtoms().getGuessAtomsCount() - difference >= 0)
+                            textBox = TextBox.ATOM_GUESS;
+                        else
+                            textBox = TextBox.DEATOM_GUESS;
+                    }
                 } else {
                     textBox = TextBox.INVALID_TILE;
                     game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
@@ -211,6 +220,9 @@ public class GameScreen extends SignIn implements Screen {
             case RAY_DEFLECT -> text.setText("Ray has deflected an Atom.");
             case RAY_MISS -> text.setText("Ray has missed an Atom.");
             case ATOM_GUESS -> text.setText("Guess atom #%d".formatted(tiledMap.getAtoms().getGuessAtomsCount()));
+            case DEATOM_GUESS ->
+                    text.setText("Deselected guess atom #%d".formatted(tiledMap.getAtoms().getGuessAtomsCount() + 1));
+            case ATOM_MAX -> text.setText("Maximum number of guess atoms placed.");
             case GUESS_INCOMPLETE -> text.setText("You must place six guess atoms to end the game.");
             case CHEATER -> text.setText("Cheats enabled.");
         }
@@ -263,7 +275,9 @@ public class GameScreen extends SignIn implements Screen {
         RAY_MISS(7),
         ATOM_GUESS(8),
         GUESS_INCOMPLETE(9),
-        CHEATER(10);
+        CHEATER(10),
+        DEATOM_GUESS(11),
+        ATOM_MAX(12);
         
         TextBox(int value)
         {
