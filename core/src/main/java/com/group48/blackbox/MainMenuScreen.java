@@ -1,6 +1,7 @@
 package com.group48.blackbox;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
@@ -106,7 +107,7 @@ public class MainMenuScreen implements Screen {
             public void enter(InputEvent event, float x, float y, int pointer, Actor fromActor)
             {
                 game.assets.get("Sound/clickHover.wav", Sound.class).play();
-                System.out.println("PLAY:\n\t- Set your username (if you haven't already)\n\t- Play Black Box+\n");
+                System.out.println("PLAY:\n\t- Set your username (if you haven't already)\n\t\t- Right click to enter a new username\n\t- Play Black Box+\n");
                 play.addAction(color(Color.CORAL));
             }
             
@@ -121,11 +122,17 @@ public class MainMenuScreen implements Screen {
             {
                 game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                 if (Objects.isNull(SignIn.getUsername()) || Objects.equals(SignIn.getUsername(), "sv_cheats 1"))
-//
                     game.setScreen(game.signInScreen);
-                 else
+                else
                     game.setScreen(game.gameScreen);
-                
+            }
+        });
+        play.addListener(new ClickListener(Input.Buttons.RIGHT) {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                game.setScreen(game.signInScreen);
             }
         });
         

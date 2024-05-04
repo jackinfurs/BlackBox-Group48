@@ -1,12 +1,163 @@
 package com.group48.blackbox;
 
-import com.badlogic.gdx.maps.MapProperties;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.HashSet;
 import java.util.Set;
+
+public class GameBoard {
+    
+    final BlackBox game;
+    
+    private final TiledMap tiledMap;
+    private final TiledMapRenderer renderer;
+    private final TileCoordinates specialCoords;
+    private final Atoms atoms;
+    private final Rays rays;
+    private final Score score;
+    private boolean finished;
+    private CoordCell startTile;
+    private CoordCell pointerTile;
+    
+    public GameBoard(final BlackBox game)
+    {
+        this.game = game;
+        finished = false;
+        tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
+        
+        renderer = new HexagonalTiledMapRenderer(tiledMap);
+        specialCoords = new TileCoordinates();
+        atoms = new Atoms(tiledMap);
+        rays = new Rays(tiledMap);
+        score = new Score(atoms);
+    }
+    
+    public int addGuessAtom(Vector3 Mouse)
+    {
+        return atoms.addGuessAtom(getTileXCoord(Mouse), getTileYCoord(Mouse));
+    }
+    
+    private void deselectTiles()
+    {
+        // get base tile layer to clear
+        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
+        // get "clear" texture (replacing green with black)
+        TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.BLACK.getValue());
+        
+        if (startTile != null) { // if first tile has been chosen
+            tileLayer.getCell(startTile.getX(), startTile.getY()).setTile(defaultTile);
+            startTile = null;
+        }
+        if (pointerTile != null) { // if second tile has been chosen
+            tileLayer.getCell(pointerTile.getX(), pointerTile.getY()).setTile(defaultTile);
+            pointerTile = null;
+        }
+    }
+    
+    public Atoms getAtoms()
+    {
+        return atoms;
+    }
+    
+    public TiledMapRenderer getRenderer()
+    {
+        return renderer;
+    }
+    
+    public int getTileXCoord(Vector3 Mouse)
+    {
+        return (int) Mouse.x / 32;
+    }
+    
+    public int getTileYCoord(Vector3 Mouse)
+    {
+        return (int) Mouse.y / 26;
+    }
+    
+    public void placeAtoms()
+    {
+        atoms.placeRandomAtoms();
+    }
+    
+    private TiledMapTileLayer.Cell greenify(int tileX, int tileY)
+    {
+        // get green tile tilemap (image)
+        TiledMapTile selectedTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.GREEN.getValue());
+        // select "Base" tile layer from Hex.tmx; makes next line more concise
+        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
+        // use this to select a specific tile by the X and Y coordinate (in the range of 0-8)
+        // x: 0 = leftmost, 8 = rightmost on board
+        // y: 0 = lowest, 8 = highest on board
+        TiledMapTileLayer.Cell cell = tileLayer.getCell(tileX, tileY);
+        // change cell to green tile (selectedTile above)
+        return cell.setTile(selectedTile);
+    }
+    
+    public int selectTile(Vector3 mouse)
+    {
+        int tileX = getTileXCoord(mouse);
+        int tileY = getTileYCoord(mouse);
+        
+        // regardless error checking for outside board
+        if (atoms.isExcluded(tileX, tileY)) {
+            System.out.println("Selected tile invalid.\n");
+            deselectTiles();
+            return -1;
+        }
+        
+        // first selection
+        // must be an edge
+        if (specialCoords.isEdge(tileX, tileY) && startTile == null) {
+            System.out.println("Selected an edge tile\nSelect a valid adjacent tile");
+            startTile = new CoordCell(greenify(tileX, tileY), tileX, tileY);
+            return 0;
+        }
+        
+        // second selection (if it applies)
+        if (startTile != null) {
+            pointerTile = new CoordCell(greenify(tileX, tileY), tileX, tileY);
+            // must be a neighbour
+            if (startTile.isNeighbour(pointerTile)) {
+                // if starter tile is a corner tile (since a corner is still an edge)
+                if (specialCoords.isCorner(startTile.getX(), startTile.getY())) {
+                    rays.newRay(startTile, pointerTile);
+                    return 0;
+                }
+                // if second tile isn't an edge, cast a ray
+                else if (!specialCoords.isEdge(pointerTile.getX(), pointerTile.getY())) {
+                    rays.newRay(startTile, pointerTile);
+                    return 0;
+                }
+                deselectTiles();
+            }
+        }
+        // if you have gotten to this point you have failed
+        return -1;
+    }
+    
+    public boolean isFinished()
+    {
+        return finished;
+    }
+    
+    public void setFinished(boolean finished)
+    {
+        this.finished = finished;
+        atoms.revealAtoms();
+        // FIXME prevent this from being printed in TutorialScreen
+        //        int scoreTotal;
+        //        scoreTotal = score.calculateScore();
+        //        System.out.println("Score for this round: " + scoreTotal);
+    }
+    
+    public void dispose()
+    {
+        tiledMap.dispose();
+        rays.dispose();
+    }
+}
 
 enum Tile {
     BLACK(1), GREEN(2);
@@ -87,173 +238,6 @@ class TileCoordinates {
     public boolean isCorner(int x, int y)
     {
         return cornerCoords.contains(x + "," + y);
-    }
-}
-
-public class GameBoard {
-    
-    final BlackBox game;
-    
-    private final TiledMap tiledMap;
-    private final TiledMapRenderer renderer;
-    private final TileCoordinates specialCoords;
-    private final Atoms atoms;
-    private final Rays rays;
-    private final Score score;
-    private boolean finished;
-    private CoordCell startTile;
-    private CoordCell pointerTile;
-    
-    public GameBoard(final BlackBox game)
-    {
-        this.game = game;
-        finished = false;
-        tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
-        
-        renderer = new HexagonalTiledMapRenderer(tiledMap);
-        specialCoords = new TileCoordinates();
-        atoms = new Atoms(tiledMap);
-        rays = new Rays(tiledMap);
-        score = new Score(atoms);
-    }
-    
-    public int addGuessAtom(Vector3 Mouse)
-    {
-        return atoms.addGuessAtom(getTileXCoord(Mouse), getTileYCoord(Mouse));
-    }
-    
-    void deselectTiles()
-    {
-        // get base tile layer to clear
-        TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
-        // get "clear" texture (replacing green with black)
-        TiledMapTile defaultTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.BLACK.getValue());
-        
-        if (startTile != null) { // if first tile has been chosen
-            tileLayer.getCell(startTile.getX(), startTile.getY()).setTile(defaultTile);
-            startTile = null;
-        }
-        if (pointerTile != null) { // if second tile has been chosen
-            tileLayer.getCell(pointerTile.getX(), pointerTile.getY()).setTile(defaultTile);
-            pointerTile = null;
-        }
-    }
-    
-    public Atoms getAtoms()
-    {
-        return atoms;
-    }
-    
-    public TiledMapRenderer getRenderer()
-    {
-        return renderer;
-    }
-    
-    public int getTileXCoord(Vector3 Mouse)
-    {
-        return (int) Mouse.x / 32;
-    }
-    
-    public int getTileYCoord(Vector3 Mouse)
-    {
-        return (int) Mouse.y / 26;
-    }
-    
-    public void placeAtoms()
-    {
-        atoms.placeRandomAtoms();
-    }
-    
-    public int selectTile(Vector3 mouse)
-    {
-        int tileX = getTileXCoord(mouse);
-        int tileY = getTileYCoord(mouse);
-        
-        // regardless error checking for outside board
-        if (atoms.isExcluded(tileX, tileY)) {
-            System.out.println("Selected tile invalid.\n");
-            deselectTiles();
-            return -1;
-        }
-        
-        // first selection
-        // must be an edge
-        if (specialCoords.isEdge(tileX, tileY) && startTile == null) {
-            System.out.println("Selected an edge tile\nSelect a valid adjacent tile");
-            startTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
-            return 0;
-        }
-        
-        // second selection (if it applies)
-        if (startTile != null) {
-            pointerTile = new CoordCell(selectTile(tiledMap, tileX, tileY), tileX, tileY);
-            // must be a neighbour
-            if (startTile.isNeighbour(pointerTile)) {
-                // if starter tile is a corner tile (since a corner is still an edge)
-                if (specialCoords.isCorner(startTile.getX(), startTile.getY())) {
-                    rays.newRay(startTile, pointerTile);
-                    return 0;
-                }
-                // if second tile isn't an edge, cast a ray
-                else if (!specialCoords.isEdge(pointerTile.getX(), pointerTile.getY())) {
-                    rays.newRay(startTile, pointerTile);
-                    return 0;
-                }
-            }
-        }
-        // if you have gotten to this point you have failed
-        deselectTiles();
-        return -1;
-    }
-    
-    public boolean isFinished()
-    {
-        return finished;
-    }
-    
-    public void setFinished(boolean finished)
-    {
-        this.finished = finished;
-        atoms.revealAtoms();
-        // FIXME prevent this from being printed in TutorialScreen
-        //        int scoreTotal;
-        //        scoreTotal = score.calculateScore();
-        //        System.out.println("Score for this round: " + scoreTotal);
-    }
-    
-    // this method changes a tile from black to green to signify that it has been selected
-    TiledMapTileLayer.Cell selectTile(TiledMap tiledMap, int x, int y)
-    {
-        TiledMapTileLayer.Cell cell;
-        
-        // error checking; not in tilemap region
-        MapProperties map = tiledMap.getProperties();
-        if (x > map.get("width", Integer.class) - 1 ||
-                y > map.get("height", Integer.class) - 1) {
-            return null;
-        } else if (atoms.isExcluded(x, y)) { // error checking; unrendered tile
-            return null;
-        } else {
-            // get green tile tilemap (image)
-            TiledMapTile selectedTile = tiledMap.getTileSets().getTileSet("Hex").getTile(Tile.GREEN.getValue());
-            // select "Base" tile layer from Hex.tmx; makes next line more concise
-            TiledMapTileLayer tileLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Base");
-            // use this to select a specific tile by the X and Y coordinate (in the range of 0-8)
-            // x: 0 = leftmost, 8 = rightmost on board
-            // y: 0 = lowest, 8 = highest on board
-            cell = tileLayer.getCell(x, y);
-            // change cell to green tile (selectedTile above)
-            
-            // finally render (please make sure to call this anytime you change the board)
-            renderer.render();
-            return cell.setTile(selectedTile);
-        }
-    }
-    
-    public void dispose()
-    {
-        tiledMap.dispose();
-        rays.dispose();
     }
 }
 
