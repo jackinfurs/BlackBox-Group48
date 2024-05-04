@@ -7,7 +7,6 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
@@ -127,8 +126,8 @@ public class LoadingScreen extends InputAdapter implements Screen {
         if (game.assets.update() && progress >= game.assets.getProgress() - .001f) {
             // once loading is done, load a screen (default splashScreen)
             // change start screen for debugging here
-//                        game.setScreen(game.splashScreen);
-            game.setScreen(game.tutorialScreen);
+            game.setScreen(game.splashScreen);
+//             game.setScreen(game.tutorialScreen);
         }
     }
 }

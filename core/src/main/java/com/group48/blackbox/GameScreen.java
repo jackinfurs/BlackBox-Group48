@@ -114,7 +114,6 @@ public class GameScreen extends SignIn implements Screen {
         if (cheats) {
             tiledMap.getAtoms().revealAtoms();
             textBox = TextBox.CHEATER;
-            System.out.println(text.getText());
             game.assets.get("Sound/yousuck.wav", Sound.class).play();
         } else game.assets.get("Sound/gameStart.wav", Sound.class).play();
         
