@@ -35,4 +35,7 @@ public class Score{
         return score;
     }
 
+    public void setGameFinished(boolean b) {
+        gamefinished = b;
+    }
 }

@@ -64,8 +64,8 @@ public class TestCases {
     //   }
     @Test
     public void testGetUsername() {
-        SignIn.username = "TestUser";
-        assertEquals("TestUser", SignIn.getUsername());
+        UsersManager.username = "TestUser";
+        assertEquals("TestUser", UsersManager.getUsername());
     }
 
 }

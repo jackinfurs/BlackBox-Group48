@@ -8,7 +8,7 @@ import java.util.Comparator;
 import java.util.List;
 
 public class ScoresManager {
-    private static final String SCORES_FILE = "scores.csv";
+    static final String SCORES_FILE = "scores.csv";
     private static final int MAX_SCORES = 10;
 
     public static void addScore(String username, int score) {
@@ -17,7 +17,6 @@ public class ScoresManager {
         entries.add(new ScoreEntry(username, score));
 
         entries.sort((e1, e2) -> Integer.compare(e1.getScore(), e2.getScore()));
-
 
         // If there are more than MAX_SCORES, remove the lowest scores
         if (entries.size() > MAX_SCORES) {
