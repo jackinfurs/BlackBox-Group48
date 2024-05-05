@@ -25,7 +25,7 @@ public class ScoresManager {
         saveScores(entries);
     }
     
-    static List<ScoreEntry> loadScores()
+    public static List<ScoreEntry> loadScores()
     {
         List<ScoreEntry> entries = new ArrayList<>();
         File file = new File(SCORES_FILE);
@@ -58,7 +58,7 @@ public class ScoresManager {
         }
     }
     
-    static class ScoreEntry {
+    public static class ScoreEntry {
         private final String username;
         private final int score;
         

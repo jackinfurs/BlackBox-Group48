@@ -149,7 +149,7 @@ public class Atoms {
                     System.out.printf("Guess atom #%d\n", ++guessAtomsCount);
                 }
             } else {
-                System.out.printf("Deselected guess atom #%d.\n", guessAtomsCount);
+                System.out.printf("Deselected guess atom #%d\n", guessAtomsCount);
                 guessAtomsLayer.setCell(x, y, null);
                 guessAtomsCount--;
             }

@@ -15,6 +15,10 @@ public class Score {
         this.scoresManager = scoresManager;
     }
     
+    public void setFinished(boolean gamefinished) {
+        this.gamefinished = gamefinished;
+    }
+    
     // Method to calculate the atoms score
     public int calculateScore()
     {

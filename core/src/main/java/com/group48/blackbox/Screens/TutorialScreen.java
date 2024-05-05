@@ -1,4 +1,4 @@
-package com.group48.blackbox;
+package com.group48.blackbox.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -16,6 +16,8 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.group48.blackbox.BlackBox;
+import com.group48.blackbox.GameBoard;
 
 import java.util.Objects;
 
@@ -184,7 +186,6 @@ public class TutorialScreen implements Screen {
                                 dialogueN = 11;
                             else
                                 dialogueN = 12;
-                            game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                             text.setText(Dialogue[dialogueN]);
                             System.out.printf("\n%s\n", Dialogue[dialogueN]);
                         }

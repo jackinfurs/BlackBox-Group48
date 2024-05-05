@@ -1,4 +1,4 @@
-package com.group48.blackbox;
+package com.group48.blackbox.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
@@ -16,6 +16,10 @@ import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
+import com.group48.blackbox.BlackBox;
+import com.group48.blackbox.GameBoard;
+import com.group48.blackbox.Score;
+import com.group48.blackbox.UsersManager;
 
 import java.util.Objects;
 
@@ -75,7 +79,7 @@ public class GameScreen extends UsersManager implements Screen {
                     if (tiledMap.getAtoms().getGuessAtomsCount() == 6) {
                         textBox = TextBox.END_GAME;
                         tiledMap.setFinished(true);
-                        score.gamefinished = true;
+                        score.setFinished(true);
                         game.assets.get("Sound/gameEnd.wav", Sound.class).play();
                         int i = 0;
                         for (String s : tiledMap.getAtoms().getAtomCoordinates()) {

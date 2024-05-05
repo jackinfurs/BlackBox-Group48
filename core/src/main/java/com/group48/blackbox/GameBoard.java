@@ -3,6 +3,7 @@ package com.group48.blackbox;
 import com.badlogic.gdx.maps.tiled.*;
 import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
+import com.group48.blackbox.Screens.GameScreen;
 
 import java.util.HashSet;
 import java.util.Objects;

@@ -1,29 +1,28 @@
-package com.group48.blackbox;
+package com.group48.blackbox.Screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
-import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.*;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
+import com.badlogic.gdx.scenes.scene2d.ui.TextField;
 import com.badlogic.gdx.utils.viewport.FitViewport;
-
-import java.util.List;
+import com.group48.blackbox.BlackBox;
+import com.group48.blackbox.UsersManager;
 
 import static com.badlogic.gdx.scenes.scene2d.actions.Actions.*;
 
-public class LeaderboardScreen extends InputAdapter implements Screen {
+public class SignInScreen implements Screen {
     
     final BlackBox game;
     private final Stage stage;
-    private ScoresManager scoresManager;
+    private TextField usernameField;
     
-    public LeaderboardScreen(final BlackBox game)
+    public SignInScreen(final BlackBox game)
     {
         this.game = game;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
@@ -32,54 +31,29 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
     @Override
     public void show()
     {
-        System.out.println("\n--- LEADERBOARD SCREEN ---\n");
+        System.out.println("\n--- SIGN IN SCREEN ---\nEnter your username and hit ENTER to begin playing Black Box+\n");
         Gdx.input.setInputProcessor(stage);
         
-        Skin skin = game.assets.get("uiskin.json");
-        
-        Table table = new Table();
-        table.setFillParent(true);
-        table.top().padTop(50).left().padLeft(100);
-        
-        List<ScoresManager.ScoreEntry> scores = ScoresManager.loadScores();
-        
-        Label titleLabel = new Label("LEADERBOARD", skin);
-        titleLabel.setFontScale(2.0f);
-        table.add(titleLabel).padBottom(30).colspan(2).center();
-        table.row();
-        
-        for (int i = 0 ; i < scores.size() && i < 10 ; i++) {
-            ScoresManager.ScoreEntry entry = scores.get(i);
-            String scoreText = String.format("%2d. %s - %d", i + 1, entry.getUsername(), entry.getScore());
-            Label scoreLabel = new Label(scoreText, skin);
-            table.add(scoreLabel).pad(8);
-            table.row();
-        }
+        Skin skin = new Skin(Gdx.files.internal("uiskin.json"));
         
         Texture backgroundTex = game.assets.get("signinBackground.png");
         Image background = new Image(backgroundTex);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
-        TextButton exitButton = new TextButton("Exit to main menu", skin);
-        exitButton.setPosition(stage.getWidth() - 280, stage.getHeight() - 100);
-        exitButton.addListener(new ClickListener() {
-            @Override
-            public void clicked(InputEvent event, float x, float y)
-            {
-                game.setScreen(game.mainMenuScreen);
-            }
-        });
+        usernameField = new TextField("", skin);
+        usernameField.setMessageText("Enter username...");
+        usernameField.setPosition(stage.getWidth() / 2f + 40, stage.getHeight() / 2f);
+        usernameField.setSize(300, 35);
         
         stage.addActor(background);
-        stage.addActor(table);
-        stage.addActor(exitButton);
-        background.addAction(alpha(0.3f));
+        stage.addActor(usernameField);
         stage.addAction(sequence(alpha(0f), fadeIn(0.5f)));
     }
     
     @Override
     public void render(float delta)
     {
+        
         Gdx.gl.glClearColor(0, 0, 0, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         
@@ -87,12 +61,23 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
         
         game.batch.begin();
         stage.draw();
-        game.batch.end();
         
+        // not sure there's a better way to do this.
+        if (Gdx.input.isKeyJustPressed(Input.Keys.ENTER)) {
+            if (!usernameField.getText().isEmpty()) {
+                UsersManager.setUsername(usernameField.getText());
+                game.setScreen(game.gameScreen);
+            } else {
+                game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                System.out.println("Username not provided. Please provide a username.");
+            }
+        }
         if (Gdx.input.isKeyJustPressed(Input.Keys.ESCAPE)) {
             game.assets.get("Sound/clickBack.wav", Sound.class).play();
             game.setScreen(game.mainMenuScreen);
         }
+        
+        game.batch.end();
     }
     
     @Override
