@@ -56,9 +56,6 @@ public class GameScreen extends UsersManager implements Screen {
         Image background = new Image(backgroundTex);
         background.setSize(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         
-        Texture coiTex = game.assets.get("GameScreen/circle.png");
-        Image[] circles = new Image[6];
-        
         tiledMap = new GameBoard(game);
         tiledMapCamera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         tiledMapCamera.position.set(280, 120, 0);
@@ -66,6 +63,9 @@ public class GameScreen extends UsersManager implements Screen {
         
         tiledMap.getRenderer().setView(tiledMapCamera);
         tiledMap.placeAtoms();
+        
+        Texture coiTex = game.assets.get("GameScreen/circle.png");
+        Image[] circles = new Image[6];
         
         TextButton endButton = new TextButton("End game", skin);
         endButton.setPosition(stage.getWidth() - 280, stage.getHeight() - 240);

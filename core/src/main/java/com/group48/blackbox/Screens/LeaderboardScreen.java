@@ -23,7 +23,6 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
     
     final BlackBox game;
     private final Stage stage;
-    private ScoresManager scoresManager;
     
     public LeaderboardScreen(final BlackBox game)
     {
@@ -50,7 +49,7 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
         table.add(titleLabel).padBottom(30).colspan(2).center();
         table.row();
         
-        for (int i = 0 ; i < scores.size() && i < 10 ; i++) {
+        for (int i = 0 ; i < scores.size() ; i++) {
             ScoresManager.ScoreEntry entry = scores.get(i);
             String scoreText = String.format("%2d. %s - %d", i + 1, entry.getUsername(), entry.getScore());
             Label scoreLabel = new Label(scoreText, skin);

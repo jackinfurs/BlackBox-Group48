@@ -195,6 +195,7 @@ public class GameBoard {
     {
         this.finished = finished;
         atoms.revealAtoms();
+        deselectTiles();
         // FIXME prevent this from being printed in TutorialScreen
         //        int scoreTotal;
         //        scoreTotal = score.calculateScore();

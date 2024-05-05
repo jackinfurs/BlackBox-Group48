@@ -7,6 +7,7 @@ import com.badlogic.gdx.maps.tiled.TiledMapTile;
 import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 import com.badlogic.gdx.maps.tiled.TiledMapTileSet;
 import com.badlogic.gdx.maps.tiled.tiles.StaticTiledMapTile;
+import com.group48.blackbox.Screens.TutorialScreen;
 
 import java.util.HashSet;
 import java.util.Random;
@@ -69,12 +70,13 @@ public class Atoms {
     }
     
     /**
-     * Initialises {@code atomsLayer}, a <a href="https://libgdx.com/wiki/graphics/2d/tile-maps#tiled-map-layers">TiledMap tile layer</a> for atoms,
+     * Initialises {@code atomsLayer}, a <a href="https://libgdx.com/wiki/graphics/2d/tile-maps#tiled-map-layers">TiledMap tile layer</a> for atom placement,
      * and creates a new tileset for the atom (for use during drawing)
      * <p>
      * This must be called in the constructor, otherwise an exception may occur when attempting to place atoms.
      *
      * @see #Atoms
+     * @see #addAtom(int, int)
      */
     private void createAtoms()
     {
@@ -89,12 +91,13 @@ public class Atoms {
     }
     
     /**
-     * Initialises {@code guessAtomsLayer}, a <a href="https://libgdx.com/wiki/graphics/2d/tile-maps#tiled-map-layers">TiledMap tile layer</a> for guess atoms and correctly-placed atoms,
+     * Initialises {@code guessAtomsLayer}, a <a href="https://libgdx.com/wiki/graphics/2d/tile-maps#tiled-map-layers">TiledMap tile layer</a> for the placement of guess atoms and correctly-placed atoms,
      * and creates a new tileset for guess atoms and correct atoms (for use during drawing)
      * <p>
      * This must be called in the constructor, otherwise an exception may occur when attempting to place guess atoms.
      *
      * @see #Atoms
+     * @see #addGuessAtom(int, int)
      */
     private void createGuessAtoms()
     {
@@ -116,10 +119,28 @@ public class Atoms {
     }
     
     /**
+     * Adds an atom to the specified x-y coordinate on the TiledMap (without hiding it).
+     * <p>
+     * Used mostly in {@code TutorialScreen} for the placement of demonstrative atoms, displaying the function of rays.
+     * <p>
+     * Since the parameters are explicitly known at compile time, the method expects <b>valid</b> x-y coordinates as a parameter (x, y < 9 AND not in {@code excludedCoords}).
+     * Otherwise, an {@code IllegalArgumentException} will be thrown.
+     *
+     * @param x
+     *         the x-coordinate of the desired atom's placement on the {@code TiledMap}
+     * @param y
+     *         the y-coordinate of the desired atom's placement on the {@code TiledMap}
+     *
+     * @throws IllegalArgumentException
+     *         if invalid x-y coordinates are provided
      * @see #removeAtom(int x, int y)
+     * @see TiledMap
+     * @see TutorialScreen
      */
     public void addAtom(int x, int y)
     {
+        if (excludedCoords.contains("%d,%d".formatted(x, y)) || x > 9 || y > 9)
+            throw new IllegalArgumentException("invalid coordinates");
         atomCoordinates.add("%d,%d".formatted(x, y));
         TiledMapTileLayer.Cell atomCell = new TiledMapTileLayer.Cell();
         atomCell.setTile(tileset.getTile(AtomID.RED.ordinal()));
@@ -127,16 +148,46 @@ public class Atoms {
     }
     
     /**
+     * Removes an atom at the specified x-y coordinate on the TiledMap.
+     * <p>
+     * Used mostly in {@code TutorialScreen} for the removal of demonstrative atoms.
+     * <p>
+     * Since the parameters are explicitly known at compile time, the method expects <b>valid</b> x-y coordinates as a parameter (x, y < 9 AND not in {@code excludedCoords}).
+     * Otherwise, an {@code IllegalArgumentException} will be thrown.
+     *
+     * @param x
+     *         the x-coordinate of the desired atom's removal from the {@code TiledMap}
+     * @param y
+     *         the y-coordinate of the desired atom's removal from the {@code TiledMap}
+     *
+     * @throws IllegalArgumentException
+     *         if invalid x-y coordinates are provided
      * @see #addAtom(int x, int y)
+     * @see TiledMap
+     * @see TutorialScreen
      */
     public void removeAtom(int x, int y)
     {
+        if (excludedCoords.contains("%d,%d".formatted(x, y)) || x > 9 || y > 9)
+            throw new IllegalArgumentException("invalid coordinates");
         atomCoordinates.remove("%d,%d".formatted(x, y));
         atomsLayer.setCell(x, y, null);
     }
     
     /**
+     * Adds/removes a guess atom to the specified x-y coordinate on the TiledMap, depending on whether a guess atom has already been placed at the tile.
+     * <p>
+     * Usually called whenever the user right-clicks on the TiledMap to place/remove a guess atom,
+     * but can also be called explicitly (e.g. in TutorialScreen)
+     *
+     * @param x
+     *         the x-coordinate of the guess atom's placement on the {@code TiledMap}
+     * @param y
+     *         the y-coordinate of the guess atom's placement on the {@code TiledMap}
+     *
      * @see #addAtom(int x, int y)
+     * @see TiledMap
+     * @see TutorialScreen
      */
     public int addGuessAtom(int x, int y)
     {
@@ -160,19 +211,36 @@ public class Atoms {
     }
     
     /**
-     * @see #addAtom(int x, int y)
+     * Adds a 'correct' atom to the specified x-y coordinate on the TiledMap.
+     * <p>
+     *     Used to display which guesses were correct to the user.
+     * <p>
+     * Since the parameters are explicitly known at compile time, the method expects <b>valid</b> x-y coordinates as a parameter (x, y < 9 AND not in {@code excludedCoords}).
+     * Otherwise, an {@code IllegalArgumentException} will be thrown.
+     *
+     * @param x
+     *         the x-coordinate of the desired atom's placement on the {@code TiledMap}
+     * @param y
+     *         the y-coordinate of the desired atom's placement on the {@code TiledMap}
+     *
+     * @throws IllegalArgumentException
+     *         if invalid x-y coordinates are provided
+     * @see #removeAtom(int x, int y)
+     * @see TiledMap
+     * @see TutorialScreen
+     * @see GameScreen
      */
     public void addCorrectAtom(int x, int y)
     {
+        if (excludedCoords.contains("%d,%d".formatted(x, y)) || x > 9 || y > 9)
+            throw new IllegalArgumentException("invalid coordinates");
+        
         TiledMapTileLayer.Cell correctAtomCell = new TiledMapTileLayer.Cell();
         correctAtomCell.setTile(guessTileSet.getTile(AtomID.CORRECT.ordinal()));
         guessAtomsLayer.setCell(x, y, correctAtomCell);
         ++correctAtomsCount;
     }
     
-    /**
-     * @see #addAtom(int x, int y)
-     */
     public int getGuessAtomsCount()
     {
         return guessAtomsCount;
@@ -185,6 +253,7 @@ public class Atoms {
     
     /**
      * @see #addAtom(int x, int y)
+     * @see GameBoard
      */
     public void revealAtoms()
     {
@@ -222,33 +291,25 @@ public class Atoms {
             placeRandomAtom();
     }
     
-    /**
-     * @see #addAtom(int x, int y)
-     */
     public TiledMapTileLayer getGuessAtomsLayer()
     {
         return guessAtomsLayer;
     }
     
     /**
-     * @see #addAtom(int x, int y)
+     * @see #addGuessAtom(int x, int y)
+     * @see #placeRandomAtom()
      */
     public boolean isExcluded(int x, int y)
     {
         return excludedCoords.contains(x + "," + y);
     }
     
-    /**
-     * @see #addAtom(int x, int y)
-     */
     public Set<String> getAtomCoordinates()
     {
         return atomCoordinates;
     }
     
-    /**
-     * @see #addAtom(int x, int y)
-     */
     public boolean containsAtom(int x, int y)
     {
         return atomCoordinates.contains(x + "," + y);
