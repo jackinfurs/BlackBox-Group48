@@ -15,7 +15,8 @@ public class Score {
         this.scoresManager = scoresManager;
     }
     
-    public void setFinished(boolean gamefinished) {
+    public void setFinished(boolean gamefinished)
+    {
         this.gamefinished = gamefinished;
     }
     

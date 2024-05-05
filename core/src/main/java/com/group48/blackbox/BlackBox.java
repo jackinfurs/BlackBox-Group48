@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Disposable;
 import com.group48.blackbox.Screens.*;
 
 /**
@@ -40,6 +41,13 @@ public class BlackBox extends Game {
     public LeaderboardScreen leaderboardScreen;
     public SignInScreen signInScreen;
     
+    /**
+     * Create all global variables for use in Screens.
+     * <p>
+     * Enqueues assets (through {@link LoadingScreen}) for caching.
+     *
+     * @see LoadingScreen
+     */
     public void create()
     {
         assets = new AssetManager(); // see LoadingScreen.java
@@ -62,6 +70,15 @@ public class BlackBox extends Game {
         this.setScreen(loadingScreen); // don't change the starting screen here.
     }
     
+    /**
+     * Marks assets, SpriteBatch, and screens for disposal by LibGDX's garbage collector. Called when the game should release all resources.
+     * <p>
+     * Calls {@code dispose()} in all associated Screens.
+     * <p>
+     * Left unchecked, this could result in memory leaks and exceptions upon closing.
+     *
+     * @see Disposable
+     */
     public void dispose()
     {
         assets.dispose();
@@ -76,9 +93,15 @@ public class BlackBox extends Game {
         leaderboardScreen.dispose();
     }
     
+    /**
+     * Renders the super class (Game).
+     * <p>
+     * Very important; nothing renders without this being called.
+     *
+     * @see com.badlogic.gdx.graphics.g3d.Renderable
+     */
     public void render()
     {
-        // very important! nothing renders without this being called
         super.render();
     }
 }
