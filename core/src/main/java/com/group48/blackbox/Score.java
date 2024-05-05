@@ -4,15 +4,17 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 public class Score{
     private final Atoms atoms;
+    private ScoresManager scoresManager;
+    private int score = 0;
 
     // Constructor takes an instance of Atoms to access its data
     public Score(Atoms atoms) {
         this.atoms = atoms;
+        this.scoresManager = scoresManager;
     }
     boolean gamefinished = false;
     // Method to calculate the atoms score
     public int calculateScore() {
-        int score = 0;
 
         TiledMapTileLayer guessAtomsLayer = atoms.getGuessAtomsLayer();
 
@@ -24,10 +26,16 @@ public class Score{
                     }
                 }
             }
+            ScoresManager.addScore(UsersManager.getUsername(), score);
+            gamefinished = false;
         }
 
-        // ray point for deflections, hits, reflections to be implemented here
+        // ray points for deflections, hits, reflections to be implemented here
 
         return score;
+    }
+
+    public void setGameFinished(boolean b) {
+        gamefinished = b;
     }
 }
