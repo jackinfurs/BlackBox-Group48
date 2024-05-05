@@ -6,12 +6,12 @@ import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
 
 import java.util.ArrayList;
 
-//// TODO SET THE RAY TO JERRY
 class Ray {
     private final CoordCell startCell;
     private final CoordCell pointerCell;
     private final TiledMapTileLayer atomsLayer;
     private final Atoms atoms;
+    private final int status = 5; // FIXME instantiate this later, return type for text display
 
     public Ray(CoordCell startCell, CoordCell pointerCell, TiledMapTileLayer atomsLayer, Atoms atoms)
     {
@@ -25,6 +25,10 @@ class Ray {
     public Ray(CoordCell startCell, CoordCell pointerCell)
     {
         this(startCell, pointerCell, null, null); // this.atoms was giving me issues so default to this
+    }
+    
+    public int getStatus(){
+        return status;
     }
 
     private CoordCell calculateNextCell(CoordCell currentCell, CoordCell targetCell)
@@ -118,10 +122,11 @@ public class Rays {
     }
 
     // https://www.redblobgames.com/grids/hexagons/
-    public void newRay(CoordCell startTile, CoordCell pointerTile)
+    public int newRay(CoordCell startTile, CoordCell pointerTile)
     {
         Ray ray = new Ray(startTile, pointerTile, atomsLayer, atoms);
         rayList.add(ray);
+        return ray.getStatus();
     }
 
     public void render()

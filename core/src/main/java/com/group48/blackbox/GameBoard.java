@@ -7,6 +7,16 @@ import com.badlogic.gdx.math.Vector3;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ *
+ *
+ * @author Jack Dunne 22483576
+ * @see Atoms
+ * @see Rays
+ * @see GameScreen
+ * @since Sprint 1
+ */
+
 public class GameBoard {
     
     final BlackBox game;
@@ -21,13 +31,31 @@ public class GameBoard {
     private CoordCell startTile;
     private CoordCell pointerTile;
     
+    /**
+     * Constructor for {@link GameBoard}. Requires an instance of {@link BlackBox} as a parameter.
+     * <p>
+     * Initialises:
+     * <ul>
+     *     <li>{@code this.game} to the {@code game} parameter
+     *     <li>{@code tiledMap} to a new <a href="https://libgdx.com/wiki/graphics/2d/tile-maps">TiledMap</a> + renderer (taken from assets)
+     *     <li>{@code specialCoords} to a new <a href="https://libgdx.com/wiki/graphics/2d/tile-maps">TiledMap</a> (taken from assets)
+     *     <li>{@code atoms}, {@code rays}, {@code score} (see their respective documentation)
+     * </ul>
+     *
+     * @param game
+     *         an instance of {@link BlackBox}
+     *
+     * @see Atoms
+     * @see Rays
+     * @see Score
+     */
     public GameBoard(final BlackBox game)
     {
         this.game = game;
         finished = false;
         tiledMap = new TmxMapLoader().load("GameScreen/HexMap.tmx");
-        
         renderer = new HexagonalTiledMapRenderer(tiledMap);
+        
         specialCoords = new TileCoordinates();
         atoms = new Atoms(tiledMap);
         rays = new Rays(tiledMap);
@@ -95,6 +123,12 @@ public class GameBoard {
         return cell.setTile(selectedTile);
     }
     
+    /**
+     *
+     * @param mouse
+     * @return -1 if invalid tile, 0 if first tile selected, 1 if ray is hit, 2 if ray is reflected, 3 if ray is deflected, 4 if ray is missed, 5 if ray cast
+     *
+     */
     public int selectTile(Vector3 mouse)
     {
         int tileX = getTileXCoord(mouse);
@@ -122,13 +156,12 @@ public class GameBoard {
             if (startTile.isNeighbour(pointerTile)) {
                 // if starter tile is a corner tile (since a corner is still an edge)
                 if (specialCoords.isCorner(startTile.getX(), startTile.getY())) {
-                    rays.newRay(startTile, pointerTile);
-                    return 0;
+                    return rays.newRay(startTile, pointerTile);
                 }
                 // if second tile isn't an edge, cast a ray
                 else if (!specialCoords.isEdge(pointerTile.getX(), pointerTile.getY())) {
                     rays.newRay(startTile, pointerTile);
-                    return 0;
+                    return rays.newRay(startTile, pointerTile);
                 }
                 deselectTiles();
             }

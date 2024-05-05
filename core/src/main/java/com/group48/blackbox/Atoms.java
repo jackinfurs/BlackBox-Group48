@@ -12,6 +12,20 @@ import java.util.HashSet;
 import java.util.Random;
 import java.util.Set;
 
+/**
+ * This class implements the functionality of {@code Atoms} for {@code GameBoard}.
+ * Allows the creation & placement of {@code Atoms} (game atoms, guess atoms, correct atoms)
+ * and some utility methods for checking/revealing atom properties (position, etc.)
+ * <p>
+ * The usage of {@code Atoms} depends on an instance of {@link GameBoard}.
+ * One must create a new instance of {@code Atoms} which inherits the current {@code GameBoard}.
+ *
+ * @author Jack Dunne 22483576
+ * @author Harry McCormack 22513539
+ * @see GameBoard
+ * @since Sprint 1
+ */
+
 public class Atoms {
     private final TiledMap tiledMap;
     private final Set<String> atomCoordinates;
@@ -20,9 +34,27 @@ public class Atoms {
     private TiledMapTileLayer atomsLayer;
     private TiledMapTileLayer guessAtomsLayer;
     private TiledMapTileSet tileset;
-    private TiledMapTileSet guessTileset;
+    private TiledMapTileSet guessTileSet;
     private int guessAtomsCount;
     
+    /**
+     * Constructor for {@code Atoms}. Requires an instance of {@code tiledMap}.
+     * <p>
+     * Initialises:
+     * <ul>
+     *     <li>{@code this.tiledMap} to the {@code tiledMap} parameter
+     *     <li>{@code atomCoordinates}, a HashSet denoting the positions of atoms
+     *     <li>{@code excludedCoordinates}, a Set denoting the positions on the {@code GameBoard} where atoms cannot be placed
+     *     <li>The {@code Atoms} and {@code GuessAtoms} layer for the placement of (guess) atoms.
+     * </ul>
+     *
+     * @param tiledMap
+     *         see <a href="https://libgdx.com/wiki/graphics/2d/tile-maps">Tile Maps in libGDX</a>
+     *
+     * @see GameBoard
+     * @see #createAtoms()
+     * @see #createGuessAtoms()
+     */
     public Atoms(TiledMap tiledMap)
     {
         this.tiledMap = tiledMap;
@@ -34,6 +66,14 @@ public class Atoms {
         random = new Random();
     }
     
+    /**
+     * Initialises {@code atomsLayer}, a <a href="https://libgdx.com/wiki/graphics/2d/tile-maps#tiled-map-layers">TiledMap tile layer</a> for atoms,
+     * and creates a new tileset for the atom (for use during drawing)
+     * <p>
+     * This must be called in the constructor, otherwise an exception may occur when attempting to place atoms.
+     *
+     * @see #Atoms
+     */
     private void createAtoms()
     {
         atomsLayer = new TiledMapTileLayer(9, 9, 32, 34);
@@ -46,25 +86,36 @@ public class Atoms {
         tileset.putTile(AtomID.RED.ordinal(), redAtomData);
     }
     
+    /**
+     * Initialises {@code guessAtomsLayer}, a <a href="https://libgdx.com/wiki/graphics/2d/tile-maps#tiled-map-layers">TiledMap tile layer</a> for guess atoms and correctly-placed atoms,
+     * and creates a new tileset for guess atoms and correct atoms (for use during drawing)
+     * <p>
+     * This must be called in the constructor, otherwise an exception may occur when attempting to place guess atoms.
+     *
+     * @see #Atoms
+     */
     private void createGuessAtoms()
     {
         guessAtomsLayer = new TiledMapTileLayer(9, 9, 32, 34);
         guessAtomsLayer.setName("GuessAtoms");
         tiledMap.getLayers().add(guessAtomsLayer);
         
-        guessTileset = new TiledMapTileSet();
+        guessTileSet = new TiledMapTileSet();
         
         TextureRegion guessTile = new TextureRegion(new Texture("GameScreen/guessAtom.png"));
         TiledMapTile guessTileData = new StaticTiledMapTile(guessTile);
         guessTileData.setId(AtomID.GUESS.ordinal());
-        guessTileset.putTile(AtomID.GUESS.ordinal(), guessTileData);
+        guessTileSet.putTile(AtomID.GUESS.ordinal(), guessTileData);
         
         TextureRegion correctTile = new TextureRegion(new Texture("GameScreen/correctAtom.png"));
         TiledMapTile correctTileData = new StaticTiledMapTile(correctTile);
         correctTileData.setId(AtomID.CORRECT.ordinal());
-        guessTileset.putTile(AtomID.CORRECT.ordinal(), correctTileData);
+        guessTileSet.putTile(AtomID.CORRECT.ordinal(), correctTileData);
     }
     
+    /**
+     * @see #removeAtom(int x, int y)
+     */
     public void addAtom(int x, int y)
     {
         TiledMapTileLayer.Cell atomCell = new TiledMapTileLayer.Cell();
@@ -72,18 +123,24 @@ public class Atoms {
         atomsLayer.setCell(x, y, atomCell);
     }
     
+    /**
+     * @see #addAtom(int x, int y)
+     */
     public void removeAtom(int x, int y)
     {
         atomsLayer.setCell(x, y, null);
     }
     
+    /**
+     * @see #addAtom(int x, int y)
+     */
     public int addGuessAtom(int x, int y)
     {
         if (!isExcluded(x, y)) {
             if (guessAtomsLayer.getCell(x, y) == null) {
                 if (guessAtomsCount != 6) {
                     TiledMapTileLayer.Cell guessAtomCell = new TiledMapTileLayer.Cell();
-                    guessAtomCell.setTile(guessTileset.getTile(AtomID.GUESS.ordinal()));
+                    guessAtomCell.setTile(guessTileSet.getTile(AtomID.GUESS.ordinal()));
                     guessAtomsLayer.setCell(x, y, guessAtomCell);
                     System.out.printf("Guess atom #%d\n", ++guessAtomsCount);
                 }
@@ -98,18 +155,27 @@ public class Atoms {
         return -1;
     }
     
+    /**
+     * @see #addAtom(int x, int y)
+     */
     public void addCorrectAtom(int x, int y)
     {
         TiledMapTileLayer.Cell correctAtomCell = new TiledMapTileLayer.Cell();
-        correctAtomCell.setTile(guessTileset.getTile(AtomID.CORRECT.ordinal()));
+        correctAtomCell.setTile(guessTileSet.getTile(AtomID.CORRECT.ordinal()));
         guessAtomsLayer.setCell(x, y, correctAtomCell);
     }
     
+    /**
+     * @see #addAtom(int x, int y)
+     */
     public int getGuessAtomsCount()
     {
         return guessAtomsCount;
     }
     
+    /**
+     * @see #addAtom(int x, int y)
+     */
     public void revealAtoms()
     {
         for (String coordinate : atomCoordinates) {
@@ -123,6 +189,9 @@ public class Atoms {
         }
     }
     
+    /**
+     * @see #placeRandomAtoms()
+     */
     public int placeRandomAtom()
     {
         int x = random.nextInt(atomsLayer.getWidth());
@@ -134,6 +203,9 @@ public class Atoms {
         return -1;
     }
     
+    /**
+     * @see #placeRandomAtom()
+     */
     public void placeRandomAtoms()
     {
         for (int i = 0 ; i < 6 ; ) {
@@ -142,26 +214,41 @@ public class Atoms {
         }
     }
     
+    /**
+     * @see #addAtom(int x, int y)
+     */
     public TiledMapTileLayer getGuessAtomsLayer()
     {
         return guessAtomsLayer;
     }
     
+    /**
+     * @see #addAtom(int x, int y)
+     */
     public boolean isExcluded(int x, int y)
     {
         return excludedCoords.contains(x + "," + y);
     }
     
+    /**
+     * @see #addAtom(int x, int y)
+     */
     public Set<String> getAtomCoordinates()
     {
         return atomCoordinates;
     }
     
+    /**
+     * @see #addAtom(int x, int y)
+     */
     public boolean containsAtom(int x, int y)
     {
         return atomCoordinates.contains(x + "," + y);
     }
     
+    /**
+     * @see #addAtom(int x, int y)
+     */
     private Set<String> initializeExcludedCoords()
     {
         if (excludedCoords == null) {

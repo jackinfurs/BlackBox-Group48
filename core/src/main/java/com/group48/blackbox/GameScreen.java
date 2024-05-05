@@ -164,12 +164,35 @@ public class GameScreen extends SignIn implements Screen {
             mousePos = new Vector3(Gdx.input.getX(), Gdx.input.getY(), 0);
             if (validateInput(mousePos)) {
                 tiledMapCamera.unproject(mousePos);
-                if (tiledMap.selectTile(mousePos) == -1) {
-                    game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
-                    textBox = TextBox.INVALID_TILE;
-                } else {
-                    game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
-                    textBox = TextBox.SELECT_TILE;
+                switch (tiledMap.selectTile(mousePos)) {
+                    case -1:
+                        game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                        textBox = TextBox.INVALID_TILE;
+                        break;
+                    case 0:
+                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                        textBox = TextBox.SELECT_TILE;
+                        break;
+                    case 1:
+                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                        textBox = TextBox.RAY_HIT;
+                        break;
+                    case 2:
+                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                        textBox = TextBox.RAY_REFLECT;
+                        break;
+                    case 3:
+                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                        textBox = TextBox.RAY_DEFLECT;
+                        break;
+                    case 4:
+                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                        textBox = TextBox.RAY_MISS;
+                        break;
+                    case 5:
+                        game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                        textBox = TextBox.RAY_CAST;
+                        break;
                 }
                 System.out.println(text.getText());
             }
@@ -218,6 +241,7 @@ public class GameScreen extends SignIn implements Screen {
             case RAY_REFLECT -> text.setText("Ray has reflected from an Atom.");
             case RAY_DEFLECT -> text.setText("Ray has deflected an Atom.");
             case RAY_MISS -> text.setText("Ray has missed an Atom.");
+            case RAY_CAST -> text.setText("Casting ray...");
             case ATOM_GUESS -> text.setText("Guess atom #%d".formatted(tiledMap.getAtoms().getGuessAtomsCount()));
             case DEATOM_GUESS ->
                     text.setText("Deselected guess atom #%d".formatted(tiledMap.getAtoms().getGuessAtomsCount() + 1));
@@ -264,22 +288,19 @@ public class GameScreen extends SignIn implements Screen {
     }
     
     enum TextBox {
-        EMPTY(0),
-        INVALID_TILE(1),
-        END_GAME(2),
-        SELECT_TILE(3),
-        RAY_HIT(4),
-        RAY_REFLECT(5),
-        RAY_DEFLECT(6),
-        RAY_MISS(7),
-        ATOM_GUESS(8),
-        GUESS_INCOMPLETE(9),
-        CHEATER(10),
-        DEATOM_GUESS(11),
-        ATOM_MAX(12);
-        
-        TextBox(int value)
-        {
-        }
+        EMPTY,
+        SELECT_TILE,
+        INVALID_TILE,
+        RAY_CAST,
+        RAY_HIT,
+        RAY_REFLECT,
+        RAY_DEFLECT,
+        RAY_MISS,
+        ATOM_GUESS,
+        DEATOM_GUESS,
+        ATOM_MAX,
+        GUESS_INCOMPLETE,
+        CHEATER,
+        END_GAME
     }
 }
