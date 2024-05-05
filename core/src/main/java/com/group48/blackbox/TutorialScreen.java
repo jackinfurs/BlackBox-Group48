@@ -64,7 +64,6 @@ public class TutorialScreen implements Screen {
             @Override
             public void clicked(InputEvent event, float x, float y)
             {
-                game.assets.get("Sound/clickBack.wav", Sound.class).play();
                 game.setScreen(game.mainMenuScreen);
             }
         });

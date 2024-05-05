@@ -7,8 +7,10 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.*;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 
 import java.util.List;
@@ -24,7 +26,6 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
     public LeaderboardScreen(final BlackBox game)
     {
         this.game = game;
-        this.scoresManager = scoresManager;
         stage = new Stage(new FitViewport(Gdx.graphics.getWidth(), Gdx.graphics.getHeight(), game.camera));
     }
     
@@ -38,7 +39,7 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
         
         Table table = new Table();
         table.setFillParent(true);
-        table.top().padTop(30);
+        table.top().padTop(50).left().padLeft(100);
         
         List<ScoresManager.ScoreEntry> scores = ScoresManager.loadScores();
         
@@ -47,7 +48,7 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
         table.add(titleLabel).padBottom(30).colspan(2).center();
         table.row();
         
-        for (int i = 0 ; i < scores.size() ; i++) {
+        for (int i = 0 ; i < scores.size() && i < 10 ; i++) {
             ScoresManager.ScoreEntry entry = scores.get(i);
             String scoreText = String.format("%2d. %s - %d", i + 1, entry.getUsername(), entry.getScore());
             Label scoreLabel = new Label(scoreText, skin);
@@ -61,11 +62,19 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
         
         TextButton exitButton = new TextButton("Exit to main menu", skin);
         exitButton.setPosition(stage.getWidth() - 280, stage.getHeight() - 100);
+        exitButton.addListener(new ClickListener() {
+            @Override
+            public void clicked(InputEvent event, float x, float y)
+            {
+                game.setScreen(game.mainMenuScreen);
+            }
+        });
         
         stage.addActor(background);
+        stage.addActor(table);
+        stage.addActor(exitButton);
         background.addAction(alpha(0.3f));
         stage.addAction(sequence(alpha(0f), fadeIn(0.5f)));
-        stage.addActor(table);
     }
     
     @Override
@@ -107,7 +116,6 @@ public class LeaderboardScreen extends InputAdapter implements Screen {
     @Override
     public void hide()
     {
-        
         stage.clear();
     }
     
