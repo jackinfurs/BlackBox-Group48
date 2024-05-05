@@ -149,8 +149,6 @@ public class TutorialScreen implements Screen {
                     }
                     break;
                 case 11:
-                    game.setScreen(game.mainMenuScreen);
-                    break;
                 case 12:
                     game.setScreen(game.mainMenuScreen);
                     break;
@@ -207,11 +205,6 @@ public class TutorialScreen implements Screen {
         game.batch.end();
     }
     
-    private boolean validateInput(Vector3 mousePos)
-    {
-        return ((mousePos.x > 280 && mousePos.x < 568) && (mousePos.y > 165 && mousePos.y < 400));
-    }
-    
     @Override
     public void resize(int width, int height)
     {
@@ -242,6 +235,11 @@ public class TutorialScreen implements Screen {
         stage.dispose();
         if (!Objects.isNull(tiledMap))
             tiledMap.dispose();
+    }
+    
+    private boolean validateInput(Vector3 mousePos)
+    {
+        return ((mousePos.x > 280 && mousePos.x < 568) && (mousePos.y > 165 && mousePos.y < 400));
     }
     
     public void update(float delta)

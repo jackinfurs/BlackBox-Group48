@@ -12,7 +12,7 @@ class Ray {
     private final TiledMapTileLayer atomsLayer;
     private final Atoms atoms;
     private final int status = 5; // FIXME instantiate this later, return type for text display
-
+    
     public Ray(CoordCell startCell, CoordCell pointerCell, TiledMapTileLayer atomsLayer, Atoms atoms)
     {
         this.startCell = startCell;
@@ -21,27 +21,28 @@ class Ray {
         this.atoms = atoms;
         cast();
     }
-
+    
     public Ray(CoordCell startCell, CoordCell pointerCell)
     {
         this(startCell, pointerCell, null, null); // this.atoms was giving me issues so default to this
     }
     
-    public int getStatus(){
+    public int getStatus()
+    {
         return status;
     }
-
+    
     private CoordCell calculateNextCell(CoordCell currentCell, CoordCell targetCell)
     {
         int currentX = currentCell.getX();
         int currentY = currentCell.getY();
         int targetX = targetCell.getX();
         int targetY = targetCell.getY();
-
+        
         // Calculate the direction of movement
         int dx = targetX - currentX;
         int dy = targetY - currentY;
-
+        
         // Adjust the movement direction based on the coordinate system used
         if (currentY % 2 == 1) {
             dx -= (currentY + 1) / 2;
@@ -50,23 +51,23 @@ class Ray {
             dx -= currentY / 2;
             targetX -= currentY / 2;
         }
-
+        
         // Determine the next cell based on the direction of movement
         int nextX = currentX;
         int nextY = currentY;
-
+        
         if (dx > 0) {
             nextX++;
         } else if (dx < 0) {
             nextX--;
         }
-
+        
         if (dy > 0) {
             nextY++;
         } else if (dy < 0) {
             nextY--;
         }
-
+        
         // Check if the next cell is within the bounds of the map
         if (nextX >= 0 && nextX < atomsLayer.getWidth() && nextY >= 0 && nextY < atomsLayer.getHeight()) {
             return new CoordCell(atomsLayer.getCell(nextX, nextY), nextX, nextY);
@@ -74,12 +75,12 @@ class Ray {
             return null; // Return null if the next cell is out of bounds
         }
     }
-
+    
     public void show()
     {
         // change opacity of line
     }
-
+    
     public void cast()
     {
         if (atoms == null) {
@@ -88,7 +89,7 @@ class Ray {
         }
         // get world x,y coords of both tiles
         CoordCell nextCell = calculateNextCell(startCell, pointerCell);
-
+        
         if (nextCell != null) {
             // Check if the next cell contains an atom
             if (atoms.containsAtom(nextCell.getX(), nextCell.getY())) {
@@ -96,9 +97,9 @@ class Ray {
             }
         }
         // draw line between the two
-
+        
         // startLine = pedal it back by half the length in the other direction of the angle
-
+        
         // ray logic
         // if tile directly ahead has an atom, set ray to red
         // if tile slightly left/right has an atom, change direction by 30 degrees
@@ -112,7 +113,7 @@ public class Rays {
     private final ArrayList<Ray> rayList; // RayList = ArrayList - Ar. sidesplitting.
     private final ShapeRenderer shapeRenderer;
     private final Atoms atoms;
-
+    
     public Rays(TiledMap tiledMap)
     {
         atomsLayer = (TiledMapTileLayer) tiledMap.getLayers().get("Atoms");
@@ -120,7 +121,7 @@ public class Rays {
         shapeRenderer = new ShapeRenderer();
         atoms = new Atoms(tiledMap); // Initialize the Atoms instance
     }
-
+    
     // https://www.redblobgames.com/grids/hexagons/
     public int newRay(CoordCell startTile, CoordCell pointerTile)
     {
@@ -128,7 +129,7 @@ public class Rays {
         rayList.add(ray);
         return ray.getStatus();
     }
-
+    
     public void render()
     {
         // iterate through RayList, call show on each
@@ -136,7 +137,7 @@ public class Rays {
             ray.show();
         }
     }
-
+    
     public void dispose()
     {
         rayList.clear();

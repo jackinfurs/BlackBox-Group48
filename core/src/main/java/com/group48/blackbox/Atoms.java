@@ -120,7 +120,7 @@ public class Atoms {
      */
     public void addAtom(int x, int y)
     {
-        atomCoordinates.add("%d,%d".formatted(x,y));
+        atomCoordinates.add("%d,%d".formatted(x, y));
         TiledMapTileLayer.Cell atomCell = new TiledMapTileLayer.Cell();
         atomCell.setTile(tileset.getTile(AtomID.RED.ordinal()));
         atomsLayer.setCell(x, y, atomCell);
@@ -204,7 +204,7 @@ public class Atoms {
      */
     public int placeRandomAtom()
     {
-        int x,y;
+        int x, y;
         do {
             x = random.nextInt(atomsLayer.getWidth());
             y = random.nextInt(atomsLayer.getHeight());

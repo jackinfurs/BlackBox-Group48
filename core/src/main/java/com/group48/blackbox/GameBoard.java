@@ -8,6 +8,21 @@ import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
+enum Tile {
+    BLACK(1), GREEN(2);
+    private final int value;
+    
+    Tile(int value)
+    {
+        this.value = value;
+    }
+    
+    public int getValue()
+    {
+        return value;
+    }
+}
+
 /**
  * @author Jack Dunne 22483576
  * @see Atoms
@@ -192,21 +207,6 @@ public class GameBoard {
     }
 }
 
-enum Tile {
-    BLACK(1), GREEN(2);
-    private final int value;
-    
-    Tile(int value)
-    {
-        this.value = value;
-    }
-    
-    public int getValue()
-    {
-        return value;
-    }
-}
-
 class TileCoordinates {
     
     private Set<String> edgeCoords, cornerCoords;
@@ -275,9 +275,9 @@ class TileCoordinates {
 }
 
 class CoordCell {
-    private TiledMapTileLayer.Cell tile;
     private final int x;
     private final int y;
+    private TiledMapTileLayer.Cell tile;
     
     public CoordCell(TiledMapTileLayer.Cell tile, int x, int y)
     {
@@ -316,7 +316,8 @@ class CoordCell {
         return y;
     }
     
-    public TiledMapTileLayer.Cell setTile(TiledMapTileLayer.Cell tile) {
+    public TiledMapTileLayer.Cell setTile(TiledMapTileLayer.Cell tile)
+    {
         var old = tile;
         this.tile = tile;
         return old;
