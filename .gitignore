@@ -152,8 +152,8 @@ Thumbs.db
 *~
 *.*#
 *#*#
-/assets/assets.txt
-/core/scores.csv
+*.txt
+*.csv
 
 ## Special cases:
 
