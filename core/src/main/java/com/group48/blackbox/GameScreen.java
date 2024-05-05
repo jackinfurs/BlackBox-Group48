@@ -194,7 +194,6 @@ public class GameScreen extends SignIn implements Screen {
                         textBox = TextBox.RAY_CAST;
                         break;
                 }
-                System.out.println(text.getText());
             }
         }
         int currentScore = score.calculateScore();

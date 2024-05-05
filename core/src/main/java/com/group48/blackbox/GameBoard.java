@@ -5,11 +5,10 @@ import com.badlogic.gdx.maps.tiled.renderers.HexagonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector3;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
- *
- *
  * @author Jack Dunne 22483576
  * @see Atoms
  * @see Rays
@@ -124,49 +123,50 @@ public class GameBoard {
     }
     
     /**
-     *
-     * @param mouse
      * @return -1 if invalid tile, 0 if first tile selected, 1 if ray is hit, 2 if ray is reflected, 3 if ray is deflected, 4 if ray is missed, 5 if ray cast
-     *
      */
     public int selectTile(Vector3 mouse)
     {
         int tileX = getTileXCoord(mouse);
         int tileY = getTileYCoord(mouse);
         
-        // regardless error checking for outside board
-        if (atoms.isExcluded(tileX, tileY)) {
-            System.out.println("Selected tile invalid.\n");
+        if (Objects.nonNull(startTile) && Objects.nonNull(pointerTile)) {
             deselectTiles();
-            return -1;
         }
         
-        // first selection
-        // must be an edge
-        if (specialCoords.isEdge(tileX, tileY) && startTile == null) {
-            System.out.println("Selected an edge tile\nSelect a valid adjacent tile");
-            startTile = new CoordCell(greenify(tileX, tileY), tileX, tileY);
-            return 0;
-        }
-        
-        // second selection (if it applies)
-        if (startTile != null) {
-            pointerTile = new CoordCell(greenify(tileX, tileY), tileX, tileY);
-            // must be a neighbour
-            if (startTile.isNeighbour(pointerTile)) {
-                // if starter tile is a corner tile (since a corner is still an edge)
-                if (specialCoords.isCorner(startTile.getX(), startTile.getY())) {
-                    return rays.newRay(startTile, pointerTile);
+        // regardless error checking for outside board
+        if (!atoms.isExcluded(tileX, tileY)) {
+            
+            // first selection
+            // must be an edge
+            if (specialCoords.isEdge(tileX, tileY) && startTile == null) {
+                System.out.println("Selected an edge tile\nSelect a valid adjacent tile");
+                startTile = new CoordCell(greenify(tileX, tileY), tileX, tileY);
+                return 0;
+            }
+            
+            // second selection (if it applies)
+            if (startTile != null) {
+                // must be a neighbour
+                pointerTile = new CoordCell(null, tileX, tileY);
+                if (startTile.isNeighbour(pointerTile)) {
+                    pointerTile.setTile(greenify(tileX, tileY));
+                    System.out.println("Casting ray...\n");
+                    // if starter tile is a corner tile (since a corner is still an edge)
+                    if (specialCoords.isCorner(startTile.getX(), startTile.getY())) {
+                        return rays.newRay(startTile, pointerTile);
+                    }
+                    // if second tile isn't an edge, cast a ray
+                    else if (!specialCoords.isEdge(pointerTile.getX(), pointerTile.getY())) {
+                        rays.newRay(startTile, pointerTile);
+                        return rays.newRay(startTile, pointerTile);
+                    }
                 }
-                // if second tile isn't an edge, cast a ray
-                else if (!specialCoords.isEdge(pointerTile.getX(), pointerTile.getY())) {
-                    rays.newRay(startTile, pointerTile);
-                    return rays.newRay(startTile, pointerTile);
-                }
-                deselectTiles();
             }
         }
         // if you have gotten to this point you have failed
+        System.out.println("Selected tile invalid.\n");
+        deselectTiles();
         return -1;
     }
     
@@ -275,7 +275,7 @@ class TileCoordinates {
 }
 
 class CoordCell {
-    private final TiledMapTileLayer.Cell tile;
+    private TiledMapTileLayer.Cell tile;
     private final int x;
     private final int y;
     
@@ -314,5 +314,11 @@ class CoordCell {
     public int getY()
     {
         return y;
+    }
+    
+    public TiledMapTileLayer.Cell setTile(TiledMapTileLayer.Cell tile) {
+        var old = tile;
+        this.tile = tile;
+        return old;
     }
 }
