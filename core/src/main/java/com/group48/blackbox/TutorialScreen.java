@@ -150,10 +150,15 @@ public class TutorialScreen implements Screen {
                     break;
                 case 11:
                     game.setScreen(game.mainMenuScreen);
+                    break;
+                case 12:
+                    game.setScreen(game.mainMenuScreen);
+                    break;
                 default:
                     game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                     text.setText(Dialogue[++dialogueN]);
                     System.out.printf("\n%s\n", Dialogue[dialogueN]);
+                    break;
             }
         }
         if (Gdx.input.isButtonJustPressed(Input.Buttons.RIGHT)) {
@@ -178,16 +183,19 @@ public class TutorialScreen implements Screen {
                         else {
                             game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
                             tiledMap.setFinished(true);
-                            text.setText(Dialogue[++dialogueN]);
-                            System.out.printf("%s\n\n", Dialogue[dialogueN]);
+                            if (tiledMap.getAtoms().getCorrectAtomsCount() > 0)
+                                dialogueN = 11;
+                            else
+                                dialogueN = 12;
+                            game.assets.get("Sound/clickConfirm.wav", Sound.class).play();
+                            text.setText(Dialogue[dialogueN]);
+                            System.out.printf("\n%s\n", Dialogue[dialogueN]);
                         }
                     }
-                    // if correct guess, dialogueN = 11
-                    
-                    // if incorrect, dialogueN = 12
                     break;
                 default:
                     game.assets.get("Sound/clickInvalid.wav", Sound.class).play();
+                    break;
             }
         }
         if (Gdx.input.isKeyPressed(Input.Keys.ESCAPE)) {

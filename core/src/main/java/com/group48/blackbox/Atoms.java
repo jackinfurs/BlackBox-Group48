@@ -36,6 +36,7 @@ public class Atoms {
     private TiledMapTileSet tileset;
     private TiledMapTileSet guessTileSet;
     private int guessAtomsCount;
+    private int correctAtomsCount;
     
     /**
      * Constructor for {@code Atoms}. Requires an instance of {@code tiledMap}.
@@ -63,6 +64,7 @@ public class Atoms {
         createAtoms();
         createGuessAtoms();
         guessAtomsCount = 0;
+        correctAtomsCount = 0;
         random = new Random();
     }
     
@@ -118,6 +120,7 @@ public class Atoms {
      */
     public void addAtom(int x, int y)
     {
+        atomCoordinates.add("%d,%d".formatted(x,y));
         TiledMapTileLayer.Cell atomCell = new TiledMapTileLayer.Cell();
         atomCell.setTile(tileset.getTile(AtomID.RED.ordinal()));
         atomsLayer.setCell(x, y, atomCell);
@@ -128,6 +131,7 @@ public class Atoms {
      */
     public void removeAtom(int x, int y)
     {
+        atomCoordinates.remove("%d,%d".formatted(x, y));
         atomsLayer.setCell(x, y, null);
     }
     
@@ -163,6 +167,7 @@ public class Atoms {
         TiledMapTileLayer.Cell correctAtomCell = new TiledMapTileLayer.Cell();
         correctAtomCell.setTile(guessTileSet.getTile(AtomID.CORRECT.ordinal()));
         guessAtomsLayer.setCell(x, y, correctAtomCell);
+        ++correctAtomsCount;
     }
     
     /**
@@ -171,6 +176,11 @@ public class Atoms {
     public int getGuessAtomsCount()
     {
         return guessAtomsCount;
+    }
+    
+    public int getCorrectAtomsCount()
+    {
+        return correctAtomsCount;
     }
     
     /**
@@ -194,13 +204,13 @@ public class Atoms {
      */
     public int placeRandomAtom()
     {
-        int x = random.nextInt(atomsLayer.getWidth());
-        int y = random.nextInt(atomsLayer.getHeight());
-        if (!isExcluded(x, y) && !containsAtom(x, y)) {
-            atomCoordinates.add(x + "," + y);
-            return 0;
-        }
-        return -1;
+        int x,y;
+        do {
+            x = random.nextInt(atomsLayer.getWidth());
+            y = random.nextInt(atomsLayer.getHeight());
+        } while (isExcluded(x, y) || containsAtom(x, y));
+        atomCoordinates.add(x + "," + y);
+        return 0;
     }
     
     /**
@@ -208,10 +218,8 @@ public class Atoms {
      */
     public void placeRandomAtoms()
     {
-        for (int i = 0 ; i < 6 ; ) {
-            if (placeRandomAtom() == 0)
-                i++;
-        }
+        for (int i = 0 ; i < 6 ; ++i)
+            placeRandomAtom();
     }
     
     /**
