@@ -34,6 +34,7 @@ public class GameScreen extends UsersManager implements Screen {
     private Label scoreText;
     private TextBox textBox;
     private Score score;
+    private boolean cheats = false;
     
     public GameScreen(BlackBox game)
     {
@@ -44,7 +45,6 @@ public class GameScreen extends UsersManager implements Screen {
     @Override
     public void show()
     {
-        boolean cheats = false;
         textBox = TextBox.EMPTY;
         System.out.println("\n--- GAME SCREEN ---\nCast your first ray by selecting an edge tile and a valid adjacent tile.\n");
         Gdx.input.setInputProcessor(stage);
@@ -79,7 +79,8 @@ public class GameScreen extends UsersManager implements Screen {
                     if (tiledMap.getAtoms().getGuessAtomsCount() == 6) {
                         textBox = TextBox.END_GAME;
                         tiledMap.setFinished(true);
-                        score.setFinished(true);
+                        if (!cheats)
+                            score.setFinished(true);
                         game.assets.get("Sound/gameEnd.wav", Sound.class).play();
                         int i = 0;
                         for (String s : tiledMap.getAtoms().getAtomCoordinates()) {
